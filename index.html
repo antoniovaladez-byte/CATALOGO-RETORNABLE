@@ -395,7 +395,77 @@
     /* =====================================================
        CATÁLOGO
     ===================================================== */
+.catalogo-buscador {
+  position: relative;
+  margin-bottom: 22px;
+}
 
+.catalogo-buscador-icono {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 21px;
+  pointer-events: none;
+}
+
+.catalogo-buscador-input {
+  width: 100%;
+  height: 58px;
+  border: 2px solid #d7dde6;
+  border-radius: 16px;
+  background: white;
+  padding: 0 50px 0 52px;
+  font-size: 17px;
+  color: #111827;
+  outline: none;
+  box-shadow: 0 3px 10px rgba(0,0,0,.05);
+  transition: .15s;
+}
+
+.catalogo-buscador-input:focus {
+  border-color: #003A8C;
+  box-shadow: 0 4px 14px rgba(0,58,140,.10);
+}
+
+.catalogo-buscador-input::placeholder {
+  color: #9ca3af;
+}
+
+.catalogo-limpiar {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #eef2f7;
+  color: #4b5563;
+  font-size: 17px;
+  font-weight: 900;
+  cursor: pointer;
+  display: none;
+}
+
+.catalogo-sin-resultados {
+  grid-column: 1 / -1;
+  background: white;
+  border-radius: 16px;
+  padding: 35px 20px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 17px;
+  box-shadow: 0 3px 10px rgba(0,0,0,.05);
+}
+
+.catalogo-sin-resultados strong {
+  display: block;
+  color: #003A8C;
+  font-size: 21px;
+  margin-bottom: 7px;
+}
     .catalogo-seccion {
       margin-top: 5px;
     }
@@ -893,11 +963,38 @@
     <button class="inicio-btn" onclick="volverInicio()">← Inicio</button>
   </div>
 
-  <div class="container">
+<div class="container">
 
-    <section class="catalogo-seccion">
+  <section class="catalogo-seccion">
 
-      <div class="catalogo-cabecera">
+    <div class="catalogo-buscador">
+
+      <span class="catalogo-buscador-icono">
+        🔎
+      </span>
+
+      <input
+        id="buscadorCatalogo"
+        class="catalogo-buscador-input"
+        type="text"
+        placeholder="Buscar ubicación, proveedor, número o ruta..."
+        autocomplete="off"
+        oninput="filtrarCatalogo()"
+      >
+
+      <button
+        id="limpiarBuscador"
+        class="catalogo-limpiar"
+        onclick="limpiarFiltroCatalogo()"
+        aria-label="Limpiar búsqueda"
+      >
+        ✕
+      </button>
+
+    </div>
+
+
+    <div class="catalogo-cabecera">
 
         <div class="catalogo-titulo">
           Ubicaciones
@@ -1663,7 +1760,301 @@ function valoresUnicos(campo) {
    CATÁLOGO
 ===================================================== */
 
-function renderizarCatalogo() {
+function renderizarCatalogo(
+  registros = datosCatalogo
+) {
+
+  const grid =
+    document.getElementById(
+      "catalogoGrid"
+    );
+
+  const contador =
+    document.getElementById(
+      "contador"
+    );
+
+
+  grid.innerHTML = "";
+
+
+  if (!registros.length) {
+
+    const mensaje =
+      document.createElement(
+        "div"
+      );
+
+    mensaje.className =
+      "catalogo-sin-resultados";
+
+
+    const titulo =
+      document.createElement(
+        "strong"
+      );
+
+    titulo.textContent =
+      "Sin resultados";
+
+
+    const texto =
+      document.createElement(
+        "span"
+      );
+
+    texto.textContent =
+      "No encontré coincidencias en el catálogo.";
+
+
+    mensaje.appendChild(
+      titulo
+    );
+
+    mensaje.appendChild(
+      texto
+    );
+
+    grid.appendChild(
+      mensaje
+    );
+
+
+    contador.textContent =
+      "0 resultados";
+
+    return;
+
+  }
+
+
+  registros.forEach(
+    function(registro) {
+
+      const tarjeta =
+        document.createElement(
+          "div"
+        );
+
+
+      tarjeta.className =
+        "catalogo-card";
+
+
+      tarjeta.addEventListener(
+        "click",
+        function() {
+
+          abrirFichaPorRegistro(
+            registro
+          );
+
+        }
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        registro.ubicacion,
+        "catalogo-ubicacion"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        registro.proveedor,
+        "catalogo-proveedor"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        registro.ruta,
+        "catalogo-ruta"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        "Proveedor #" +
+        (
+          registro.numeroProveedor ||
+          "—"
+        ),
+        "catalogo-numero"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        "Máximo: " +
+        (
+          registro.maximo ||
+          "—"
+        ),
+        "catalogo-maximo"
+      );
+
+
+      grid.appendChild(
+        tarjeta
+      );
+
+    }
+  );
+
+
+  const hayFiltro =
+    document
+      .getElementById(
+        "buscadorCatalogo"
+      )
+      ?.value
+      .trim();
+
+
+  contador.textContent =
+    registros.length +
+    (
+      hayFiltro
+        ? (
+            registros.length === 1
+              ? " resultado"
+              : " resultados"
+          )
+        : " ubicaciones"
+    );
+
+}
+
+
+function filtrarCatalogo() {
+
+  const input =
+    document.getElementById(
+      "buscadorCatalogo"
+    );
+
+
+  const botonLimpiar =
+    document.getElementById(
+      "limpiarBuscador"
+    );
+
+
+  const consulta =
+    normalizarComparacion(
+      input.value
+    );
+
+
+  botonLimpiar.style.display =
+    consulta
+      ? "block"
+      : "none";
+
+
+  if (!consulta) {
+
+    renderizarCatalogo(
+      datosCatalogo
+    );
+
+    return;
+
+  }
+
+
+  const consultaCompacta =
+    consulta.replace(
+      /\s+/g,
+      ""
+    );
+
+
+  const filtrados =
+    datosCatalogo.filter(
+      function(registro) {
+
+        const campos = [
+
+          registro.ubicacion,
+
+          registro.proveedor,
+
+          registro.numeroProveedor,
+
+          registro.ruta
+
+        ];
+
+
+        return campos.some(
+          function(valor) {
+
+            const normal =
+              normalizarComparacion(
+                valor || ""
+              );
+
+
+            const compacto =
+              normal.replace(
+                /\s+/g,
+                ""
+              );
+
+
+            return (
+              normal.includes(
+                consulta
+              ) ||
+              compacto.includes(
+                consultaCompacta
+              )
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  renderizarCatalogo(
+    filtrados
+  );
+
+}
+
+
+function limpiarFiltroCatalogo() {
+
+  const input =
+    document.getElementById(
+      "buscadorCatalogo"
+    );
+
+
+  input.value = "";
+
+
+  document
+    .getElementById(
+      "limpiarBuscador"
+    )
+    .style.display =
+    "none";
+
+
+  renderizarCatalogo(
+    datosCatalogo
+  );
+
+
+  input.focus();
+
+}
 
   const grid =
     document.getElementById(
