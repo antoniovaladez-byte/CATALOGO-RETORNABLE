@@ -8,11 +8,13 @@
   <title>Catálogo de Retornables</title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       margin: 0;
       min-height: 100%;
     }
@@ -22,6 +24,11 @@
       background: #eef2f7;
       color: #111827;
     }
+
+    button {
+      font-family: inherit;
+    }
+
 
     /* =====================================================
        ENCABEZADO
@@ -48,39 +55,160 @@
       opacity: .9;
     }
 
+
+    /* =====================================================
+       CONTENEDORES
+    ===================================================== */
+
     .container {
       max-width: 1100px;
       margin: auto;
       padding: 22px;
     }
 
+    .vista-seccion {
+      display: none;
+    }
+
+
     /* =====================================================
-       VOZ
+       MENÚ PRINCIPAL
+    ===================================================== */
+
+    #vistaInicio {
+      display: block;
+    }
+
+    .inicio-contenedor {
+      max-width: 950px;
+      margin: auto;
+      padding: 45px 22px;
+    }
+
+    .inicio-bienvenida {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .inicio-bienvenida h2 {
+      margin: 0;
+      color: #003A8C;
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    .inicio-bienvenida p {
+      margin: 9px 0 0;
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    .menu-principal {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .menu-card {
+      min-height: 240px;
+      background: white;
+      border: 2px solid transparent;
+      border-radius: 22px;
+      padding: 25px 18px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,.08);
+      transition: .18s;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .menu-card:hover {
+      border-color: #003A8C;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,58,140,.12);
+    }
+
+    .menu-icono {
+      font-size: 65px;
+      margin-bottom: 15px;
+    }
+
+    .menu-titulo {
+      color: #003A8C;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .menu-descripcion {
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.45;
+      margin-top: 9px;
+    }
+
+
+    /* =====================================================
+       NAVEGACIÓN
+    ===================================================== */
+
+    .barra-navegacion {
+      max-width: 1100px;
+      margin: auto;
+      padding: 16px 22px 0;
+    }
+
+    .inicio-btn,
+    .volver-btn {
+      border: none;
+      background: white;
+      color: #003A8C;
+      padding: 11px 17px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
+
+    .inicio-btn:hover,
+    .volver-btn:hover {
+      background: #f7f9fc;
+    }
+
+
+    /* =====================================================
+       BÚSQUEDA POR VOZ
     ===================================================== */
 
     .voice-card {
+      max-width: 800px;
+      margin: auto;
       background: white;
-      border-radius: 20px;
-      padding: 28px 20px;
+      border-radius: 22px;
+      padding: 30px 20px;
       text-align: center;
       box-shadow: 0 3px 12px rgba(0,0,0,.08);
     }
 
     .voice-title {
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 900;
       margin-bottom: 20px;
     }
 
     .mic-btn {
-      width: 170px;
-      height: 170px;
+      width: 180px;
+      height: 180px;
       border-radius: 50%;
       border: none;
       background: #003A8C;
       color: white;
       cursor: pointer;
-      font-size: 60px;
+      font-size: 62px;
       transition: .2s;
       box-shadow: 0 5px 15px rgba(0,58,140,.25);
     }
@@ -100,19 +228,19 @@
 
     .mic-text {
       display: block;
-      font-size: 16px;
+      font-size: 17px;
       font-weight: 900;
       margin-top: 5px;
     }
 
     .voice-help {
-      margin-top: 16px;
+      margin-top: 18px;
       color: #6b7280;
-      font-size: 14px;
+      font-size: 15px;
     }
 
     .sound-row {
-      margin-top: 16px;
+      margin-top: 18px;
     }
 
     .sound-btn {
@@ -123,6 +251,10 @@
       border-radius: 20px;
       cursor: pointer;
       font-size: 14px;
+    }
+
+    .sound-btn:hover {
+      background: #eef2f7;
     }
 
     .speech-info {
@@ -137,14 +269,14 @@
 
     .speech-label {
       color: #777;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 900;
       text-transform: uppercase;
-      margin-top: 7px;
+      margin-top: 8px;
     }
 
     .speech-value {
-      font-size: 17px;
+      font-size: 18px;
       margin-top: 3px;
     }
 
@@ -154,27 +286,30 @@
     }
 
     #estado {
-      margin-top: 15px;
+      margin-top: 18px;
       text-align: center;
+      font-size: 17px;
+      color: #666;
       font-weight: 900;
-      color: #6b7280;
     }
 
+
     /* =====================================================
-       RESULTADOS DE VOZ
+       RESULTADOS VOZ
     ===================================================== */
 
     .resultados-voz {
-      margin-top: 18px;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
     .resultado {
       background: white;
-      margin-top: 12px;
-      padding: 20px;
-      border-radius: 16px;
+      margin-top: 15px;
+      padding: 22px;
+      border-radius: 18px;
       border-left: 7px solid #003A8C;
-      box-shadow: 0 3px 10px rgba(0,0,0,.07);
+      box-shadow: 0 3px 10px rgba(0,0,0,.08);
       cursor: pointer;
       transition: .15s;
     }
@@ -184,31 +319,50 @@
     }
 
     .resultado-ubicacion {
-      font-size: 42px;
+      font-size: 48px;
       font-weight: 900;
       color: #003A8C;
     }
 
     .resultado-proveedor {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 900;
-      margin-top: 5px;
+      margin-top: 8px;
     }
 
     .resultado-detalle {
-      font-size: 17px;
-      margin-top: 5px;
+      font-size: 19px;
+      margin-top: 6px;
     }
 
-    .error {
+
+    /* =====================================================
+       RESPUESTA CONTEXTUAL
+    ===================================================== */
+
+    .respuesta-contextual {
       background: white;
-      margin-top: 18px;
-      padding: 22px;
-      border-radius: 15px;
-      color: #b91c1c;
-      text-align: center;
+      margin-top: 15px;
+      padding: 24px;
+      border-radius: 18px;
+      border-left: 7px solid #16a34a;
+      box-shadow: 0 3px 10px rgba(0,0,0,.08);
+    }
+
+    .respuesta-contextual-titulo {
+      color: #777;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    .respuesta-contextual-valor {
+      color: #003A8C;
+      font-size: 30px;
       font-weight: 900;
     }
+
 
     /* =====================================================
        AMBIGÜEDAD
@@ -220,17 +374,19 @@
       padding: 24px;
       border-radius: 18px;
       border-left: 7px solid #ea580c;
+      box-shadow: 0 3px 10px rgba(0,0,0,.08);
       text-align: center;
     }
 
     .ambiguedad-titulo {
-      font-size: 21px;
+      font-size: 23px;
       font-weight: 900;
     }
 
     .ambiguedad-texto {
       color: #666;
       margin-top: 7px;
+      font-size: 16px;
     }
 
     .ambiguedad-opciones {
@@ -238,26 +394,49 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 10px;
-      margin-top: 18px;
+      margin-top: 20px;
     }
 
     .ambiguedad-btn {
       border: 2px solid #003A8C;
       background: white;
       color: #003A8C;
-      border-radius: 13px;
-      padding: 12px 18px;
+      border-radius: 14px;
+      padding: 13px 20px;
       cursor: pointer;
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 900;
+      min-width: 110px;
     }
+
+    .ambiguedad-btn:hover {
+      background: #003A8C;
+      color: white;
+    }
+
+
+    /* =====================================================
+       ERROR
+    ===================================================== */
+
+    .error {
+      background: white;
+      margin-top: 18px;
+      padding: 22px;
+      border-radius: 15px;
+      color: #b91c1c;
+      text-align: center;
+      font-weight: 900;
+      box-shadow: 0 3px 10px rgba(0,0,0,.06);
+    }
+
 
     /* =====================================================
        CATÁLOGO
     ===================================================== */
 
     .catalogo-seccion {
-      margin-top: 28px;
+      margin-top: 5px;
     }
 
     .catalogo-cabecera {
@@ -331,6 +510,51 @@
       font-size: 14px;
     }
 
+
+    /* =====================================================
+       QR
+    ===================================================== */
+
+    .qr-card {
+      max-width: 650px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 22px;
+      padding: 40px 25px;
+      text-align: center;
+      box-shadow: 0 3px 12px rgba(0,0,0,.08);
+    }
+
+    .qr-icono {
+      font-size: 85px;
+    }
+
+    .qr-titulo {
+      color: #003A8C;
+      font-size: 27px;
+      font-weight: 900;
+      margin-top: 15px;
+    }
+
+    .qr-texto {
+      color: #6b7280;
+      margin-top: 10px;
+      line-height: 1.5;
+      font-size: 15px;
+    }
+
+    .qr-proximamente {
+      display: inline-block;
+      margin-top: 25px;
+      background: #eef2f7;
+      color: #003A8C;
+      padding: 10px 17px;
+      border-radius: 20px;
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+
     /* =====================================================
        FICHA
     ===================================================== */
@@ -343,18 +567,6 @@
       max-width: 1100px;
       margin: auto;
       padding: 18px 22px 0;
-    }
-
-    .volver-btn {
-      border: none;
-      background: white;
-      color: #003A8C;
-      padding: 11px 16px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,.07);
     }
 
     .ficha-contenedor {
@@ -439,17 +651,35 @@
       margin-bottom: 20px;
     }
 
+
     /* =====================================================
        MÓVIL
     ===================================================== */
 
     @media(max-width: 800px) {
+
+      .menu-principal {
+        grid-template-columns: 1fr;
+      }
+
+      .menu-card {
+        min-height: 175px;
+      }
+
+      .menu-icono {
+        font-size: 52px;
+        margin-bottom: 10px;
+      }
+
       .catalogo-grid {
         grid-template-columns: repeat(2, 1fr);
       }
+
     }
 
+
     @media(max-width: 600px) {
+
       .header {
         padding: 17px 12px;
       }
@@ -458,8 +688,20 @@
         font-size: 23px;
       }
 
+      .inicio-contenedor {
+        padding: 28px 14px;
+      }
+
+      .inicio-bienvenida h2 {
+        font-size: 25px;
+      }
+
       .container {
         padding: 13px;
+      }
+
+      .barra-navegacion {
+        padding: 12px 13px 0;
       }
 
       .voice-card {
@@ -467,8 +709,8 @@
       }
 
       .mic-btn {
-        width: 150px;
-        height: 150px;
+        width: 155px;
+        height: 155px;
       }
 
       .catalogo-grid {
@@ -530,96 +772,117 @@
 
       .ambiguedad-btn {
         width: 100%;
-        margin-top: 7px;
+        margin-top: 8px;
       }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
   <!-- =====================================================
-       VISTA PRINCIPAL
+       INICIO
   ====================================================== -->
 
-  <div id="vistaPrincipal">
+  <div id="vistaInicio">
 
     <div class="header">
-      <h1>CATÁLOGO DE RETORNABLES</h1>
-      <p>Ubicaciones • Proveedores • Rutas</p>
+
+      <h1>
+        CATÁLOGO DE RETORNABLES
+      </h1>
+
+      <p>
+        PENSKE
+      </p>
+
     </div>
 
-    <div class="container">
 
-      <div class="voice-card">
+    <div class="inicio-contenedor">
 
-        <div class="voice-title">
-          ¿Qué necesitas encontrar?
-        </div>
+      <div class="inicio-bienvenida">
 
-        <button
-          id="micBtn"
-          class="mic-btn"
-          onclick="escuchar()"
-        >
-          🎤
-          <span id="micText" class="mic-text">
-            HABLAR
-          </span>
-        </button>
+        <h2>
+          ¿Qué deseas hacer?
+        </h2>
 
-        <div class="voice-help">
-          Toca el micrófono y haz tu pregunta
-        </div>
-
-        <div class="sound-row">
-          <button
-            id="soundBtn"
-            class="sound-btn"
-            onclick="alternarSonido()"
-          >
-            🔊 Respuesta por voz activada
-          </button>
-        </div>
-
-        <div id="speechInfo" class="speech-info">
-
-          <div class="speech-label">
-            Escuché
-          </div>
-
-          <div id="escuchado" class="speech-value"></div>
-
-          <div class="speech-label">
-            Interpretado
-          </div>
-
-          <div id="interpretado" class="speech-value interpretado"></div>
-
-        </div>
+        <p>
+          Selecciona una función
+        </p>
 
       </div>
 
-      <div id="estado"></div>
-      <div id="resultados" class="resultados-voz"></div>
 
-      <section class="catalogo-seccion">
+      <div class="menu-principal">
 
-        <div class="catalogo-cabecera">
 
-          <div class="catalogo-titulo">
-            Catálogo
+        <div
+          class="menu-card"
+          onclick="abrirSeccion('voz')"
+        >
+
+          <div class="menu-icono">
+            🎤
           </div>
 
-          <div id="contador" class="contador">
-            Cargando...
+          <div class="menu-titulo">
+            BÚSQUEDA POR VOZ
+          </div>
+
+          <div class="menu-descripcion">
+            Busca ubicaciones, proveedores y rutas utilizando tu voz.
           </div>
 
         </div>
 
-        <div id="catalogoGrid" class="catalogo-grid"></div>
 
-      </section>
+        <div
+          class="menu-card"
+          onclick="abrirSeccion('catalogo')"
+        >
+
+          <div class="menu-icono">
+            📦
+          </div>
+
+          <div class="menu-titulo">
+            CATÁLOGO
+          </div>
+
+          <div class="menu-descripcion">
+            Consulta todas las ubicaciones registradas en el almacén.
+          </div>
+
+        </div>
+
+
+        <div
+          class="menu-card"
+          onclick="abrirSeccion('qr')"
+        >
+
+          <div class="menu-icono">
+            📷
+          </div>
+
+          <div class="menu-titulo">
+            ESCANEAR QR
+          </div>
+
+          <div class="menu-descripcion">
+            Escanea el código de una ubicación para consultar su información.
+          </div>
+
+        </div>
+
+
+      </div>
 
     </div>
 
@@ -627,26 +890,292 @@
 
 
   <!-- =====================================================
-       VISTA FICHA
+       VOZ
+  ====================================================== -->
+
+  <div
+    id="vistaVoz"
+    class="vista-seccion"
+  >
+
+    <div class="header">
+
+      <h1>
+        BÚSQUEDA POR VOZ
+      </h1>
+
+      <p>
+        Ubicaciones • Proveedores • Rutas
+      </p>
+
+    </div>
+
+
+    <div class="barra-navegacion">
+
+      <button
+        class="inicio-btn"
+        onclick="volverInicio()"
+      >
+        ← Inicio
+      </button>
+
+    </div>
+
+
+    <div class="container">
+
+
+      <div class="voice-card">
+
+        <div class="voice-title">
+          ¿Qué necesitas encontrar?
+        </div>
+
+
+        <button
+          id="micBtn"
+          class="mic-btn"
+          onclick="escuchar()"
+        >
+
+          🎤
+
+          <span
+            id="micText"
+            class="mic-text"
+          >
+            HABLAR
+          </span>
+
+        </button>
+
+
+        <div class="voice-help">
+          Toca el micrófono y haz tu pregunta
+        </div>
+
+
+        <div class="sound-row">
+
+          <button
+            id="soundBtn"
+            class="sound-btn"
+            onclick="alternarSonido()"
+          >
+            🔊 Respuesta por voz activada
+          </button>
+
+        </div>
+
+
+        <div
+          id="speechInfo"
+          class="speech-info"
+        >
+
+          <div class="speech-label">
+            Escuché
+          </div>
+
+          <div
+            id="escuchado"
+            class="speech-value"
+          ></div>
+
+
+          <div class="speech-label">
+            Interpretado
+          </div>
+
+          <div
+            id="interpretado"
+            class="speech-value interpretado"
+          ></div>
+
+        </div>
+
+      </div>
+
+
+      <div id="estado"></div>
+
+      <div
+        id="resultados"
+        class="resultados-voz"
+      ></div>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       CATÁLOGO
+  ====================================================== -->
+
+  <div
+    id="vistaCatalogo"
+    class="vista-seccion"
+  >
+
+    <div class="header">
+
+      <h1>
+        CATÁLOGO
+      </h1>
+
+      <p>
+        Ubicaciones registradas
+      </p>
+
+    </div>
+
+
+    <div class="barra-navegacion">
+
+      <button
+        class="inicio-btn"
+        onclick="volverInicio()"
+      >
+        ← Inicio
+      </button>
+
+    </div>
+
+
+    <div class="container">
+
+
+      <section class="catalogo-seccion">
+
+
+        <div class="catalogo-cabecera">
+
+          <div class="catalogo-titulo">
+            Ubicaciones
+          </div>
+
+          <div
+            id="contador"
+            class="contador"
+          >
+            Cargando...
+          </div>
+
+        </div>
+
+
+        <div
+          id="catalogoGrid"
+          class="catalogo-grid"
+        ></div>
+
+
+      </section>
+
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       QR
+  ====================================================== -->
+
+  <div
+    id="vistaQR"
+    class="vista-seccion"
+  >
+
+    <div class="header">
+
+      <h1>
+        ESCANEAR QR
+      </h1>
+
+      <p>
+        Consulta rápida de ubicación
+      </p>
+
+    </div>
+
+
+    <div class="barra-navegacion">
+
+      <button
+        class="inicio-btn"
+        onclick="volverInicio()"
+      >
+        ← Inicio
+      </button>
+
+    </div>
+
+
+    <div class="container">
+
+      <div class="qr-card">
+
+        <div class="qr-icono">
+          📷
+        </div>
+
+        <div class="qr-titulo">
+          Escáner QR
+        </div>
+
+        <div class="qr-texto">
+          Escanea el código QR de la ubicación para consultar su información.
+        </div>
+
+        <div class="qr-proximamente">
+          LECTOR PREPARADO PARA ACTIVACIÓN
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       FICHA
   ====================================================== -->
 
   <div id="vistaFicha">
 
+
     <div class="header">
-      <h1>PENSKE</h1>
-      <p>Información de ubicación</p>
+
+      <h1>
+        PENSKE
+      </h1>
+
+      <p>
+        Información de ubicación
+      </p>
+
     </div>
+
 
     <div class="ficha-toolbar">
+
       <button
         class="volver-btn"
-        onclick="volverCatalogo()"
+        onclick="volverVistaAnterior()"
       >
-        ← Volver al catálogo
+        ← Volver
       </button>
+
     </div>
 
+
     <div class="ficha-contenedor">
+
 
       <div class="bloque-ubicacion">
 
@@ -661,9 +1190,15 @@
 
       </div>
 
+
       <div id="fichaRegistros"></div>
 
-      <div id="fichaPie" class="pie"></div>
+
+      <div
+        id="fichaPie"
+        class="pie"
+      ></div>
+
 
     </div>
 
@@ -672,8 +1207,9 @@
 
   <script>
 
+
     // =====================================================
-    // API NUEVA
+    // API
     // =====================================================
 
     const API_BASE =
@@ -687,116 +1223,395 @@
     let datosCatalogo = [];
 
     let catalogoVoz = {
+
       ubicaciones: [],
       rutas: [],
       proveedores: [],
       numerosProveedor: []
+
     };
 
+
     let sonidoActivado = true;
+
     let contextoActual = null;
+
+    let vistaAnterior = "inicio";
+
+
+    // =====================================================
+    // NAVEGACIÓN
+    // =====================================================
+
+    function ocultarVistas() {
+
+      document
+        .getElementById(
+          "vistaInicio"
+        )
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById(
+          "vistaVoz"
+        )
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById(
+          "vistaCatalogo"
+        )
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById(
+          "vistaQR"
+        )
+        .style.display =
+        "none";
+
+
+      document
+        .getElementById(
+          "vistaFicha"
+        )
+        .style.display =
+        "none";
+
+    }
+
+
+    function abrirSeccion(
+      seccion
+    ) {
+
+      ocultarVistas();
+
+
+      vistaAnterior =
+        seccion;
+
+
+      if (
+        seccion === "voz"
+      ) {
+
+        document
+          .getElementById(
+            "vistaVoz"
+          )
+          .style.display =
+          "block";
+
+      }
+
+
+      if (
+        seccion === "catalogo"
+      ) {
+
+        document
+          .getElementById(
+            "vistaCatalogo"
+          )
+          .style.display =
+          "block";
+
+      }
+
+
+      if (
+        seccion === "qr"
+      ) {
+
+        document
+          .getElementById(
+            "vistaQR"
+          )
+          .style.display =
+          "block";
+
+      }
+
+
+      window.scrollTo(
+        0,
+        0
+      );
+
+    }
+
+
+    function volverInicio() {
+
+      if (
+        reconocimiento
+      ) {
+
+        try {
+
+          reconocimiento.abort();
+
+        } catch (e) {}
+
+      }
+
+
+      if (
+        "speechSynthesis" in window
+      ) {
+
+        window
+          .speechSynthesis
+          .cancel();
+
+      }
+
+
+      ocultarVistas();
+
+
+      document
+        .getElementById(
+          "vistaInicio"
+        )
+        .style.display =
+        "block";
+
+
+      vistaAnterior =
+        "inicio";
+
+
+      window.scrollTo(
+        0,
+        0
+      );
+
+    }
+
+
+    function volverVistaAnterior() {
+
+      ocultarVistas();
+
+
+      if (
+        vistaAnterior === "voz"
+      ) {
+
+        document
+          .getElementById(
+            "vistaVoz"
+          )
+          .style.display =
+          "block";
+
+      }
+
+      else if (
+        vistaAnterior ===
+        "catalogo"
+      ) {
+
+        document
+          .getElementById(
+            "vistaCatalogo"
+          )
+          .style.display =
+          "block";
+
+      }
+
+      else if (
+        vistaAnterior === "qr"
+      ) {
+
+        document
+          .getElementById(
+            "vistaQR"
+          )
+          .style.display =
+          "block";
+
+      }
+
+      else {
+
+        document
+          .getElementById(
+            "vistaInicio"
+          )
+          .style.display =
+          "block";
+
+      }
+
+
+      window.scrollTo(
+        0,
+        0
+      );
+
+    }
 
 
     // =====================================================
     // JSONP
     // =====================================================
 
-    function cargarJSONP(parametros) {
+    function cargarJSONP(
+      parametros
+    ) {
 
-      return new Promise(function(resolve, reject) {
+      return new Promise(
+        function(
+          resolve,
+          reject
+        ) {
 
-        const callback =
-          "jsonp_" +
-          Date.now() +
-          "_" +
-          Math.random()
-            .toString(36)
-            .slice(2);
+          const callback =
+            "jsonp_" +
+            Date.now() +
+            "_" +
+            Math.random()
+              .toString(36)
+              .slice(2);
 
-        const script =
-          document.createElement("script");
 
-        let terminado = false;
-
-        const timer =
-          setTimeout(function() {
-
-            limpiar();
-
-            reject(
-              new Error("Tiempo de espera agotado.")
+          const script =
+            document.createElement(
+              "script"
             );
 
-          }, 15000);
+
+          let terminado =
+            false;
 
 
-        function limpiar() {
+          const timer =
+            setTimeout(
+              function() {
 
-          if (terminado) {
-            return;
+                limpiar();
+
+                reject(
+                  new Error(
+                    "Tiempo de espera agotado."
+                  )
+                );
+
+              },
+              15000
+            );
+
+
+          function limpiar() {
+
+            if (terminado) {
+              return;
+            }
+
+
+            terminado =
+              true;
+
+
+            clearTimeout(
+              timer
+            );
+
+
+            try {
+
+              delete window[
+                callback
+              ];
+
+            } catch (e) {
+
+              window[
+                callback
+              ] = undefined;
+
+            }
+
+
+            if (
+              script.parentNode
+            ) {
+
+              script
+                .parentNode
+                .removeChild(
+                  script
+                );
+
+            }
+
           }
 
-          terminado = true;
 
-          clearTimeout(timer);
+          window[
+            callback
+          ] =
+            function(datos) {
 
-          try {
-            delete window[callback];
-          } catch (e) {
-            window[callback] = undefined;
-          }
+              limpiar();
 
-          if (script.parentNode) {
-            script.parentNode.removeChild(script);
-          }
-        }
+              resolve(
+                datos
+              );
 
-
-        window[callback] =
-          function(datos) {
-
-            limpiar();
-            resolve(datos);
-
-          };
+            };
 
 
-        const params =
-          new URLSearchParams(
-            parametros || {}
+          const params =
+            new URLSearchParams(
+              parametros || {}
+            );
+
+
+          params.set(
+            "callback",
+            callback
           );
 
-        params.set(
-          "callback",
-          callback
-        );
+
+          script.src =
+            API_BASE +
+            "?" +
+            params.toString();
 
 
-        script.src =
-          API_BASE +
-          "?" +
-          params.toString();
+          script.onerror =
+            function() {
+
+              limpiar();
+
+              reject(
+                new Error(
+                  "No fue posible conectar con la API."
+                )
+              );
+
+            };
 
 
-        script.onerror =
-          function() {
-
-            limpiar();
-
-            reject(
-              new Error(
-                "No fue posible conectar con la API."
-              )
+          document
+            .body
+            .appendChild(
+              script
             );
 
-          };
-
-
-        document.body.appendChild(
-          script
-        );
-
-      });
+        }
+      );
 
     }
 
@@ -807,17 +1622,11 @@
 
     async function iniciarAplicacion() {
 
-      const estado =
-        document.getElementById("estado");
-
-      estado.textContent =
-        "Cargando catálogo...";
-
-
       try {
 
         const resultados =
           await Promise.all([
+
             cargarJSONP({
               catalogo: "1"
             }),
@@ -825,34 +1634,44 @@
             cargarJSONP({
               voz: "1"
             })
+
           ]);
 
 
         const datos =
           resultados[0];
 
+
         const voz =
           resultados[1];
 
 
-        if (!Array.isArray(datos)) {
+        if (
+          !Array.isArray(
+            datos
+          )
+        ) {
 
           throw new Error(
-            "El catálogo no llegó en el formato esperado."
+            "Formato de catálogo incorrecto."
           );
 
         }
 
 
         datosCatalogo =
-          datos.filter(function(r) {
+          datos.filter(
+            function(r) {
 
-            return (
-              r &&
-              String(r.ubicacion || "").trim()
-            );
+              return (
+                r &&
+                String(
+                  r.ubicacion || ""
+                ).trim()
+              );
 
-          });
+            }
+          );
 
 
         if (
@@ -873,18 +1692,18 @@
 
         renderizarCatalogo();
 
-        estado.textContent = "";
-
 
       } catch (error) {
 
-        console.error(error);
+        console.error(
+          error
+        );
 
-        estado.textContent =
-          "No fue posible cargar la base de datos.";
 
         document
-          .getElementById("contador")
+          .getElementById(
+            "contador"
+          )
           .textContent =
           "Error de conexión";
 
@@ -896,57 +1715,96 @@
     function crearCatalogoVozLocal() {
 
       catalogoVoz = {
-        ubicaciones: valoresUnicos("ubicacion"),
-        rutas: valoresUnicos("ruta"),
-        proveedores: valoresUnicos("proveedor"),
-        numerosProveedor: valoresUnicos("numeroProveedor")
+
+        ubicaciones:
+          valoresUnicos(
+            "ubicacion"
+          ),
+
+        rutas:
+          valoresUnicos(
+            "ruta"
+          ),
+
+        proveedores:
+          valoresUnicos(
+            "proveedor"
+          ),
+
+        numerosProveedor:
+          valoresUnicos(
+            "numeroProveedor"
+          )
+
       };
 
     }
 
 
-    function valoresUnicos(campo) {
+    function valoresUnicos(
+      campo
+    ) {
 
       return Array.from(
+
         new Set(
+
           datosCatalogo
-            .map(function(r) {
-              return String(r[campo] || "").trim();
-            })
-            .filter(Boolean)
+
+            .map(
+              function(r) {
+
+                return String(
+                  r[campo] || ""
+                ).trim();
+
+              }
+            )
+
+            .filter(
+              Boolean
+            )
+
         )
+
       );
 
     }
 
 
     // =====================================================
-    // CATÁLOGO VISUAL
+    // CATÁLOGO
     // =====================================================
 
     function renderizarCatalogo() {
 
       const grid =
-        document.getElementById(
-          "catalogoGrid"
-        );
+        document
+          .getElementById(
+            "catalogoGrid"
+          );
+
 
       const contador =
-        document.getElementById(
-          "contador"
-        );
+        document
+          .getElementById(
+            "contador"
+          );
 
 
-      grid.innerHTML = "";
+      grid.innerHTML =
+        "";
 
 
       datosCatalogo.forEach(
         function(registro) {
 
           const tarjeta =
-            document.createElement(
-              "div"
-            );
+            document
+              .createElement(
+                "div"
+              );
+
 
           tarjeta.className =
             "catalogo-card";
@@ -988,7 +1846,11 @@
           agregarElemento(
             tarjeta,
             "Proveedor #" +
-            (registro.numeroProveedor || "—"),
+            (
+              registro
+                .numeroProveedor ||
+              "—"
+            ),
             "catalogo-numero"
           );
 
@@ -996,7 +1858,10 @@
           agregarElemento(
             tarjeta,
             "Máximo: " +
-            (registro.maximo || "—"),
+            (
+              registro.maximo ||
+              "—"
+            ),
             "catalogo-maximo"
           );
 
@@ -1023,13 +1888,18 @@
     ) {
 
       const elemento =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
+
 
       elemento.className =
         clase;
 
+
       elemento.textContent =
         texto || "—";
+
 
       padre.appendChild(
         elemento
@@ -1051,9 +1921,6 @@
       }
 
 
-      // Si varios registros pertenecen a la
-      // misma ubicación, los mostramos juntos.
-
       const ubicacion =
         normalizarComparacion(
           registro.ubicacion
@@ -1067,7 +1934,8 @@
             return (
               normalizarComparacion(
                 r.ubicacion
-              ) === ubicacion
+              ) ===
+              ubicacion
             );
 
           }
@@ -1075,10 +1943,13 @@
 
 
       mostrarFicha(
+
         registro.ubicacion,
+
         registros.length
           ? registros
           : [registro]
+
       );
 
     }
@@ -1089,12 +1960,7 @@
       registros
     ) {
 
-      document
-        .getElementById(
-          "vistaPrincipal"
-        )
-        .style.display =
-        "none";
+      ocultarVistas();
 
 
       document
@@ -1114,44 +1980,59 @@
 
 
       const contenedor =
-        document.getElementById(
-          "fichaRegistros"
-        );
+        document
+          .getElementById(
+            "fichaRegistros"
+          );
 
 
-      contenedor.innerHTML = "";
+      contenedor.innerHTML =
+        "";
 
 
       registros.forEach(
-        function(registro, indice) {
+        function(
+          registro,
+          indice
+        ) {
 
           if (
-            registros.length > 1
+            registros.length >
+            1
           ) {
 
             const separador =
-              document.createElement(
-                "div"
-              );
+              document
+                .createElement(
+                  "div"
+                );
+
 
             separador.className =
               "separador";
 
+
             separador.textContent =
               "Proveedor " +
-              (indice + 1);
+              (
+                indice + 1
+              );
 
-            contenedor.appendChild(
-              separador
-            );
+
+            contenedor
+              .appendChild(
+                separador
+              );
 
           }
 
 
           const tarjeta =
-            document.createElement(
-              "div"
-            );
+            document
+              .createElement(
+                "div"
+              );
+
 
           tarjeta.className =
             "registro";
@@ -1160,7 +2041,8 @@
           crearFilaFicha(
             tarjeta,
             "No. proveedor",
-            registro.numeroProveedor
+            registro
+              .numeroProveedor
           );
 
 
@@ -1187,9 +2069,10 @@
           );
 
 
-          contenedor.appendChild(
-            tarjeta
-          );
+          contenedor
+            .appendChild(
+              tarjeta
+            );
 
         }
       );
@@ -1200,10 +2083,10 @@
       );
 
 
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
+      window.scrollTo(
+        0,
+        0
+      );
 
     }
 
@@ -1216,34 +2099,51 @@
     ) {
 
       const fila =
-        document.createElement("div");
+        document
+          .createElement(
+            "div"
+          );
+
 
       fila.className =
         "fila";
 
 
       const etiquetaElemento =
-        document.createElement("div");
+        document
+          .createElement(
+            "div"
+          );
+
 
       etiquetaElemento.className =
         "etiqueta";
+
 
       etiquetaElemento.textContent =
         etiqueta;
 
 
       const valorElemento =
-        document.createElement("div");
+        document
+          .createElement(
+            "div"
+          );
+
 
       valorElemento.className =
         "valor";
 
 
-      if (claseExtra) {
+      if (
+        claseExtra
+      ) {
 
-        valorElemento.classList.add(
-          claseExtra
-        );
+        valorElemento
+          .classList
+          .add(
+            claseExtra
+          );
 
       }
 
@@ -1256,9 +2156,11 @@
         etiquetaElemento
       );
 
+
       fila.appendChild(
         valorElemento
       );
+
 
       padre.appendChild(
         fila
@@ -1272,28 +2174,42 @@
     ) {
 
       const pie =
-        document.getElementById(
-          "fichaPie"
-        );
+        document
+          .getElementById(
+            "fichaPie"
+          );
 
 
       const fechas =
         Array.from(
+
           new Set(
+
             registros
-              .map(function(r) {
 
-                return String(
-                  r.fechaActualizacion || ""
-                ).trim();
+              .map(
+                function(r) {
 
-              })
-              .filter(Boolean)
+                  return String(
+                    r.fechaActualizacion ||
+                    ""
+                  ).trim();
+
+                }
+              )
+
+              .filter(
+                Boolean
+              )
+
           )
+
         );
 
 
-      if (!fechas.length) {
+      if (
+        !fechas.length
+      ) {
 
         pie.style.display =
           "none";
@@ -1307,7 +2223,9 @@
         "block";
 
 
-      if (fechas.length === 1) {
+      if (
+        fechas.length === 1
+      ) {
 
         pie.textContent =
           "Última actualización: " +
@@ -1324,34 +2242,8 @@
     }
 
 
-    function volverCatalogo() {
-
-      document
-        .getElementById(
-          "vistaFicha"
-        )
-        .style.display =
-        "none";
-
-
-      document
-        .getElementById(
-          "vistaPrincipal"
-        )
-        .style.display =
-        "block";
-
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-    }
-
-
     // =====================================================
-    // VOZ
+    // RECONOCIMIENTO DE VOZ
     // =====================================================
 
     const SpeechRecognition =
@@ -1359,21 +2251,27 @@
       window.webkitSpeechRecognition;
 
 
-    let reconocimiento = null;
+    let reconocimiento =
+      null;
 
 
     function escuchar() {
 
       if (
-        "speechSynthesis" in window
+        "speechSynthesis"
+        in window
       ) {
 
-        window.speechSynthesis.cancel();
+        window
+          .speechSynthesis
+          .cancel();
 
       }
 
 
-      if (!SpeechRecognition) {
+      if (
+        !SpeechRecognition
+      ) {
 
         mostrarError(
           "Este navegador no permite reconocimiento de voz."
@@ -1384,10 +2282,14 @@
       }
 
 
-      if (reconocimiento) {
+      if (
+        reconocimiento
+      ) {
 
         try {
+
           reconocimiento.abort();
+
         } catch (e) {}
 
       }
@@ -1400,40 +2302,53 @@
       reconocimiento.lang =
         "es-MX";
 
+
       reconocimiento.continuous =
         false;
 
+
       reconocimiento.interimResults =
         false;
+
 
       reconocimiento.maxAlternatives =
         3;
 
 
       const boton =
-        document.getElementById(
-          "micBtn"
-        );
+        document
+          .getElementById(
+            "micBtn"
+          );
+
 
       const textoBoton =
-        document.getElementById(
-          "micText"
-        );
+        document
+          .getElementById(
+            "micText"
+          );
 
 
       reconocimiento.onstart =
         function() {
 
-          boton.classList.add(
-            "listening"
-          );
+          boton
+            .classList
+            .add(
+              "listening"
+            );
 
-          boton.classList.remove(
-            "processing"
-          );
+
+          boton
+            .classList
+            .remove(
+              "processing"
+            );
+
 
           textoBoton.textContent =
             "ESCUCHANDO...";
+
 
           document
             .getElementById(
@@ -1448,19 +2363,26 @@
       reconocimiento.onresult =
         function(event) {
 
-          boton.classList.remove(
-            "listening"
-          );
+          boton
+            .classList
+            .remove(
+              "listening"
+            );
 
-          boton.classList.add(
-            "processing"
-          );
+
+          boton
+            .classList
+            .add(
+              "processing"
+            );
+
 
           textoBoton.textContent =
             "PROCESANDO";
 
 
-          const alternativas = [];
+          const alternativas =
+            [];
 
 
           for (
@@ -1471,9 +2393,12 @@
           ) {
 
             alternativas.push(
-              event.results[0][i]
+
+              event
+                .results[0][i]
                 .transcript
                 .trim()
+
             );
 
           }
@@ -1492,7 +2417,8 @@
               "escuchado"
             )
             .textContent =
-            alternativas[0] || "";
+            alternativas[0] ||
+            "";
 
 
           procesarAlternativas(
@@ -1538,6 +2464,11 @@
             mensaje
           );
 
+
+          hablar(
+            "No pude escuchar correctamente."
+          );
+
         };
 
 
@@ -1545,9 +2476,11 @@
         function() {
 
           if (
-            !boton.classList.contains(
-              "processing"
-            )
+            !boton
+              .classList
+              .contains(
+                "processing"
+              )
           ) {
 
             restaurarMicrofono();
@@ -1565,6 +2498,7 @@
 
         restaurarMicrofono();
 
+
         mostrarError(
           "No fue posible iniciar el micrófono."
         );
@@ -1575,14 +2509,14 @@
 
 
     // =====================================================
-    // PROCESAR VOZ
+    // PROCESAR ALTERNATIVAS
     // =====================================================
 
     async function procesarAlternativas(
       alternativas
     ) {
 
-      // Contexto conversacional primero.
+      // CONTEXTO
 
       for (
         let i = 0;
@@ -1596,7 +2530,9 @@
           );
 
 
-        if (contextual) {
+        if (
+          contextual
+        ) {
 
           document
             .getElementById(
@@ -1621,7 +2557,7 @@
       }
 
 
-      // Coincidencia exacta.
+      // EXACTA
 
       for (
         let i = 0;
@@ -1652,10 +2588,13 @@
 
 
           await consultarAPI(
+
             deteccion.opcion.tipo +
             " " +
             deteccion.opcion.valor,
+
             true
+
           );
 
 
@@ -1668,7 +2607,7 @@
       }
 
 
-      // Ambigüedad.
+      // AMBIGUA
 
       for (
         let i = 0;
@@ -1702,11 +2641,12 @@
       }
 
 
-      // Último intento backend.
+      // BACKEND
 
       const consulta =
         normalizarVoz(
-          alternativas[0] || ""
+          alternativas[0] ||
+          ""
         );
 
 
@@ -1743,25 +2683,36 @@
         );
 
 
-      let tipoPreferido = null;
+      let tipoPreferido =
+        null;
 
 
       if (
-        /\bUBICACION\b/.test(normal)
+        /\bUBICACION\b/.test(
+          normal
+        )
       ) {
 
         tipoPreferido =
           "UBICACION";
 
-      } else if (
-        /\bRUTA\b/.test(normal)
+      }
+
+      else if (
+        /\bRUTA\b/.test(
+          normal
+        )
       ) {
 
         tipoPreferido =
           "RUTA";
 
-      } else if (
-        /\bPROVEEDOR\b/.test(normal)
+      }
+
+      else if (
+        /\bPROVEEDOR\b/.test(
+          normal
+        )
       ) {
 
         tipoPreferido =
@@ -1777,21 +2728,38 @@
         );
 
 
-      if (exactas.length === 1) {
+      if (
+        exactas.length === 1
+      ) {
 
         return {
-          estado: "EXACTA",
-          opcion: exactas[0]
+
+          estado:
+            "EXACTA",
+
+          opcion:
+            exactas[0]
+
         };
 
       }
 
 
-      if (exactas.length > 1) {
+      if (
+        exactas.length > 1
+      ) {
 
         return {
-          estado: "AMBIGUA",
-          opciones: exactas.slice(0,4)
+
+          estado:
+            "AMBIGUA",
+
+          opciones:
+            exactas.slice(
+              0,
+              4
+            )
+
         };
 
       }
@@ -1804,8 +2772,12 @@
         );
 
 
-      if (!aproximadas.length) {
+      if (
+        !aproximadas.length
+      ) {
+
         return null;
+
       }
 
 
@@ -1814,21 +2786,34 @@
       ) {
 
         if (
-          aproximadas[0].distancia === 0
+          aproximadas[0]
+            .distancia === 0
         ) {
 
           return {
-            estado: "EXACTA",
-            opcion: aproximadas[0]
+
+            estado:
+              "EXACTA",
+
+            opcion:
+              aproximadas[0]
+
           };
 
         }
 
 
         return {
-          estado: "AMBIGUA",
+
+          estado:
+            "AMBIGUA",
+
           opciones:
-            aproximadas.slice(0,3)
+            aproximadas.slice(
+              0,
+              3
+            )
+
         };
 
       }
@@ -1836,6 +2821,7 @@
 
       const mejor =
         aproximadas[0];
+
 
       const segunda =
         aproximadas[1];
@@ -1848,21 +2834,37 @@
       ) {
 
         return {
-          estado: "EXACTA",
-          opcion: mejor
+
+          estado:
+            "EXACTA",
+
+          opcion:
+            mejor
+
         };
 
       }
 
 
       return {
-        estado: "AMBIGUA",
+
+        estado:
+          "AMBIGUA",
+
         opciones:
-          aproximadas.slice(0,3)
+          aproximadas.slice(
+            0,
+            3
+          )
+
       };
 
     }
 
+
+    // =====================================================
+    // COINCIDENCIAS EXACTAS
+    // =====================================================
 
     function buscarCoincidenciasExactas(
       texto,
@@ -1870,34 +2872,56 @@
     ) {
 
       const candidatos =
-        generarCandidatos(texto);
+        generarCandidatos(
+          texto
+        );
 
 
       const set =
         new Set(
+
           candidatos.map(
-            limpiarCodigo
+            function(c) {
+
+              return limpiarCodigo(
+                c
+              );
+
+            }
           )
+
         );
 
 
-      return eliminarDuplicados(
+      const resultados =
         obtenerEntradasCatalogo(
           tipoPreferido
         )
-          .filter(function(entrada) {
+          .filter(
+            function(entrada) {
 
-            return set.has(
-              limpiarCodigo(
-                entrada.valor
-              )
-            );
+              return set.has(
 
-          })
+                limpiarCodigo(
+                  entrada.valor
+                )
+
+              );
+
+            }
+          );
+
+
+      return eliminarDuplicados(
+        resultados
       );
 
     }
 
+
+    // =====================================================
+    // COINCIDENCIAS APROXIMADAS
+    // =====================================================
 
     function buscarCoincidenciasAproximadas(
       texto,
@@ -1905,85 +2929,129 @@
     ) {
 
       const candidatos =
-        generarCandidatos(texto)
-          .map(limpiarCodigo)
-          .filter(function(c) {
-            return c.length >= 2;
-          });
+        generarCandidatos(
+          texto
+        )
+          .map(
+            function(c) {
 
+              return limpiarCodigo(
+                c
+              );
 
-      const resultados = [];
+            }
+          )
+          .filter(
+            function(c) {
 
-
-      obtenerEntradasCatalogo(
-        tipoPreferido
-      )
-        .forEach(function(entrada) {
-
-          const codigo =
-            limpiarCodigo(
-              entrada.valor
-            );
-
-
-          let mejor =
-            Infinity;
-
-
-          candidatos.forEach(
-            function(candidato) {
-
-              if (
-                Math.abs(
-                  candidato.length -
-                  codigo.length
-                ) > 2
-              ) {
-                return;
-              }
-
-
-              const distancia =
-                distanciaLevenshtein(
-                  codigo,
-                  candidato
-                );
-
-
-              if (
-                distancia < mejor
-              ) {
-
-                mejor =
-                  distancia;
-
-              }
+              return c.length >= 2;
 
             }
           );
 
 
-          const limite =
-            codigo.length >= 6
-              ? 2
-              : 1;
+      if (
+        !candidatos.length
+      ) {
+
+        return [];
+
+      }
 
 
-          if (mejor <= limite) {
+      const resultados =
+        [];
 
-            resultados.push({
-              tipo: entrada.tipo,
-              valor: entrada.valor,
-              distancia: mejor
-            });
+
+      obtenerEntradasCatalogo(
+        tipoPreferido
+      )
+        .forEach(
+          function(entrada) {
+
+            const codigo =
+              limpiarCodigo(
+                entrada.valor
+              );
+
+
+            if (!codigo) {
+              return;
+            }
+
+
+            let mejorDistancia =
+              Infinity;
+
+
+            candidatos.forEach(
+              function(candidato) {
+
+                if (
+                  Math.abs(
+                    candidato.length -
+                    codigo.length
+                  ) > 2
+                ) {
+
+                  return;
+
+                }
+
+
+                const distancia =
+                  distanciaLevenshtein(
+                    codigo,
+                    candidato
+                  );
+
+
+                if (
+                  distancia <
+                  mejorDistancia
+                ) {
+
+                  mejorDistancia =
+                    distancia;
+
+                }
+
+              }
+            );
+
+
+            const limite =
+              codigo.length >= 6
+                ? 2
+                : 1;
+
+
+            if (
+              mejorDistancia <=
+              limite
+            ) {
+
+              resultados.push({
+
+                tipo:
+                  entrada.tipo,
+
+                valor:
+                  entrada.valor,
+
+                distancia:
+                  mejorDistancia
+
+              });
+
+            }
 
           }
-
-        });
+        );
 
 
       resultados.sort(
-        function(a,b) {
+        function(a, b) {
 
           if (
             a.distancia !==
@@ -1997,10 +3065,14 @@
 
           }
 
-          return String(a.valor)
-            .localeCompare(
-              String(b.valor)
-            );
+
+          return String(
+            a.valor
+          ).localeCompare(
+            String(
+              b.valor
+            )
+          );
 
         }
       );
@@ -2013,11 +3085,16 @@
     }
 
 
+    // =====================================================
+    // ENTRADAS CATÁLOGO VOZ
+    // =====================================================
+
     function obtenerEntradasCatalogo(
       tipoPreferido
     ) {
 
-      const entradas = [];
+      const entradas =
+        [];
 
 
       function agregar(
@@ -2027,21 +3104,33 @@
 
         if (
           tipoPreferido &&
-          tipo !== tipoPreferido
+          tipo !==
+          tipoPreferido
         ) {
+
           return;
+
         }
 
 
-        (lista || [])
-          .forEach(function(valor) {
+        (
+          lista || []
+        )
+          .forEach(
+            function(valor) {
 
-            entradas.push({
-              tipo: tipo,
-              valor: valor
-            });
+              entradas.push({
 
-          });
+                tipo:
+                  tipo,
+
+                valor:
+                  valor
+
+              });
+
+            }
+          );
 
       }
 
@@ -2051,15 +3140,18 @@
         catalogoVoz.ubicaciones
       );
 
+
       agregar(
         "RUTA",
         catalogoVoz.rutas
       );
 
+
       agregar(
         "PROVEEDOR",
         catalogoVoz.proveedores
       );
+
 
       agregar(
         "NUMERO",
@@ -2089,7 +3181,11 @@
             opcion.valor;
 
 
-          if (!mapa.has(clave)) {
+          if (
+            !mapa.has(
+              clave
+            )
+          ) {
 
             mapa.set(
               clave,
@@ -2118,43 +3214,63 @@
     ) {
 
       const contenedor =
-        document.getElementById(
-          "resultados"
-        );
+        document
+          .getElementById(
+            "resultados"
+          );
 
 
-      contenedor.innerHTML = "";
+      contenedor.innerHTML =
+        "";
 
 
       const tarjeta =
-        document.createElement("div");
+        document
+          .createElement(
+            "div"
+          );
+
 
       tarjeta.className =
         "ambiguedad";
 
 
       const titulo =
-        document.createElement("div");
+        document
+          .createElement(
+            "div"
+          );
+
 
       titulo.className =
         "ambiguedad-titulo";
+
 
       titulo.textContent =
         "No estoy completamente seguro";
 
 
       const texto =
-        document.createElement("div");
+        document
+          .createElement(
+            "div"
+          );
+
 
       texto.className =
         "ambiguedad-texto";
+
 
       texto.textContent =
         "¿Te refieres a una de estas opciones?";
 
 
       const zona =
-        document.createElement("div");
+        document
+          .createElement(
+            "div"
+          );
+
 
       zona.className =
         "ambiguedad-opciones";
@@ -2164,18 +3280,22 @@
         function(opcion) {
 
           const boton =
-            document.createElement(
-              "button"
-            );
+            document
+              .createElement(
+                "button"
+              );
+
 
           boton.className =
             "ambiguedad-btn";
+
 
           boton.textContent =
             opcion.valor;
 
 
-          boton.onclick =
+          boton.addEventListener(
+            "click",
             function() {
 
               document
@@ -2189,13 +3309,17 @@
 
 
               consultarAPI(
+
                 opcion.tipo +
                 " " +
                 opcion.valor,
+
                 true
+
               );
 
-            };
+            }
+          );
 
 
           zona.appendChild(
@@ -2206,9 +3330,20 @@
       );
 
 
-      tarjeta.appendChild(titulo);
-      tarjeta.appendChild(texto);
-      tarjeta.appendChild(zona);
+      tarjeta.appendChild(
+        titulo
+      );
+
+
+      tarjeta.appendChild(
+        texto
+      );
+
+
+      tarjeta.appendChild(
+        zona
+      );
+
 
       contenedor.appendChild(
         tarjeta
@@ -2232,31 +3367,40 @@
     ) {
 
       const estado =
-        document.getElementById(
-          "estado"
-        );
+        document
+          .getElementById(
+            "estado"
+          );
+
 
       const contenedor =
-        document.getElementById(
-          "resultados"
-        );
+        document
+          .getElementById(
+            "resultados"
+          );
 
 
       estado.textContent =
         "Buscando...";
 
-      contenedor.innerHTML = "";
+
+      contenedor.innerHTML =
+        "";
 
 
       try {
 
         const datos =
           await cargarJSONP({
-            q: consulta
+
+            q:
+              consulta
+
           });
 
 
-        estado.textContent = "";
+        estado.textContent =
+          "";
 
 
         if (
@@ -2264,12 +3408,30 @@
           !datos.ok
         ) {
 
-          mostrarError(
-            datos &&
-            datos.mensaje
+          const mensaje =
+            (
+              datos &&
+              datos.mensaje
+            )
               ? datos.mensaje
-              : "Ocurrió un error."
+              : "Ocurrió un error.";
+
+
+          mostrarError(
+            mensaje
           );
+
+
+          if (
+            debeHablar
+          ) {
+
+            hablar(
+              "Ocurrió un error al realizar la búsqueda."
+            );
+
+          }
+
 
           return;
 
@@ -2285,13 +3447,16 @@
           );
 
 
-          if (debeHablar) {
+          if (
+            debeHablar
+          ) {
 
             hablar(
               "No encontré información para esa consulta."
             );
 
           }
+
 
           return;
 
@@ -2308,7 +3473,9 @@
         );
 
 
-        if (debeHablar) {
+        if (
+          debeHablar
+        ) {
 
           responderConVoz(
             datos
@@ -2319,13 +3486,29 @@
 
       } catch (error) {
 
-        console.error(error);
+        console.error(
+          error
+        );
 
-        estado.textContent = "";
+
+        estado.textContent =
+          "";
+
 
         mostrarError(
           "No fue posible consultar la base de datos."
         );
+
+
+        if (
+          debeHablar
+        ) {
+
+          hablar(
+            "No fue posible consultar la base de datos."
+          );
+
+        }
 
       }
 
@@ -2333,7 +3516,7 @@
 
 
     // =====================================================
-    // RESULTADOS
+    // MOSTRAR RESULTADOS
     // =====================================================
 
     function mostrarResultados(
@@ -2341,34 +3524,40 @@
     ) {
 
       const contenedor =
-        document.getElementById(
-          "resultados"
-        );
+        document
+          .getElementById(
+            "resultados"
+          );
 
 
-      contenedor.innerHTML = "";
+      contenedor.innerHTML =
+        "";
 
 
       datos.resultados.forEach(
         function(r) {
 
           const tarjeta =
-            document.createElement(
-              "div"
-            );
+            document
+              .createElement(
+                "div"
+              );
+
 
           tarjeta.className =
             "resultado";
 
 
-          tarjeta.onclick =
+          tarjeta.addEventListener(
+            "click",
             function() {
 
               abrirFichaPorRegistro(
                 r
               );
 
-            };
+            }
+          );
 
 
           agregarElemento(
@@ -2388,7 +3577,10 @@
           agregarElemento(
             tarjeta,
             "Proveedor #" +
-            (r.numeroProveedor || "—"),
+            (
+              r.numeroProveedor ||
+              "—"
+            ),
             "resultado-detalle"
           );
 
@@ -2396,7 +3588,10 @@
           agregarElemento(
             tarjeta,
             "🚛 Ruta: " +
-            (r.ruta || "—"),
+            (
+              r.ruta ||
+              "—"
+            ),
             "resultado-detalle"
           );
 
@@ -2404,7 +3599,10 @@
           agregarElemento(
             tarjeta,
             "📦 Máximo: " +
-            (r.maximo || "—"),
+            (
+              r.maximo ||
+              "—"
+            ),
             "resultado-detalle"
           );
 
@@ -2420,7 +3618,7 @@
 
 
     // =====================================================
-    // CONTEXTO
+    // CONTEXTO CONVERSACIONAL
     // =====================================================
 
     function guardarContexto(
@@ -2433,14 +3631,29 @@
         !datos.resultados ||
         !datos.resultados.length
       ) {
+
         return;
+
       }
 
 
       contextoActual = {
-        tipo: datos.tipo,
-        valor: datos.valor,
-        resultados: datos.resultados
+
+        tipo:
+          String(
+            datos.tipo ||
+            ""
+          ),
+
+        valor:
+          String(
+            datos.valor ||
+            ""
+          ),
+
+        resultados:
+          datos.resultados
+
       };
 
     }
@@ -2450,8 +3663,12 @@
       texto
     ) {
 
-      if (!contextoActual) {
+      if (
+        !contextoActual
+      ) {
+
         return null;
+
       }
 
 
@@ -2462,9 +3679,17 @@
 
 
       if (
-        /\bRUTA\b/.test(t)
+        /\bRUTA\b/.test(t) &&
+        (
+          /\bQUE\b/.test(t) ||
+          /\bCUAL\b/.test(t) ||
+          /\bTIENE\b/.test(t) ||
+          /\bES\b/.test(t)
+        )
       ) {
+
         return "RUTA";
+
       }
 
 
@@ -2473,7 +3698,9 @@
         /\bMAXIMA\b/.test(t) ||
         /\bCAPACIDAD\b/.test(t)
       ) {
+
         return "MAXIMO";
+
       }
 
 
@@ -2481,7 +3708,9 @@
         /\bNUMERO\b/.test(t) &&
         /\bPROVEEDOR\b/.test(t)
       ) {
+
         return "NUMERO";
+
       }
 
 
@@ -2490,21 +3719,39 @@
         /\bFECHA\b/.test(t) ||
         /\bCUANDO\b/.test(t)
       ) {
+
         return "FECHA";
+
       }
 
 
       if (
-        /\bUBICACION\b/.test(t)
+        /\bUBICACION\b/.test(t) &&
+        (
+          /\bQUE\b/.test(t) ||
+          /\bCUAL\b/.test(t) ||
+          /\bDONDE\b/.test(t) ||
+          /\bESTA\b/.test(t)
+        )
       ) {
+
         return "UBICACION";
+
       }
 
 
       if (
-        /\bPROVEEDOR\b/.test(t)
+        /\bPROVEEDOR\b/.test(t) &&
+        (
+          /\bQUE\b/.test(t) ||
+          /\bCUAL\b/.test(t) ||
+          /\bQUIEN\b/.test(t) ||
+          /\bES\b/.test(t)
+        )
       ) {
+
         return "PROVEEDOR";
+
       }
 
 
@@ -2529,24 +3776,43 @@
 
 
       const mapa = {
-        RUTA: ["ruta", "La ruta"],
-        MAXIMO: ["maximo", "El máximo"],
+
+        RUTA: [
+          "ruta",
+          "Ruta",
+          "La ruta"
+        ],
+
+        MAXIMO: [
+          "maximo",
+          "Máximo",
+          "El máximo"
+        ],
+
         NUMERO: [
           "numeroProveedor",
+          "Número de proveedor",
           "El número de proveedor"
         ],
+
         FECHA: [
           "fechaActualizacion",
+          "Última actualización",
           "La última actualización"
         ],
+
         UBICACION: [
           "ubicacion",
+          "Ubicación",
           "La ubicación"
         ],
+
         PROVEEDOR: [
           "proveedor",
+          "Proveedor",
           "El proveedor"
         ]
+
       };
 
 
@@ -2554,8 +3820,12 @@
         mapa[campo];
 
 
-      if (!configuracion) {
+      if (
+        !configuracion
+      ) {
+
         return;
+
       }
 
 
@@ -2566,81 +3836,173 @@
         );
 
 
-      if (!valores.length) {
+      if (
+        !valores.length
+      ) {
+
+        mostrarRespuestaContextual(
+          configuracion[1],
+          "Sin información"
+        );
+
 
         hablar(
-          "No hay información disponible."
+          "No hay información disponible para ese dato."
         );
+
 
         return;
 
       }
 
 
-      document
-        .getElementById(
-          "resultados"
+      mostrarRespuestaContextual(
+
+        configuracion[1],
+
+        valores.join(
+          ", "
         )
-        .innerHTML =
-        '<div class="resultado">' +
-        '<div class="resultado-proveedor">' +
-        escaparHTML(configuracion[1]) +
-        '</div>' +
-        '<div class="resultado-ubicacion">' +
-        escaparHTML(
-          valores.join(", ")
-        ) +
-        '</div>' +
-        '</div>';
+
+      );
 
 
       hablar(
-        configuracion[1] +
+
+        configuracion[2] +
         " es " +
         valores
-          .map(decirCodigo)
-          .join(", ") +
+          .map(
+            decirCodigo
+          )
+          .join(
+            ", "
+          ) +
         "."
+
+      );
+
+    }
+
+
+    function mostrarRespuestaContextual(
+      titulo,
+      valor
+    ) {
+
+      const contenedor =
+        document
+          .getElementById(
+            "resultados"
+          );
+
+
+      contenedor.innerHTML =
+        "";
+
+
+      const tarjeta =
+        document
+          .createElement(
+            "div"
+          );
+
+
+      tarjeta.className =
+        "respuesta-contextual";
+
+
+      const tituloElemento =
+        document
+          .createElement(
+            "div"
+          );
+
+
+      tituloElemento.className =
+        "respuesta-contextual-titulo";
+
+
+      tituloElemento.textContent =
+        titulo;
+
+
+      const valorElemento =
+        document
+          .createElement(
+            "div"
+          );
+
+
+      valorElemento.className =
+        "respuesta-contextual-valor";
+
+
+      valorElemento.textContent =
+        valor;
+
+
+      tarjeta.appendChild(
+        tituloElemento
+      );
+
+
+      tarjeta.appendChild(
+        valorElemento
+      );
+
+
+      contenedor.appendChild(
+        tarjeta
       );
 
     }
 
 
     // =====================================================
-    // RESPUESTA POR VOZ
+    // RESPUESTA HABLADA
     // =====================================================
 
     function responderConVoz(
       datos
     ) {
 
-      const resultados =
-        datos.resultados || [];
+      if (
+        !datos.resultados ||
+        !datos.resultados.length
+      ) {
 
-
-      if (!resultados.length) {
         return;
+
       }
+
+
+      const resultados =
+        datos.resultados;
 
 
       const tipo =
         String(
-          datos.tipo || ""
+          datos.tipo ||
+          ""
         ).toUpperCase();
 
 
       const valor =
         String(
-          datos.valor || ""
+          datos.valor ||
+          ""
         );
 
 
       if (
-        tipo === "UBICACION"
+        tipo ===
+        "UBICACION"
       ) {
 
         if (
-          resultados.length === 1
+          resultados.length ===
+          1
         ) {
 
           const r =
@@ -2659,7 +4021,9 @@
             ".";
 
 
-          if (r.ruta) {
+          if (
+            r.ruta
+          ) {
 
             frase +=
               " Ruta " +
@@ -2671,7 +4035,9 @@
           }
 
 
-          if (r.maximo) {
+          if (
+            r.maximo
+          ) {
 
             frase +=
               " Máximo " +
@@ -2681,18 +4047,67 @@
           }
 
 
-          hablar(frase);
+          hablar(
+            frase
+          );
+
 
           return;
 
         }
 
+
+        const proveedores =
+          obtenerUnicos(
+            resultados,
+            "proveedor"
+          );
+
+
+        let frase =
+          "En la ubicación " +
+          decirCodigo(
+            valor
+          ) +
+          " encontré " +
+          resultados.length +
+          " registros.";
+
+
+        if (
+          proveedores.length <=
+          5
+        ) {
+
+          frase +=
+            " Proveedores: " +
+            proveedores
+              .map(
+                decirCodigo
+              )
+              .join(
+                ", "
+              ) +
+            ".";
+
+        }
+
+
+        hablar(
+          frase
+        );
+
+
+        return;
+
       }
 
 
       if (
-        tipo === "PROVEEDOR" ||
-        tipo === "NUMERO"
+        tipo ===
+        "PROVEEDOR" ||
+        tipo ===
+        "NUMERO"
       ) {
 
         const ubicaciones =
@@ -2703,15 +4118,18 @@
 
 
         const proveedor =
-          resultados[0].proveedor ||
+          resultados[0]
+            .proveedor ||
           valor;
 
 
         if (
-          ubicaciones.length === 1
+          ubicaciones.length ===
+          1
         ) {
 
           hablar(
+
             "El proveedor " +
             decirCodigo(
               proveedor
@@ -2721,7 +4139,40 @@
               ubicaciones[0]
             ) +
             "."
+
           );
+
+
+          return;
+
+        }
+
+
+        if (
+          ubicaciones.length <=
+          5
+        ) {
+
+          hablar(
+
+            "El proveedor " +
+            decirCodigo(
+              proveedor
+            ) +
+            " se encuentra en " +
+            ubicaciones.length +
+            " ubicaciones: " +
+            ubicaciones
+              .map(
+                decirCodigo
+              )
+              .join(
+                ", "
+              ) +
+            "."
+
+          );
+
 
           return;
 
@@ -2729,14 +4180,17 @@
 
 
         hablar(
+
           "Encontré " +
           ubicaciones.length +
           " ubicaciones para el proveedor " +
           decirCodigo(
             proveedor
           ) +
-          "."
+          ". Los resultados están en pantalla."
+
         );
+
 
         return;
 
@@ -2744,7 +4198,8 @@
 
 
       if (
-        tipo === "RUTA"
+        tipo ===
+        "RUTA"
       ) {
 
         const ubicaciones =
@@ -2754,13 +4209,49 @@
           );
 
 
+        if (
+          ubicaciones.length <=
+          5
+        ) {
+
+          hablar(
+
+            "La ruta " +
+            decirCodigo(
+              valor
+            ) +
+            " tiene " +
+            ubicaciones.length +
+            " ubicaciones: " +
+            ubicaciones
+              .map(
+                decirCodigo
+              )
+              .join(
+                ", "
+              ) +
+            "."
+
+          );
+
+
+          return;
+
+        }
+
+
         hablar(
-          "La ruta " +
-          decirCodigo(valor) +
-          " tiene " +
+
+          "Encontré " +
           ubicaciones.length +
-          " ubicaciones."
+          " ubicaciones para la ruta " +
+          decirCodigo(
+            valor
+          ) +
+          ". Los resultados están en pantalla."
+
         );
+
 
         return;
 
@@ -2768,9 +4259,11 @@
 
 
       hablar(
+
         "Encontré " +
         resultados.length +
         " resultados."
+
       );
 
     }
@@ -2787,12 +4280,15 @@
 
 
       const boton =
-        document.getElementById(
-          "soundBtn"
-        );
+        document
+          .getElementById(
+            "soundBtn"
+          );
 
 
-      if (sonidoActivado) {
+      if (
+        sonidoActivado
+      ) {
 
         boton.textContent =
           "🔊 Respuesta por voz activada";
@@ -2804,10 +4300,13 @@
 
 
         if (
-          "speechSynthesis" in window
+          "speechSynthesis"
+          in window
         ) {
 
-          window.speechSynthesis.cancel();
+          window
+            .speechSynthesis
+            .cancel();
 
         }
 
@@ -2816,21 +4315,34 @@
     }
 
 
-    function hablar(texto) {
+    function hablar(
+      texto
+    ) {
 
-      if (!sonidoActivado) {
+      if (
+        !sonidoActivado
+      ) {
+
         return;
+
       }
 
 
       if (
-        !("speechSynthesis" in window)
+        !(
+          "speechSynthesis"
+          in window
+        )
       ) {
+
         return;
+
       }
 
 
-      window.speechSynthesis.cancel();
+      window
+        .speechSynthesis
+        .cancel();
 
 
       const mensaje =
@@ -2839,20 +4351,88 @@
         );
 
 
-      mensaje.lang = "es-MX";
-      mensaje.rate = 1;
-      mensaje.pitch = 1;
+      mensaje.lang =
+        "es-MX";
 
 
-      window.speechSynthesis.speak(
-        mensaje
-      );
+      mensaje.rate =
+        1;
+
+
+      mensaje.pitch =
+        1;
+
+
+      const voces =
+        window
+          .speechSynthesis
+          .getVoices();
+
+
+      const vozMX =
+        voces.find(
+          function(voz) {
+
+            return (
+              voz.lang &&
+              voz.lang
+                .toLowerCase()
+                .startsWith(
+                  "es-mx"
+                )
+            );
+
+          }
+        );
+
+
+      const vozES =
+        voces.find(
+          function(voz) {
+
+            return (
+              voz.lang &&
+              voz.lang
+                .toLowerCase()
+                .startsWith(
+                  "es"
+                )
+            );
+
+          }
+        );
+
+
+      if (
+        vozMX
+      ) {
+
+        mensaje.voice =
+          vozMX;
+
+      }
+
+      else if (
+        vozES
+      ) {
+
+        mensaje.voice =
+          vozES;
+
+      }
+
+
+      window
+        .speechSynthesis
+        .speak(
+          mensaje
+        );
 
     }
 
 
     // =====================================================
-    // NORMALIZACIÓN VOZ
+    // CANDIDATOS DE VOZ
     // =====================================================
 
     function generarCandidatos(
@@ -2864,13 +4444,19 @@
 
 
       const normal =
-        normalizarVoz(texto);
+        normalizarVoz(
+          texto
+        );
 
 
       const palabras =
         normal
-          .split(" ")
-          .filter(Boolean);
+          .split(
+            " "
+          )
+          .filter(
+            Boolean
+          );
 
 
       palabras.forEach(
@@ -2883,7 +4469,8 @@
 
 
           if (
-            limpia.length >= 2
+            limpia.length >=
+            2
           ) {
 
             candidatos.add(
@@ -2902,13 +4489,16 @@
         inicio++
       ) {
 
-        let acumulado = "";
+        let acumulado =
+          "";
 
 
         for (
           let fin = inicio;
-          fin < palabras.length &&
-          fin < inicio + 7;
+          fin <
+          palabras.length &&
+          fin <
+          inicio + 7;
           fin++
         ) {
 
@@ -2919,7 +4509,8 @@
 
 
           if (
-            acumulado.length >= 2
+            acumulado.length >=
+            2
           ) {
 
             candidatos.add(
@@ -2934,11 +4525,14 @@
 
 
       const compacto =
-        compactarVoz(texto);
+        compactarVoz(
+          texto
+        );
 
 
       if (
-        compacto.length >= 2
+        compacto.length >=
+        2
       ) {
 
         candidatos.add(
@@ -2959,43 +4553,51 @@
       texto
     ) {
 
-      return normalizarVoz(texto)
-        .replace(/\bQUE\b/g," ")
-        .replace(/\bHAY\b/g," ")
-        .replace(/\bDONDE\b/g," ")
-        .replace(/\bESTA\b/g," ")
-        .replace(/\bESTAN\b/g," ")
-        .replace(/\bEL\b/g," ")
-        .replace(/\bLA\b/g," ")
-        .replace(/\bLOS\b/g," ")
-        .replace(/\bLAS\b/g," ")
-        .replace(/\bEN\b/g," ")
-        .replace(/\bUN\b/g," ")
-        .replace(/\bUNA\b/g," ")
-        .replace(/\bDE\b/g," ")
-        .replace(/\bDEL\b/g," ")
-        .replace(/\bDAME\b/g," ")
-        .replace(/\bBUSCA\b/g," ")
-        .replace(/\bBUSCAME\b/g," ")
-        .replace(/\bNECESITO\b/g," ")
-        .replace(/\bQUIERO\b/g," ")
-        .replace(/\bUBICACION\b/g," ")
-        .replace(/\bPROVEEDOR\b/g," ")
-        .replace(/\bRUTA\b/g," ")
-        .replace(/\bNUMERO\b/g," ")
-        .replace(/\bPOR\b/g," ")
-        .replace(/\bFAVOR\b/g," ")
-        .replace(/[^A-Z0-9]/g,"");
+      return normalizarVoz(
+        texto
+      )
+        .replace(/\bQUE\b/g, " ")
+        .replace(/\bHAY\b/g, " ")
+        .replace(/\bDONDE\b/g, " ")
+        .replace(/\bESTA\b/g, " ")
+        .replace(/\bESTAN\b/g, " ")
+        .replace(/\bEL\b/g, " ")
+        .replace(/\bLA\b/g, " ")
+        .replace(/\bLOS\b/g, " ")
+        .replace(/\bLAS\b/g, " ")
+        .replace(/\bEN\b/g, " ")
+        .replace(/\bUN\b/g, " ")
+        .replace(/\bUNA\b/g, " ")
+        .replace(/\bDE\b/g, " ")
+        .replace(/\bDEL\b/g, " ")
+        .replace(/\bDAME\b/g, " ")
+        .replace(/\bBUSCA\b/g, " ")
+        .replace(/\bBUSCAME\b/g, " ")
+        .replace(/\bNECESITO\b/g, " ")
+        .replace(/\bQUIERO\b/g, " ")
+        .replace(/\bUBICACION\b/g, " ")
+        .replace(/\bPROVEEDOR\b/g, " ")
+        .replace(/\bRUTA\b/g, " ")
+        .replace(/\bNUMERO\b/g, " ")
+        .replace(/\bPOR\b/g, " ")
+        .replace(/\bFAVOR\b/g, " ")
+        .replace(/[^A-Z0-9]/g, "");
 
     }
 
+
+    // =====================================================
+    // NORMALIZACIÓN
+    // =====================================================
 
     function normalizarParaComparar(
       texto
     ) {
 
       return quitarAcentos(
-        String(texto || "")
+        String(
+          texto || ""
+        )
       )
         .toUpperCase()
         .replace(
@@ -3016,7 +4618,9 @@
     ) {
 
       return quitarAcentos(
-        String(texto || "")
+        String(
+          texto || ""
+        )
       )
         .toUpperCase()
         .trim();
@@ -3035,74 +4639,130 @@
 
 
       const letras = {
-        A:"A",
-        BE:"B", B:"B",
-        CE:"C", C:"C",
-        DE:"D", D:"D",
-        E:"E",
-        EFE:"F", F:"F",
-        GE:"G", G:"G",
-        HACHE:"H", H:"H",
-        I:"I",
-        JOTA:"J", J:"J",
-        KA:"K", K:"K",
-        ELE:"L", L:"L",
-        EME:"M", M:"M",
-        ENE:"N", N:"N",
-        O:"O",
-        PE:"P", P:"P",
-        CU:"Q", Q:"Q",
-        ERRE:"R", R:"R",
-        ESE:"S", S:"S",
-        TE:"T", T:"T",
-        U:"U",
-        UVE:"V", V:"V",
-        DOBLEU:"W",
-        EQUIS:"X", X:"X",
-        YE:"Y", Y:"Y",
-        ZETA:"Z", Z:"Z"
+
+        A: "A",
+
+        BE: "B",
+        B: "B",
+
+        CE: "C",
+        C: "C",
+
+        DE: "D",
+        D: "D",
+
+        E: "E",
+
+        EFE: "F",
+        F: "F",
+
+        GE: "G",
+        G: "G",
+
+        HACHE: "H",
+        H: "H",
+
+        I: "I",
+
+        JOTA: "J",
+        J: "J",
+
+        KA: "K",
+        K: "K",
+
+        ELE: "L",
+        L: "L",
+
+        EME: "M",
+        M: "M",
+
+        ENE: "N",
+        N: "N",
+
+        O: "O",
+
+        PE: "P",
+        P: "P",
+
+        CU: "Q",
+        Q: "Q",
+
+        ERRE: "R",
+        R: "R",
+
+        ESE: "S",
+        S: "S",
+
+        TE: "T",
+        T: "T",
+
+        U: "U",
+
+        UVE: "V",
+        V: "V",
+
+        DOBLEU: "W",
+
+        EQUIS: "X",
+        X: "X",
+
+        YE: "Y",
+        Y: "Y",
+
+        ZETA: "Z",
+        Z: "Z"
+
       };
 
 
       const numeros = {
-        CERO:"0",
-        UNO:"1",
-        DOS:"2",
-        TRES:"3",
-        CUATRO:"4",
-        CINCO:"5",
-        SEIS:"6",
-        SIETE:"7",
-        OCHO:"8",
-        NUEVE:"9",
-        DIEZ:"10",
-        ONCE:"11",
-        DOCE:"12",
-        TRECE:"13",
-        CATORCE:"14",
-        QUINCE:"15",
-        DIECISEIS:"16",
-        DIECISIETE:"17",
-        DIECIOCHO:"18",
-        DIECINUEVE:"19",
-        VEINTE:"20",
-        VEINTIUNO:"21",
-        VEINTIDOS:"22",
-        VEINTITRES:"23",
-        VEINTICUATRO:"24",
-        VEINTICINCO:"25",
-        VEINTISEIS:"26",
-        VEINTISIETE:"27",
-        VEINTIOCHO:"28",
-        VEINTINUEVE:"29",
-        TREINTA:"30"
+
+        CERO: "0",
+        UNO: "1",
+        DOS: "2",
+        TRES: "3",
+        CUATRO: "4",
+        CINCO: "5",
+        SEIS: "6",
+        SIETE: "7",
+        OCHO: "8",
+        NUEVE: "9",
+
+        DIEZ: "10",
+        ONCE: "11",
+        DOCE: "12",
+        TRECE: "13",
+        CATORCE: "14",
+        QUINCE: "15",
+        DIECISEIS: "16",
+        DIECISIETE: "17",
+        DIECIOCHO: "18",
+        DIECINUEVE: "19",
+
+        VEINTE: "20",
+        VEINTIUNO: "21",
+        VEINTIDOS: "22",
+        VEINTITRES: "23",
+        VEINTICUATRO: "24",
+        VEINTICINCO: "25",
+        VEINTISEIS: "26",
+        VEINTISIETE: "27",
+        VEINTIOCHO: "28",
+        VEINTINUEVE: "29",
+
+        TREINTA: "30"
+
       };
 
 
       const palabras =
-        t.split(" ");
+        t.split(
+          " "
+        );
 
-      const convertidas = [];
+
+      const convertidas =
+        [];
 
 
       for (
@@ -3116,12 +4776,20 @@
 
 
         if (
-          palabra === "DOBLE" &&
-          palabras[i + 1] === "U"
+          palabra ===
+          "DOBLE" &&
+          palabras[i + 1] ===
+          "U"
         ) {
 
-          convertidas.push("W");
+          convertidas.push(
+            "W"
+          );
+
+
           i++;
+
+
           continue;
 
         }
@@ -3135,6 +4803,7 @@
           convertidas.push(
             numeros[palabra]
           );
+
 
           continue;
 
@@ -3150,6 +4819,7 @@
             letras[palabra]
           );
 
+
           continue;
 
         }
@@ -3163,8 +4833,13 @@
 
 
       return convertidas
-        .join(" ")
-        .replace(/\s+/g," ")
+        .join(
+          " "
+        )
+        .replace(
+          /\s+/g,
+          " "
+        )
         .trim();
 
     }
@@ -3190,8 +4865,12 @@
       texto
     ) {
 
-      return String(texto)
-        .normalize("NFD")
+      return String(
+        texto
+      )
+        .normalize(
+          "NFD"
+        )
         .replace(
           /[\u0300-\u036f]/g,
           ""
@@ -3209,11 +4888,20 @@
       b
     ) {
 
-      a = String(a || "");
-      b = String(b || "");
+      a =
+        String(
+          a || ""
+        );
 
 
-      const matriz = [];
+      b =
+        String(
+          b || ""
+        );
+
+
+      const matriz =
+        [];
 
 
       for (
@@ -3222,7 +4910,8 @@
         i++
       ) {
 
-        matriz[i] = [i];
+        matriz[i] =
+          [i];
 
       }
 
@@ -3233,7 +4922,8 @@
         j++
       ) {
 
-        matriz[0][j] = j;
+        matriz[0][j] =
+          j;
 
       }
 
@@ -3251,20 +4941,44 @@
         ) {
 
           if (
-            b.charAt(i - 1) ===
-            a.charAt(j - 1)
+            b.charAt(
+              i - 1
+            ) ===
+            a.charAt(
+              j - 1
+            )
           ) {
 
             matriz[i][j] =
-              matriz[i - 1][j - 1];
+              matriz[
+                i - 1
+              ][
+                j - 1
+              ];
 
           } else {
 
             matriz[i][j] =
               Math.min(
-                matriz[i-1][j-1] + 1,
-                matriz[i][j-1] + 1,
-                matriz[i-1][j] + 1
+
+                matriz[
+                  i - 1
+                ][
+                  j - 1
+                ] + 1,
+
+                matriz[
+                  i
+                ][
+                  j - 1
+                ] + 1,
+
+                matriz[
+                  i - 1
+                ][
+                  j
+                ] + 1
+
               );
 
           }
@@ -3274,7 +4988,11 @@
       }
 
 
-      return matriz[b.length][a.length];
+      return matriz[
+        b.length
+      ][
+        a.length
+      ];
 
     }
 
@@ -3288,18 +5006,36 @@
       campo
     ) {
 
+      const valores =
+        new Set();
+
+
+      resultados.forEach(
+        function(r) {
+
+          const valor =
+            String(
+              r[campo] ||
+              ""
+            ).trim();
+
+
+          if (
+            valor
+          ) {
+
+            valores.add(
+              valor
+            );
+
+          }
+
+        }
+      );
+
+
       return Array.from(
-        new Set(
-          resultados
-            .map(function(r) {
-
-              return String(
-                r[campo] || ""
-              ).trim();
-
-            })
-            .filter(Boolean)
-        )
+        valores
       );
 
     }
@@ -3317,13 +5053,19 @@
           .trim();
 
 
-      if (!codigo) {
+      if (
+        !codigo
+      ) {
+
         return "";
+
       }
 
 
       if (
-        /^\d+$/.test(codigo)
+        /^\d+$/.test(
+          codigo
+        )
       ) {
 
         return codigo;
@@ -3337,26 +5079,46 @@
         );
 
 
-      if (combinado) {
+      if (
+        combinado
+      ) {
+
+        const letras =
+          combinado[1]
+            .split(
+              ""
+            )
+            .join(
+              " "
+            );
+
+
+        const numero =
+          combinado[2];
+
 
         return (
-          combinado[1]
-            .split("")
-            .join(" ") +
+          letras +
           " " +
-          combinado[2]
+          numero
         );
 
       }
 
 
       if (
-        /^[A-Z]+$/.test(codigo)
+        /^[A-Z]+$/.test(
+          codigo
+        )
       ) {
 
         return codigo
-          .split("")
-          .join(" ");
+          .split(
+            ""
+          )
+          .join(
+            " "
+          );
 
       }
 
@@ -3371,28 +5133,33 @@
     ) {
 
       const contenedor =
-        document.getElementById(
-          "resultados"
-        );
+        document
+          .getElementById(
+            "resultados"
+          );
 
 
-      contenedor.innerHTML = "";
+      contenedor.innerHTML =
+        "";
 
 
-      const elemento =
-        document.createElement(
-          "div"
-        );
+      const error =
+        document
+          .createElement(
+            "div"
+          );
 
-      elemento.className =
+
+      error.className =
         "error";
 
-      elemento.textContent =
+
+      error.textContent =
         mensaje;
 
 
       contenedor.appendChild(
-        elemento
+        error
       );
 
     }
@@ -3401,18 +5168,24 @@
     function restaurarMicrofono() {
 
       const boton =
-        document.getElementById(
-          "micBtn"
+        document
+          .getElementById(
+            "micBtn"
+          );
+
+
+      boton
+        .classList
+        .remove(
+          "listening"
         );
 
 
-      boton.classList.remove(
-        "listening"
-      );
-
-      boton.classList.remove(
-        "processing"
-      );
+      boton
+        .classList
+        .remove(
+          "processing"
+        );
 
 
       document
@@ -3433,27 +5206,15 @@
     }
 
 
-    function escaparHTML(
-      texto
-    ) {
-
-      return String(texto || "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-    }
-
-
     // =====================================================
     // ARRANQUE
     // =====================================================
 
     iniciarAplicacion();
 
+
   </script>
 
 </body>
+
 </html>
