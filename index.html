@@ -7,6 +7,9 @@
 
   <title>Catálogo de Retornables</title>
 
+  <!-- LECTOR QR -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
   <style>
 
     * {
@@ -72,7 +75,7 @@
 
 
     /* =====================================================
-       MENÚ PRINCIPAL
+       INICIO
     ===================================================== */
 
     #vistaInicio {
@@ -174,14 +177,9 @@
       box-shadow: 0 2px 8px rgba(0,0,0,.07);
     }
 
-    .inicio-btn:hover,
-    .volver-btn:hover {
-      background: #f7f9fc;
-    }
-
 
     /* =====================================================
-       BÚSQUEDA POR VOZ
+       VOZ
     ===================================================== */
 
     .voice-card {
@@ -211,10 +209,6 @@
       font-size: 62px;
       transition: .2s;
       box-shadow: 0 5px 15px rgba(0,58,140,.25);
-    }
-
-    .mic-btn:hover {
-      transform: scale(1.03);
     }
 
     .mic-btn.listening {
@@ -251,10 +245,6 @@
       border-radius: 20px;
       cursor: pointer;
       font-size: 14px;
-    }
-
-    .sound-btn:hover {
-      background: #eef2f7;
     }
 
     .speech-info {
@@ -311,11 +301,6 @@
       border-left: 7px solid #003A8C;
       box-shadow: 0 3px 10px rgba(0,0,0,.08);
       cursor: pointer;
-      transition: .15s;
-    }
-
-    .resultado:hover {
-      transform: translateY(-2px);
     }
 
     .resultado-ubicacion {
@@ -334,11 +319,6 @@
       font-size: 19px;
       margin-top: 6px;
     }
-
-
-    /* =====================================================
-       RESPUESTA CONTEXTUAL
-    ===================================================== */
 
     .respuesta-contextual {
       background: white;
@@ -363,18 +343,12 @@
       font-weight: 900;
     }
 
-
-    /* =====================================================
-       AMBIGÜEDAD
-    ===================================================== */
-
     .ambiguedad {
       background: white;
       margin-top: 15px;
       padding: 24px;
       border-radius: 18px;
       border-left: 7px solid #ea580c;
-      box-shadow: 0 3px 10px rgba(0,0,0,.08);
       text-align: center;
     }
 
@@ -386,7 +360,6 @@
     .ambiguedad-texto {
       color: #666;
       margin-top: 7px;
-      font-size: 16px;
     }
 
     .ambiguedad-opciones {
@@ -406,18 +379,7 @@
       cursor: pointer;
       font-size: 19px;
       font-weight: 900;
-      min-width: 110px;
     }
-
-    .ambiguedad-btn:hover {
-      background: #003A8C;
-      color: white;
-    }
-
-
-    /* =====================================================
-       ERROR
-    ===================================================== */
 
     .error {
       background: white;
@@ -427,7 +389,6 @@
       color: #b91c1c;
       text-align: center;
       font-weight: 900;
-      box-shadow: 0 3px 10px rgba(0,0,0,.06);
     }
 
 
@@ -472,12 +433,10 @@
       cursor: pointer;
       box-shadow: 0 3px 10px rgba(0,0,0,.06);
       border: 2px solid transparent;
-      transition: .15s;
     }
 
     .catalogo-card:hover {
       border-color: #003A8C;
-      transform: translateY(-2px);
     }
 
     .catalogo-ubicacion {
@@ -512,46 +471,96 @@
 
 
     /* =====================================================
-       QR
+       ESCÁNER QR
     ===================================================== */
 
     .qr-card {
-      max-width: 650px;
+      max-width: 700px;
       margin: 20px auto;
       background: white;
       border-radius: 22px;
-      padding: 40px 25px;
+      padding: 28px;
       text-align: center;
       box-shadow: 0 3px 12px rgba(0,0,0,.08);
     }
 
     .qr-icono {
-      font-size: 85px;
+      font-size: 65px;
     }
 
     .qr-titulo {
       color: #003A8C;
       font-size: 27px;
       font-weight: 900;
-      margin-top: 15px;
+      margin-top: 10px;
     }
 
     .qr-texto {
       color: #6b7280;
-      margin-top: 10px;
+      margin-top: 8px;
       line-height: 1.5;
-      font-size: 15px;
     }
 
-    .qr-proximamente {
-      display: inline-block;
-      margin-top: 25px;
-      background: #eef2f7;
-      color: #003A8C;
-      padding: 10px 17px;
-      border-radius: 20px;
+    .qr-iniciar-btn {
+      width: 100%;
+      max-width: 380px;
+      margin-top: 24px;
+      border: none;
+      background: #003A8C;
+      color: white;
+      padding: 17px 20px;
+      border-radius: 14px;
+      font-size: 18px;
       font-weight: 900;
-      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .qr-iniciar-btn:disabled {
+      opacity: .55;
+      cursor: default;
+    }
+
+    #qrReader {
+      width: 100%;
+      max-width: 600px;
+      margin: 22px auto 0;
+      overflow: hidden;
+      border-radius: 16px;
+      display: none;
+    }
+
+    #qrReader video {
+      border-radius: 16px;
+    }
+
+    .qr-estado {
+      margin-top: 18px;
+      font-size: 16px;
+      font-weight: 900;
+      min-height: 24px;
+    }
+
+    .qr-estado.activo {
+      color: #16a34a;
+    }
+
+    .qr-estado.error {
+      color: #b91c1c;
+      background: transparent;
+      padding: 0;
+      box-shadow: none;
+    }
+
+    .qr-cancelar-btn {
+      display: none;
+      margin: 16px auto 0;
+      border: 1px solid #d1d5db;
+      background: #f7f9fc;
+      color: #374151;
+      padding: 11px 18px;
+      border-radius: 12px;
+      font-weight: 900;
+      cursor: pointer;
     }
 
 
@@ -648,7 +657,6 @@
       text-align: right;
       color: #6b7280;
       font-size: 13px;
-      margin-bottom: 20px;
     }
 
 
@@ -668,7 +676,6 @@
 
       .menu-icono {
         font-size: 52px;
-        margin-bottom: 10px;
       }
 
       .catalogo-grid {
@@ -676,7 +683,6 @@
       }
 
     }
-
 
     @media(max-width: 600px) {
 
@@ -690,10 +696,6 @@
 
       .inicio-contenedor {
         padding: 28px 14px;
-      }
-
-      .inicio-bienvenida h2 {
-        font-size: 25px;
       }
 
       .container {
@@ -717,12 +719,8 @@
         grid-template-columns: 1fr;
       }
 
-      .catalogo-card {
-        padding: 17px;
-      }
-
-      .catalogo-ubicacion {
-        font-size: 34px;
+      .qr-card {
+        padding: 24px 14px;
       }
 
       .ficha-toolbar {
@@ -731,10 +729,6 @@
 
       .ficha-contenedor {
         padding: 12px;
-      }
-
-      .bloque-ubicacion {
-        padding: 16px;
       }
 
       .fila {
@@ -766,4417 +760,1428 @@
         text-align: center;
       }
 
-      .ambiguedad-opciones {
-        display: block;
-      }
-
-      .ambiguedad-btn {
-        width: 100%;
-        margin-top: 8px;
-      }
-
     }
 
   </style>
-
 </head>
 
 
 <body>
 
 
-  <!-- =====================================================
-       INICIO
-  ====================================================== -->
+<!-- =====================================================
+     INICIO
+====================================================== -->
 
-  <div id="vistaInicio">
+<div id="vistaInicio">
 
-    <div class="header">
+  <div class="header">
+    <h1>CATÁLOGO DE RETORNABLES</h1>
+    <p>PENSKE</p>
+  </div>
 
-      <h1>
-        CATÁLOGO DE RETORNABLES
-      </h1>
+  <div class="inicio-contenedor">
 
-      <p>
-        PENSKE
-      </p>
-
+    <div class="inicio-bienvenida">
+      <h2>¿Qué deseas hacer?</h2>
+      <p>Selecciona una función</p>
     </div>
 
+    <div class="menu-principal">
 
-    <div class="inicio-contenedor">
-
-      <div class="inicio-bienvenida">
-
-        <h2>
-          ¿Qué deseas hacer?
-        </h2>
-
-        <p>
-          Selecciona una función
-        </p>
-
+      <div class="menu-card" onclick="abrirSeccion('voz')">
+        <div class="menu-icono">🎤</div>
+        <div class="menu-titulo">BÚSQUEDA POR VOZ</div>
+        <div class="menu-descripcion">
+          Busca ubicaciones, proveedores y rutas utilizando tu voz.
+        </div>
       </div>
 
-
-      <div class="menu-principal">
-
-
-        <div
-          class="menu-card"
-          onclick="abrirSeccion('voz')"
-        >
-
-          <div class="menu-icono">
-            🎤
-          </div>
-
-          <div class="menu-titulo">
-            BÚSQUEDA POR VOZ
-          </div>
-
-          <div class="menu-descripcion">
-            Busca ubicaciones, proveedores y rutas utilizando tu voz.
-          </div>
-
+      <div class="menu-card" onclick="abrirSeccion('catalogo')">
+        <div class="menu-icono">📦</div>
+        <div class="menu-titulo">CATÁLOGO</div>
+        <div class="menu-descripcion">
+          Consulta todas las ubicaciones registradas en el almacén.
         </div>
+      </div>
 
-
-        <div
-          class="menu-card"
-          onclick="abrirSeccion('catalogo')"
-        >
-
-          <div class="menu-icono">
-            📦
-          </div>
-
-          <div class="menu-titulo">
-            CATÁLOGO
-          </div>
-
-          <div class="menu-descripcion">
-            Consulta todas las ubicaciones registradas en el almacén.
-          </div>
-
+      <div class="menu-card" onclick="abrirSeccion('qr')">
+        <div class="menu-icono">📷</div>
+        <div class="menu-titulo">ESCANEAR QR</div>
+        <div class="menu-descripcion">
+          Escanea el código de una ubicación para consultar su información.
         </div>
-
-
-        <div
-          class="menu-card"
-          onclick="abrirSeccion('qr')"
-        >
-
-          <div class="menu-icono">
-            📷
-          </div>
-
-          <div class="menu-titulo">
-            ESCANEAR QR
-          </div>
-
-          <div class="menu-descripcion">
-            Escanea el código de una ubicación para consultar su información.
-          </div>
-
-        </div>
-
-
       </div>
 
     </div>
 
   </div>
 
-
-  <!-- =====================================================
-       VOZ
-  ====================================================== -->
-
-  <div
-    id="vistaVoz"
-    class="vista-seccion"
-  >
-
-    <div class="header">
-
-      <h1>
-        BÚSQUEDA POR VOZ
-      </h1>
-
-      <p>
-        Ubicaciones • Proveedores • Rutas
-      </p>
-
-    </div>
+</div>
 
 
-    <div class="barra-navegacion">
+<!-- =====================================================
+     VOZ
+====================================================== -->
 
-      <button
-        class="inicio-btn"
-        onclick="volverInicio()"
-      >
-        ← Inicio
+<div id="vistaVoz" class="vista-seccion">
+
+  <div class="header">
+    <h1>BÚSQUEDA POR VOZ</h1>
+    <p>Ubicaciones • Proveedores • Rutas</p>
+  </div>
+
+  <div class="barra-navegacion">
+    <button class="inicio-btn" onclick="volverInicio()">← Inicio</button>
+  </div>
+
+  <div class="container">
+
+    <div class="voice-card">
+
+      <div class="voice-title">
+        ¿Qué necesitas encontrar?
+      </div>
+
+      <button id="micBtn" class="mic-btn" onclick="escuchar()">
+        🎤
+        <span id="micText" class="mic-text">HABLAR</span>
       </button>
 
-    </div>
+      <div class="voice-help">
+        Toca el micrófono y haz tu pregunta
+      </div>
 
-
-    <div class="container">
-
-
-      <div class="voice-card">
-
-        <div class="voice-title">
-          ¿Qué necesitas encontrar?
-        </div>
-
-
-        <button
-          id="micBtn"
-          class="mic-btn"
-          onclick="escuchar()"
-        >
-
-          🎤
-
-          <span
-            id="micText"
-            class="mic-text"
-          >
-            HABLAR
-          </span>
-
+      <div class="sound-row">
+        <button id="soundBtn" class="sound-btn" onclick="alternarSonido()">
+          🔊 Respuesta por voz activada
         </button>
-
-
-        <div class="voice-help">
-          Toca el micrófono y haz tu pregunta
-        </div>
-
-
-        <div class="sound-row">
-
-          <button
-            id="soundBtn"
-            class="sound-btn"
-            onclick="alternarSonido()"
-          >
-            🔊 Respuesta por voz activada
-          </button>
-
-        </div>
-
-
-        <div
-          id="speechInfo"
-          class="speech-info"
-        >
-
-          <div class="speech-label">
-            Escuché
-          </div>
-
-          <div
-            id="escuchado"
-            class="speech-value"
-          ></div>
-
-
-          <div class="speech-label">
-            Interpretado
-          </div>
-
-          <div
-            id="interpretado"
-            class="speech-value interpretado"
-          ></div>
-
-        </div>
-
       </div>
 
+      <div id="speechInfo" class="speech-info">
 
-      <div id="estado"></div>
+        <div class="speech-label">Escuché</div>
+        <div id="escuchado" class="speech-value"></div>
 
-      <div
-        id="resultados"
-        class="resultados-voz"
-      ></div>
-
-
-    </div>
-
-  </div>
-
-
-  <!-- =====================================================
-       CATÁLOGO
-  ====================================================== -->
-
-  <div
-    id="vistaCatalogo"
-    class="vista-seccion"
-  >
-
-    <div class="header">
-
-      <h1>
-        CATÁLOGO
-      </h1>
-
-      <p>
-        Ubicaciones registradas
-      </p>
-
-    </div>
-
-
-    <div class="barra-navegacion">
-
-      <button
-        class="inicio-btn"
-        onclick="volverInicio()"
-      >
-        ← Inicio
-      </button>
-
-    </div>
-
-
-    <div class="container">
-
-
-      <section class="catalogo-seccion">
-
-
-        <div class="catalogo-cabecera">
-
-          <div class="catalogo-titulo">
-            Ubicaciones
-          </div>
-
-          <div
-            id="contador"
-            class="contador"
-          >
-            Cargando...
-          </div>
-
-        </div>
-
-
-        <div
-          id="catalogoGrid"
-          class="catalogo-grid"
-        ></div>
-
-
-      </section>
-
-
-    </div>
-
-  </div>
-
-
-  <!-- =====================================================
-       QR
-  ====================================================== -->
-
-  <div
-    id="vistaQR"
-    class="vista-seccion"
-  >
-
-    <div class="header">
-
-      <h1>
-        ESCANEAR QR
-      </h1>
-
-      <p>
-        Consulta rápida de ubicación
-      </p>
-
-    </div>
-
-
-    <div class="barra-navegacion">
-
-      <button
-        class="inicio-btn"
-        onclick="volverInicio()"
-      >
-        ← Inicio
-      </button>
-
-    </div>
-
-
-    <div class="container">
-
-      <div class="qr-card">
-
-        <div class="qr-icono">
-          📷
-        </div>
-
-        <div class="qr-titulo">
-          Escáner QR
-        </div>
-
-        <div class="qr-texto">
-          Escanea el código QR de la ubicación para consultar su información.
-        </div>
-
-        <div class="qr-proximamente">
-          LECTOR PREPARADO PARA ACTIVACIÓN
-        </div>
+        <div class="speech-label">Interpretado</div>
+        <div id="interpretado" class="speech-value interpretado"></div>
 
       </div>
 
     </div>
 
+    <div id="estado"></div>
+    <div id="resultados" class="resultados-voz"></div>
+
   </div>
 
-
-  <!-- =====================================================
-       FICHA
-  ====================================================== -->
-
-  <div id="vistaFicha">
+</div>
 
 
-    <div class="header">
+<!-- =====================================================
+     CATÁLOGO
+====================================================== -->
 
-      <h1>
-        PENSKE
-      </h1>
+<div id="vistaCatalogo" class="vista-seccion">
 
-      <p>
-        Información de ubicación
-      </p>
+  <div class="header">
+    <h1>CATÁLOGO</h1>
+    <p>Ubicaciones registradas</p>
+  </div>
 
-    </div>
+  <div class="barra-navegacion">
+    <button class="inicio-btn" onclick="volverInicio()">← Inicio</button>
+  </div>
+
+  <div class="container">
+
+    <section class="catalogo-seccion">
+
+      <div class="catalogo-cabecera">
+
+        <div class="catalogo-titulo">
+          Ubicaciones
+        </div>
+
+        <div id="contador" class="contador">
+          Cargando...
+        </div>
+
+      </div>
+
+      <div id="catalogoGrid" class="catalogo-grid"></div>
+
+    </section>
+
+  </div>
+
+</div>
 
 
-    <div class="ficha-toolbar">
+<!-- =====================================================
+     QR
+====================================================== -->
+
+<div id="vistaQR" class="vista-seccion">
+
+  <div class="header">
+    <h1>ESCANEAR QR</h1>
+    <p>Consulta rápida de ubicación</p>
+  </div>
+
+  <div class="barra-navegacion">
+    <button class="inicio-btn" onclick="volverInicio()">← Inicio</button>
+  </div>
+
+  <div class="container">
+
+    <div class="qr-card">
+
+      <div class="qr-icono">📷</div>
+
+      <div class="qr-titulo">
+        Escáner QR
+      </div>
+
+      <div class="qr-texto">
+        Presiona el botón y apunta la cámara al código QR.
+      </div>
 
       <button
-        class="volver-btn"
-        onclick="volverVistaAnterior()"
+        id="qrIniciarBtn"
+        class="qr-iniciar-btn"
+        onclick="iniciarEscanerQR()"
       >
-        ← Volver
+        📷 ABRIR CÁMARA
+      </button>
+
+      <div id="qrReader"></div>
+
+      <div id="qrEstado" class="qr-estado"></div>
+
+      <button
+        id="qrCancelarBtn"
+        class="qr-cancelar-btn"
+        onclick="detenerEscanerQR()"
+      >
+        Cerrar cámara
       </button>
 
     </div>
 
+  </div>
 
-    <div class="ficha-contenedor">
+</div>
 
 
-      <div class="bloque-ubicacion">
+<!-- =====================================================
+     FICHA
+====================================================== -->
 
-        <div class="etiqueta">
-          Ubicación
-        </div>
+<div id="vistaFicha">
 
-        <div
-          id="fichaUbicacion"
-          class="ficha-ubicacion"
-        ></div>
+  <div class="header">
+    <h1>PENSKE</h1>
+    <p>Información de ubicación</p>
+  </div>
 
+  <div class="ficha-toolbar">
+    <button class="volver-btn" onclick="volverVistaAnterior()">
+      ← Volver
+    </button>
+  </div>
+
+  <div class="ficha-contenedor">
+
+    <div class="bloque-ubicacion">
+
+      <div class="etiqueta">
+        Ubicación
       </div>
 
-
-      <div id="fichaRegistros"></div>
-
-
-      <div
-        id="fichaPie"
-        class="pie"
-      ></div>
-
+      <div id="fichaUbicacion" class="ficha-ubicacion"></div>
 
     </div>
 
+    <div id="fichaRegistros"></div>
+
+    <div id="fichaPie" class="pie"></div>
+
   </div>
 
+</div>
 
-  <script>
 
+<script>
 
-    // =====================================================
-    // API
-    // =====================================================
 
-    const API_BASE =
-      "https://script.google.com/macros/s/AKfycbzKO78SOXC2oC0OHCe3lOETFjYV5tTWgFdR0N5u9RYMGcGyagaAtd-u_9JrkaqxPxq_/exec";
+/* =====================================================
+   API
+===================================================== */
 
+const API_BASE =
+  "https://script.google.com/macros/s/AKfycbzKO78SOXC2oC0OHCe3lOETFjYV5tTWgFdR0N5u9RYMGcGyagaAtd-u_9JrkaqxPxq_/exec";
 
-    // =====================================================
-    // DATOS
-    // =====================================================
 
-    let datosCatalogo = [];
+/* =====================================================
+   DATOS
+===================================================== */
 
-    let catalogoVoz = {
+let datosCatalogo = [];
 
-      ubicaciones: [],
-      rutas: [],
-      proveedores: [],
-      numerosProveedor: []
+let catalogoVoz = {
+  ubicaciones: [],
+  rutas: [],
+  proveedores: [],
+  numerosProveedor: []
+};
 
-    };
+let sonidoActivado = true;
+let contextoActual = null;
+let vistaAnterior = "inicio";
 
 
-    let sonidoActivado = true;
+/* =====================================================
+   QR
+===================================================== */
 
-    let contextoActual = null;
+let qrScanner = null;
+let qrActivo = false;
+let qrProcesando = false;
 
-    let vistaAnterior = "inicio";
 
+async function iniciarEscanerQR() {
 
-    // =====================================================
-    // NAVEGACIÓN
-    // =====================================================
+  const estado = document.getElementById("qrEstado");
+  const reader = document.getElementById("qrReader");
+  const iniciar = document.getElementById("qrIniciarBtn");
+  const cancelar = document.getElementById("qrCancelarBtn");
 
-    function ocultarVistas() {
+  estado.className = "qr-estado";
+  estado.textContent = "";
 
-      document
-        .getElementById(
-          "vistaInicio"
-        )
-        .style.display =
-        "none";
+  if (!datosCatalogo.length) {
 
+    estado.className = "qr-estado error";
+    estado.textContent = "La base de datos todavía no está disponible.";
 
-      document
-        .getElementById(
-          "vistaVoz"
-        )
-        .style.display =
-        "none";
+    return;
+  }
 
+  if (typeof Html5Qrcode === "undefined") {
 
-      document
-        .getElementById(
-          "vistaCatalogo"
-        )
-        .style.display =
-        "none";
+    estado.className = "qr-estado error";
+    estado.textContent = "No fue posible cargar el lector QR.";
 
+    return;
+  }
 
-      document
-        .getElementById(
-          "vistaQR"
-        )
-        .style.display =
-        "none";
+  if (qrActivo) {
+    return;
+  }
 
+  qrProcesando = false;
 
-      document
-        .getElementById(
-          "vistaFicha"
-        )
-        .style.display =
-        "none";
+  reader.style.display = "block";
+  iniciar.disabled = true;
+  cancelar.style.display = "block";
 
-    }
+  estado.className = "qr-estado activo";
+  estado.textContent = "Solicitando acceso a la cámara...";
 
+  qrScanner = new Html5Qrcode("qrReader");
 
-    function abrirSeccion(
-      seccion
-    ) {
+  try {
 
-      ocultarVistas();
+    await qrScanner.start(
 
+      {
+        facingMode: "environment"
+      },
 
-      vistaAnterior =
-        seccion;
+      {
+        fps: 10,
 
+        qrbox: function(viewfinderWidth, viewfinderHeight) {
 
-      if (
-        seccion === "voz"
-      ) {
-
-        document
-          .getElementById(
-            "vistaVoz"
-          )
-          .style.display =
-          "block";
-
-      }
-
-
-      if (
-        seccion === "catalogo"
-      ) {
-
-        document
-          .getElementById(
-            "vistaCatalogo"
-          )
-          .style.display =
-          "block";
-
-      }
-
-
-      if (
-        seccion === "qr"
-      ) {
-
-        document
-          .getElementById(
-            "vistaQR"
-          )
-          .style.display =
-          "block";
-
-      }
-
-
-      window.scrollTo(
-        0,
-        0
-      );
-
-    }
-
-
-    function volverInicio() {
-
-      if (
-        reconocimiento
-      ) {
-
-        try {
-
-          reconocimiento.abort();
-
-        } catch (e) {}
-
-      }
-
-
-      if (
-        "speechSynthesis" in window
-      ) {
-
-        window
-          .speechSynthesis
-          .cancel();
-
-      }
-
-
-      ocultarVistas();
-
-
-      document
-        .getElementById(
-          "vistaInicio"
-        )
-        .style.display =
-        "block";
-
-
-      vistaAnterior =
-        "inicio";
-
-
-      window.scrollTo(
-        0,
-        0
-      );
-
-    }
-
-
-    function volverVistaAnterior() {
-
-      ocultarVistas();
-
-
-      if (
-        vistaAnterior === "voz"
-      ) {
-
-        document
-          .getElementById(
-            "vistaVoz"
-          )
-          .style.display =
-          "block";
-
-      }
-
-      else if (
-        vistaAnterior ===
-        "catalogo"
-      ) {
-
-        document
-          .getElementById(
-            "vistaCatalogo"
-          )
-          .style.display =
-          "block";
-
-      }
-
-      else if (
-        vistaAnterior === "qr"
-      ) {
-
-        document
-          .getElementById(
-            "vistaQR"
-          )
-          .style.display =
-          "block";
-
-      }
-
-      else {
-
-        document
-          .getElementById(
-            "vistaInicio"
-          )
-          .style.display =
-          "block";
-
-      }
-
-
-      window.scrollTo(
-        0,
-        0
-      );
-
-    }
-
-
-    // =====================================================
-    // JSONP
-    // =====================================================
-
-    function cargarJSONP(
-      parametros
-    ) {
-
-      return new Promise(
-        function(
-          resolve,
-          reject
-        ) {
-
-          const callback =
-            "jsonp_" +
-            Date.now() +
-            "_" +
-            Math.random()
-              .toString(36)
-              .slice(2);
-
-
-          const script =
-            document.createElement(
-              "script"
-            );
-
-
-          let terminado =
-            false;
-
-
-          const timer =
-            setTimeout(
-              function() {
-
-                limpiar();
-
-                reject(
-                  new Error(
-                    "Tiempo de espera agotado."
-                  )
-                );
-
-              },
-              15000
-            );
-
-
-          function limpiar() {
-
-            if (terminado) {
-              return;
-            }
-
-
-            terminado =
-              true;
-
-
-            clearTimeout(
-              timer
-            );
-
-
-            try {
-
-              delete window[
-                callback
-              ];
-
-            } catch (e) {
-
-              window[
-                callback
-              ] = undefined;
-
-            }
-
-
-            if (
-              script.parentNode
-            ) {
-
-              script
-                .parentNode
-                .removeChild(
-                  script
-                );
-
-            }
-
-          }
-
-
-          window[
-            callback
-          ] =
-            function(datos) {
-
-              limpiar();
-
-              resolve(
-                datos
-              );
-
-            };
-
-
-          const params =
-            new URLSearchParams(
-              parametros || {}
-            );
-
-
-          params.set(
-            "callback",
-            callback
+          const lado = Math.floor(
+            Math.min(
+              viewfinderWidth,
+              viewfinderHeight
+            ) * 0.7
           );
-
-
-          script.src =
-            API_BASE +
-            "?" +
-            params.toString();
-
-
-          script.onerror =
-            function() {
-
-              limpiar();
-
-              reject(
-                new Error(
-                  "No fue posible conectar con la API."
-                )
-              );
-
-            };
-
-
-          document
-            .body
-            .appendChild(
-              script
-            );
-
-        }
-      );
-
-    }
-
-
-    // =====================================================
-    // INICIALIZACIÓN
-    // =====================================================
-
-    async function iniciarAplicacion() {
-
-      try {
-
-        const resultados =
-          await Promise.all([
-
-            cargarJSONP({
-              catalogo: "1"
-            }),
-
-            cargarJSONP({
-              voz: "1"
-            })
-
-          ]);
-
-
-        const datos =
-          resultados[0];
-
-
-        const voz =
-          resultados[1];
-
-
-        if (
-          !Array.isArray(
-            datos
-          )
-        ) {
-
-          throw new Error(
-            "Formato de catálogo incorrecto."
-          );
-
-        }
-
-
-        datosCatalogo =
-          datos.filter(
-            function(r) {
-
-              return (
-                r &&
-                String(
-                  r.ubicacion || ""
-                ).trim()
-              );
-
-            }
-          );
-
-
-        if (
-          voz &&
-          voz.ok &&
-          voz.catalogo
-        ) {
-
-          catalogoVoz =
-            voz.catalogo;
-
-        } else {
-
-          crearCatalogoVozLocal();
-
-        }
-
-
-        renderizarCatalogo();
-
-
-      } catch (error) {
-
-        console.error(
-          error
-        );
-
-
-        document
-          .getElementById(
-            "contador"
-          )
-          .textContent =
-          "Error de conexión";
-
-      }
-
-    }
-
-
-    function crearCatalogoVozLocal() {
-
-      catalogoVoz = {
-
-        ubicaciones:
-          valoresUnicos(
-            "ubicacion"
-          ),
-
-        rutas:
-          valoresUnicos(
-            "ruta"
-          ),
-
-        proveedores:
-          valoresUnicos(
-            "proveedor"
-          ),
-
-        numerosProveedor:
-          valoresUnicos(
-            "numeroProveedor"
-          )
-
-      };
-
-    }
-
-
-    function valoresUnicos(
-      campo
-    ) {
-
-      return Array.from(
-
-        new Set(
-
-          datosCatalogo
-
-            .map(
-              function(r) {
-
-                return String(
-                  r[campo] || ""
-                ).trim();
-
-              }
-            )
-
-            .filter(
-              Boolean
-            )
-
-        )
-
-      );
-
-    }
-
-
-    // =====================================================
-    // CATÁLOGO
-    // =====================================================
-
-    function renderizarCatalogo() {
-
-      const grid =
-        document
-          .getElementById(
-            "catalogoGrid"
-          );
-
-
-      const contador =
-        document
-          .getElementById(
-            "contador"
-          );
-
-
-      grid.innerHTML =
-        "";
-
-
-      datosCatalogo.forEach(
-        function(registro) {
-
-          const tarjeta =
-            document
-              .createElement(
-                "div"
-              );
-
-
-          tarjeta.className =
-            "catalogo-card";
-
-
-          tarjeta.addEventListener(
-            "click",
-            function() {
-
-              abrirFichaPorRegistro(
-                registro
-              );
-
-            }
-          );
-
-
-          agregarElemento(
-            tarjeta,
-            registro.ubicacion,
-            "catalogo-ubicacion"
-          );
-
-
-          agregarElemento(
-            tarjeta,
-            registro.proveedor,
-            "catalogo-proveedor"
-          );
-
-
-          agregarElemento(
-            tarjeta,
-            registro.ruta,
-            "catalogo-ruta"
-          );
-
-
-          agregarElemento(
-            tarjeta,
-            "Proveedor #" +
-            (
-              registro
-                .numeroProveedor ||
-              "—"
-            ),
-            "catalogo-numero"
-          );
-
-
-          agregarElemento(
-            tarjeta,
-            "Máximo: " +
-            (
-              registro.maximo ||
-              "—"
-            ),
-            "catalogo-maximo"
-          );
-
-
-          grid.appendChild(
-            tarjeta
-          );
-
-        }
-      );
-
-
-      contador.textContent =
-        datosCatalogo.length +
-        " ubicaciones";
-
-    }
-
-
-    function agregarElemento(
-      padre,
-      texto,
-      clase
-    ) {
-
-      const elemento =
-        document.createElement(
-          "div"
-        );
-
-
-      elemento.className =
-        clase;
-
-
-      elemento.textContent =
-        texto || "—";
-
-
-      padre.appendChild(
-        elemento
-      );
-
-    }
-
-
-    // =====================================================
-    // FICHA
-    // =====================================================
-
-    function abrirFichaPorRegistro(
-      registro
-    ) {
-
-      if (!registro) {
-        return;
-      }
-
-
-      const ubicacion =
-        normalizarComparacion(
-          registro.ubicacion
-        );
-
-
-      const registros =
-        datosCatalogo.filter(
-          function(r) {
-
-            return (
-              normalizarComparacion(
-                r.ubicacion
-              ) ===
-              ubicacion
-            );
-
-          }
-        );
-
-
-      mostrarFicha(
-
-        registro.ubicacion,
-
-        registros.length
-          ? registros
-          : [registro]
-
-      );
-
-    }
-
-
-    function mostrarFicha(
-      ubicacion,
-      registros
-    ) {
-
-      ocultarVistas();
-
-
-      document
-        .getElementById(
-          "vistaFicha"
-        )
-        .style.display =
-        "block";
-
-
-      document
-        .getElementById(
-          "fichaUbicacion"
-        )
-        .textContent =
-        ubicacion || "—";
-
-
-      const contenedor =
-        document
-          .getElementById(
-            "fichaRegistros"
-          );
-
-
-      contenedor.innerHTML =
-        "";
-
-
-      registros.forEach(
-        function(
-          registro,
-          indice
-        ) {
-
-          if (
-            registros.length >
-            1
-          ) {
-
-            const separador =
-              document
-                .createElement(
-                  "div"
-                );
-
-
-            separador.className =
-              "separador";
-
-
-            separador.textContent =
-              "Proveedor " +
-              (
-                indice + 1
-              );
-
-
-            contenedor
-              .appendChild(
-                separador
-              );
-
-          }
-
-
-          const tarjeta =
-            document
-              .createElement(
-                "div"
-              );
-
-
-          tarjeta.className =
-            "registro";
-
-
-          crearFilaFicha(
-            tarjeta,
-            "No. proveedor",
-            registro
-              .numeroProveedor
-          );
-
-
-          crearFilaFicha(
-            tarjeta,
-            "Proveedor",
-            registro.proveedor,
-            "proveedor"
-          );
-
-
-          crearFilaFicha(
-            tarjeta,
-            "Ruta",
-            registro.ruta
-          );
-
-
-          crearFilaFicha(
-            tarjeta,
-            "Máximo por ubicación",
-            registro.maximo,
-            "maximo"
-          );
-
-
-          contenedor
-            .appendChild(
-              tarjeta
-            );
-
-        }
-      );
-
-
-      mostrarFechaFicha(
-        registros
-      );
-
-
-      window.scrollTo(
-        0,
-        0
-      );
-
-    }
-
-
-    function crearFilaFicha(
-      padre,
-      etiqueta,
-      valor,
-      claseExtra
-    ) {
-
-      const fila =
-        document
-          .createElement(
-            "div"
-          );
-
-
-      fila.className =
-        "fila";
-
-
-      const etiquetaElemento =
-        document
-          .createElement(
-            "div"
-          );
-
-
-      etiquetaElemento.className =
-        "etiqueta";
-
-
-      etiquetaElemento.textContent =
-        etiqueta;
-
-
-      const valorElemento =
-        document
-          .createElement(
-            "div"
-          );
-
-
-      valorElemento.className =
-        "valor";
-
-
-      if (
-        claseExtra
-      ) {
-
-        valorElemento
-          .classList
-          .add(
-            claseExtra
-          );
-
-      }
-
-
-      valorElemento.textContent =
-        valor || "—";
-
-
-      fila.appendChild(
-        etiquetaElemento
-      );
-
-
-      fila.appendChild(
-        valorElemento
-      );
-
-
-      padre.appendChild(
-        fila
-      );
-
-    }
-
-
-    function mostrarFechaFicha(
-      registros
-    ) {
-
-      const pie =
-        document
-          .getElementById(
-            "fichaPie"
-          );
-
-
-      const fechas =
-        Array.from(
-
-          new Set(
-
-            registros
-
-              .map(
-                function(r) {
-
-                  return String(
-                    r.fechaActualizacion ||
-                    ""
-                  ).trim();
-
-                }
-              )
-
-              .filter(
-                Boolean
-              )
-
-          )
-
-        );
-
-
-      if (
-        !fechas.length
-      ) {
-
-        pie.style.display =
-          "none";
-
-        return;
-
-      }
-
-
-      pie.style.display =
-        "block";
-
-
-      if (
-        fechas.length === 1
-      ) {
-
-        pie.textContent =
-          "Última actualización: " +
-          fechas[0];
-
-      } else {
-
-        pie.textContent =
-          "Actualizaciones: " +
-          fechas.join(" • ");
-
-      }
-
-    }
-
-
-    // =====================================================
-    // RECONOCIMIENTO DE VOZ
-    // =====================================================
-
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-
-    let reconocimiento =
-      null;
-
-
-    function escuchar() {
-
-      if (
-        "speechSynthesis"
-        in window
-      ) {
-
-        window
-          .speechSynthesis
-          .cancel();
-
-      }
-
-
-      if (
-        !SpeechRecognition
-      ) {
-
-        mostrarError(
-          "Este navegador no permite reconocimiento de voz."
-        );
-
-        return;
-
-      }
-
-
-      if (
-        reconocimiento
-      ) {
-
-        try {
-
-          reconocimiento.abort();
-
-        } catch (e) {}
-
-      }
-
-
-      reconocimiento =
-        new SpeechRecognition();
-
-
-      reconocimiento.lang =
-        "es-MX";
-
-
-      reconocimiento.continuous =
-        false;
-
-
-      reconocimiento.interimResults =
-        false;
-
-
-      reconocimiento.maxAlternatives =
-        3;
-
-
-      const boton =
-        document
-          .getElementById(
-            "micBtn"
-          );
-
-
-      const textoBoton =
-        document
-          .getElementById(
-            "micText"
-          );
-
-
-      reconocimiento.onstart =
-        function() {
-
-          boton
-            .classList
-            .add(
-              "listening"
-            );
-
-
-          boton
-            .classList
-            .remove(
-              "processing"
-            );
-
-
-          textoBoton.textContent =
-            "ESCUCHANDO...";
-
-
-          document
-            .getElementById(
-              "estado"
-            )
-            .textContent =
-            "Habla ahora";
-
-        };
-
-
-      reconocimiento.onresult =
-        function(event) {
-
-          boton
-            .classList
-            .remove(
-              "listening"
-            );
-
-
-          boton
-            .classList
-            .add(
-              "processing"
-            );
-
-
-          textoBoton.textContent =
-            "PROCESANDO";
-
-
-          const alternativas =
-            [];
-
-
-          for (
-            let i = 0;
-            i <
-            event.results[0].length;
-            i++
-          ) {
-
-            alternativas.push(
-
-              event
-                .results[0][i]
-                .transcript
-                .trim()
-
-            );
-
-          }
-
-
-          document
-            .getElementById(
-              "speechInfo"
-            )
-            .style.display =
-            "block";
-
-
-          document
-            .getElementById(
-              "escuchado"
-            )
-            .textContent =
-            alternativas[0] ||
-            "";
-
-
-          procesarAlternativas(
-            alternativas
-          );
-
-        };
-
-
-      reconocimiento.onerror =
-        function(event) {
-
-          restaurarMicrofono();
-
-
-          let mensaje =
-            "No pude escuchar correctamente. Intenta nuevamente.";
-
-
-          if (
-            event.error ===
-            "not-allowed"
-          ) {
-
-            mensaje =
-              "Necesitas permitir el acceso al micrófono.";
-
-          }
-
-
-          if (
-            event.error ===
-            "no-speech"
-          ) {
-
-            mensaje =
-              "No detecté voz. Intenta nuevamente.";
-
-          }
-
-
-          mostrarError(
-            mensaje
-          );
-
-
-          hablar(
-            "No pude escuchar correctamente."
-          );
-
-        };
-
-
-      reconocimiento.onend =
-        function() {
-
-          if (
-            !boton
-              .classList
-              .contains(
-                "processing"
-              )
-          ) {
-
-            restaurarMicrofono();
-
-          }
-
-        };
-
-
-      try {
-
-        reconocimiento.start();
-
-      } catch (error) {
-
-        restaurarMicrofono();
-
-
-        mostrarError(
-          "No fue posible iniciar el micrófono."
-        );
-
-      }
-
-    }
-
-
-    // =====================================================
-    // PROCESAR ALTERNATIVAS
-    // =====================================================
-
-    async function procesarAlternativas(
-      alternativas
-    ) {
-
-      // CONTEXTO
-
-      for (
-        let i = 0;
-        i < alternativas.length;
-        i++
-      ) {
-
-        const contextual =
-          detectarPreguntaContextual(
-            alternativas[i]
-          );
-
-
-        if (
-          contextual
-        ) {
-
-          document
-            .getElementById(
-              "interpretado"
-            )
-            .textContent =
-            "CONTEXTO: " +
-            contextual;
-
-
-          responderPreguntaContextual(
-            contextual
-          );
-
-
-          restaurarMicrofono();
-
-          return;
-
-        }
-
-      }
-
-
-      // EXACTA
-
-      for (
-        let i = 0;
-        i < alternativas.length;
-        i++
-      ) {
-
-        const deteccion =
-          detectarConsultaSegura(
-            alternativas[i]
-          );
-
-
-        if (
-          deteccion &&
-          deteccion.estado ===
-          "EXACTA"
-        ) {
-
-          document
-            .getElementById(
-              "interpretado"
-            )
-            .textContent =
-            deteccion.opcion.tipo +
-            ": " +
-            deteccion.opcion.valor;
-
-
-          await consultarAPI(
-
-            deteccion.opcion.tipo +
-            " " +
-            deteccion.opcion.valor,
-
-            true
-
-          );
-
-
-          restaurarMicrofono();
-
-          return;
-
-        }
-
-      }
-
-
-      // AMBIGUA
-
-      for (
-        let i = 0;
-        i < alternativas.length;
-        i++
-      ) {
-
-        const deteccion =
-          detectarConsultaSegura(
-            alternativas[i]
-          );
-
-
-        if (
-          deteccion &&
-          deteccion.estado ===
-          "AMBIGUA"
-        ) {
-
-          mostrarAmbiguedad(
-            deteccion.opciones
-          );
-
-
-          restaurarMicrofono();
-
-          return;
-
-        }
-
-      }
-
-
-      // BACKEND
-
-      const consulta =
-        normalizarVoz(
-          alternativas[0] ||
-          ""
-        );
-
-
-      document
-        .getElementById(
-          "interpretado"
-        )
-        .textContent =
-        consulta;
-
-
-      await consultarAPI(
-        consulta,
-        true
-      );
-
-
-      restaurarMicrofono();
-
-    }
-
-
-    // =====================================================
-    // DETECCIÓN SEGURA
-    // =====================================================
-
-    function detectarConsultaSegura(
-      texto
-    ) {
-
-      const normal =
-        normalizarParaComparar(
-          texto
-        );
-
-
-      let tipoPreferido =
-        null;
-
-
-      if (
-        /\bUBICACION\b/.test(
-          normal
-        )
-      ) {
-
-        tipoPreferido =
-          "UBICACION";
-
-      }
-
-      else if (
-        /\bRUTA\b/.test(
-          normal
-        )
-      ) {
-
-        tipoPreferido =
-          "RUTA";
-
-      }
-
-      else if (
-        /\bPROVEEDOR\b/.test(
-          normal
-        )
-      ) {
-
-        tipoPreferido =
-          "PROVEEDOR";
-
-      }
-
-
-      const exactas =
-        buscarCoincidenciasExactas(
-          texto,
-          tipoPreferido
-        );
-
-
-      if (
-        exactas.length === 1
-      ) {
-
-        return {
-
-          estado:
-            "EXACTA",
-
-          opcion:
-            exactas[0]
-
-        };
-
-      }
-
-
-      if (
-        exactas.length > 1
-      ) {
-
-        return {
-
-          estado:
-            "AMBIGUA",
-
-          opciones:
-            exactas.slice(
-              0,
-              4
-            )
-
-        };
-
-      }
-
-
-      const aproximadas =
-        buscarCoincidenciasAproximadas(
-          texto,
-          tipoPreferido
-        );
-
-
-      if (
-        !aproximadas.length
-      ) {
-
-        return null;
-
-      }
-
-
-      if (
-        aproximadas.length === 1
-      ) {
-
-        if (
-          aproximadas[0]
-            .distancia === 0
-        ) {
 
           return {
-
-            estado:
-              "EXACTA",
-
-            opcion:
-              aproximadas[0]
-
+            width: lado,
+            height: lado
           };
+        },
 
-        }
+        aspectRatio: 1.0
+      },
 
+      function(decodedText) {
 
-        return {
+        procesarCodigoQR(decodedText);
 
-          estado:
-            "AMBIGUA",
+      },
 
-          opciones:
-            aproximadas.slice(
-              0,
-              3
-            )
-
-        };
-
+      function() {
+        // No hacemos nada mientras busca un QR.
       }
 
+    );
 
-      const mejor =
-        aproximadas[0];
+    qrActivo = true;
 
+    estado.className = "qr-estado activo";
+    estado.textContent = "Cámara activa. Apunta al código QR.";
 
-      const segunda =
-        aproximadas[1];
+  }
 
+  catch (error) {
 
-      if (
-        mejor.distancia <= 1 &&
-        segunda.distancia >=
-        mejor.distancia + 2
-      ) {
+    console.error(error);
 
-        return {
+    qrActivo = false;
+    qrScanner = null;
 
-          estado:
-            "EXACTA",
+    reader.style.display = "none";
+    iniciar.disabled = false;
+    cancelar.style.display = "none";
 
-          opcion:
-            mejor
+    estado.className = "qr-estado error";
 
-        };
-
-      }
-
-
-      return {
-
-        estado:
-          "AMBIGUA",
-
-        opciones:
-          aproximadas.slice(
-            0,
-            3
-          )
-
-      };
-
-    }
-
-
-    // =====================================================
-    // COINCIDENCIAS EXACTAS
-    // =====================================================
-
-    function buscarCoincidenciasExactas(
-      texto,
-      tipoPreferido
+    if (
+      String(error).toLowerCase().includes("permission") ||
+      String(error).toLowerCase().includes("notallowed")
     ) {
-
-      const candidatos =
-        generarCandidatos(
-          texto
-        );
-
-
-      const set =
-        new Set(
-
-          candidatos.map(
-            function(c) {
-
-              return limpiarCodigo(
-                c
-              );
-
-            }
-          )
-
-        );
-
-
-      const resultados =
-        obtenerEntradasCatalogo(
-          tipoPreferido
-        )
-          .filter(
-            function(entrada) {
-
-              return set.has(
-
-                limpiarCodigo(
-                  entrada.valor
-                )
-
-              );
-
-            }
-          );
-
-
-      return eliminarDuplicados(
-        resultados
-      );
-
-    }
-
-
-    // =====================================================
-    // COINCIDENCIAS APROXIMADAS
-    // =====================================================
-
-    function buscarCoincidenciasAproximadas(
-      texto,
-      tipoPreferido
-    ) {
-
-      const candidatos =
-        generarCandidatos(
-          texto
-        )
-          .map(
-            function(c) {
-
-              return limpiarCodigo(
-                c
-              );
-
-            }
-          )
-          .filter(
-            function(c) {
-
-              return c.length >= 2;
-
-            }
-          );
-
-
-      if (
-        !candidatos.length
-      ) {
-
-        return [];
-
-      }
-
-
-      const resultados =
-        [];
-
-
-      obtenerEntradasCatalogo(
-        tipoPreferido
-      )
-        .forEach(
-          function(entrada) {
-
-            const codigo =
-              limpiarCodigo(
-                entrada.valor
-              );
-
-
-            if (!codigo) {
-              return;
-            }
-
-
-            let mejorDistancia =
-              Infinity;
-
-
-            candidatos.forEach(
-              function(candidato) {
-
-                if (
-                  Math.abs(
-                    candidato.length -
-                    codigo.length
-                  ) > 2
-                ) {
-
-                  return;
-
-                }
-
-
-                const distancia =
-                  distanciaLevenshtein(
-                    codigo,
-                    candidato
-                  );
-
-
-                if (
-                  distancia <
-                  mejorDistancia
-                ) {
-
-                  mejorDistancia =
-                    distancia;
-
-                }
-
-              }
-            );
-
-
-            const limite =
-              codigo.length >= 6
-                ? 2
-                : 1;
-
-
-            if (
-              mejorDistancia <=
-              limite
-            ) {
-
-              resultados.push({
-
-                tipo:
-                  entrada.tipo,
-
-                valor:
-                  entrada.valor,
-
-                distancia:
-                  mejorDistancia
-
-              });
-
-            }
-
-          }
-        );
-
-
-      resultados.sort(
-        function(a, b) {
-
-          if (
-            a.distancia !==
-            b.distancia
-          ) {
-
-            return (
-              a.distancia -
-              b.distancia
-            );
-
-          }
-
-
-          return String(
-            a.valor
-          ).localeCompare(
-            String(
-              b.valor
-            )
-          );
-
-        }
-      );
-
-
-      return eliminarDuplicados(
-        resultados
-      );
-
-    }
-
-
-    // =====================================================
-    // ENTRADAS CATÁLOGO VOZ
-    // =====================================================
-
-    function obtenerEntradasCatalogo(
-      tipoPreferido
-    ) {
-
-      const entradas =
-        [];
-
-
-      function agregar(
-        tipo,
-        lista
-      ) {
-
-        if (
-          tipoPreferido &&
-          tipo !==
-          tipoPreferido
-        ) {
-
-          return;
-
-        }
-
-
-        (
-          lista || []
-        )
-          .forEach(
-            function(valor) {
-
-              entradas.push({
-
-                tipo:
-                  tipo,
-
-                valor:
-                  valor
-
-              });
-
-            }
-          );
-
-      }
-
-
-      agregar(
-        "UBICACION",
-        catalogoVoz.ubicaciones
-      );
-
-
-      agregar(
-        "RUTA",
-        catalogoVoz.rutas
-      );
-
-
-      agregar(
-        "PROVEEDOR",
-        catalogoVoz.proveedores
-      );
-
-
-      agregar(
-        "NUMERO",
-        catalogoVoz.numerosProveedor
-      );
-
-
-      return entradas;
-
-    }
-
-
-    function eliminarDuplicados(
-      opciones
-    ) {
-
-      const mapa =
-        new Map();
-
-
-      opciones.forEach(
-        function(opcion) {
-
-          const clave =
-            opcion.tipo +
-            "|" +
-            opcion.valor;
-
-
-          if (
-            !mapa.has(
-              clave
-            )
-          ) {
-
-            mapa.set(
-              clave,
-              opcion
-            );
-
-          }
-
-        }
-      );
-
-
-      return Array.from(
-        mapa.values()
-      );
-
-    }
-
-
-    // =====================================================
-    // AMBIGÜEDAD
-    // =====================================================
-
-    function mostrarAmbiguedad(
-      opciones
-    ) {
-
-      const contenedor =
-        document
-          .getElementById(
-            "resultados"
-          );
-
-
-      contenedor.innerHTML =
-        "";
-
-
-      const tarjeta =
-        document
-          .createElement(
-            "div"
-          );
-
-
-      tarjeta.className =
-        "ambiguedad";
-
-
-      const titulo =
-        document
-          .createElement(
-            "div"
-          );
-
-
-      titulo.className =
-        "ambiguedad-titulo";
-
-
-      titulo.textContent =
-        "No estoy completamente seguro";
-
-
-      const texto =
-        document
-          .createElement(
-            "div"
-          );
-
-
-      texto.className =
-        "ambiguedad-texto";
-
-
-      texto.textContent =
-        "¿Te refieres a una de estas opciones?";
-
-
-      const zona =
-        document
-          .createElement(
-            "div"
-          );
-
-
-      zona.className =
-        "ambiguedad-opciones";
-
-
-      opciones.forEach(
-        function(opcion) {
-
-          const boton =
-            document
-              .createElement(
-                "button"
-              );
-
-
-          boton.className =
-            "ambiguedad-btn";
-
-
-          boton.textContent =
-            opcion.valor;
-
-
-          boton.addEventListener(
-            "click",
-            function() {
-
-              document
-                .getElementById(
-                  "interpretado"
-                )
-                .textContent =
-                opcion.tipo +
-                ": " +
-                opcion.valor;
-
-
-              consultarAPI(
-
-                opcion.tipo +
-                " " +
-                opcion.valor,
-
-                true
-
-              );
-
-            }
-          );
-
-
-          zona.appendChild(
-            boton
-          );
-
-        }
-      );
-
-
-      tarjeta.appendChild(
-        titulo
-      );
-
-
-      tarjeta.appendChild(
-        texto
-      );
-
-
-      tarjeta.appendChild(
-        zona
-      );
-
-
-      contenedor.appendChild(
-        tarjeta
-      );
-
-
-      hablar(
-        "No estoy completamente seguro. Selecciona una de las opciones en pantalla."
-      );
-
-    }
-
-
-    // =====================================================
-    // CONSULTAR API
-    // =====================================================
-
-    async function consultarAPI(
-      consulta,
-      debeHablar
-    ) {
-
-      const estado =
-        document
-          .getElementById(
-            "estado"
-          );
-
-
-      const contenedor =
-        document
-          .getElementById(
-            "resultados"
-          );
-
 
       estado.textContent =
-        "Buscando...";
+        "No se permitió el acceso a la cámara. Revisa el permiso de cámara del navegador.";
 
+    } else {
 
-      contenedor.innerHTML =
-        "";
-
-
-      try {
-
-        const datos =
-          await cargarJSONP({
-
-            q:
-              consulta
-
-          });
-
-
-        estado.textContent =
-          "";
-
-
-        if (
-          !datos ||
-          !datos.ok
-        ) {
-
-          const mensaje =
-            (
-              datos &&
-              datos.mensaje
-            )
-              ? datos.mensaje
-              : "Ocurrió un error.";
-
-
-          mostrarError(
-            mensaje
-          );
-
-
-          if (
-            debeHablar
-          ) {
-
-            hablar(
-              "Ocurrió un error al realizar la búsqueda."
-            );
-
-          }
-
-
-          return;
-
-        }
-
-
-        if (
-          !datos.encontrado
-        ) {
-
-          mostrarError(
-            "No encontré información para esa consulta."
-          );
-
-
-          if (
-            debeHablar
-          ) {
-
-            hablar(
-              "No encontré información para esa consulta."
-            );
-
-          }
-
-
-          return;
-
-        }
-
-
-        mostrarResultados(
-          datos
-        );
-
-
-        guardarContexto(
-          datos
-        );
-
-
-        if (
-          debeHablar
-        ) {
-
-          responderConVoz(
-            datos
-          );
-
-        }
-
-
-      } catch (error) {
-
-        console.error(
-          error
-        );
-
-
-        estado.textContent =
-          "";
-
-
-        mostrarError(
-          "No fue posible consultar la base de datos."
-        );
-
-
-        if (
-          debeHablar
-        ) {
-
-          hablar(
-            "No fue posible consultar la base de datos."
-          );
-
-        }
-
-      }
+      estado.textContent =
+        "No fue posible abrir la cámara.";
 
     }
 
+  }
 
-    // =====================================================
-    // MOSTRAR RESULTADOS
-    // =====================================================
+}
 
-    function mostrarResultados(
-      datos
-    ) {
 
-      const contenedor =
-        document
-          .getElementById(
-            "resultados"
-          );
+async function procesarCodigoQR(textoLeido) {
 
+  if (qrProcesando) {
+    return;
+  }
 
-      contenedor.innerHTML =
-        "";
+  qrProcesando = true;
 
+  const estado = document.getElementById("qrEstado");
 
-      datos.resultados.forEach(
-        function(r) {
+  const codigoLeido =
+    normalizarComparacion(textoLeido)
+      .replace(/\s+/g, "");
 
-          const tarjeta =
-            document
-              .createElement(
-                "div"
-              );
 
+  const registro =
+    datosCatalogo.find(
+      function(r) {
 
-          tarjeta.className =
-            "resultado";
-
-
-          tarjeta.addEventListener(
-            "click",
-            function() {
-
-              abrirFichaPorRegistro(
-                r
-              );
-
-            }
-          );
-
-
-          agregarElemento(
-            tarjeta,
-            r.ubicacion,
-            "resultado-ubicacion"
-          );
-
-
-          agregarElemento(
-            tarjeta,
-            r.proveedor,
-            "resultado-proveedor"
-          );
-
-
-          agregarElemento(
-            tarjeta,
-            "Proveedor #" +
-            (
-              r.numeroProveedor ||
-              "—"
-            ),
-            "resultado-detalle"
-          );
-
-
-          agregarElemento(
-            tarjeta,
-            "🚛 Ruta: " +
-            (
-              r.ruta ||
-              "—"
-            ),
-            "resultado-detalle"
-          );
-
-
-          agregarElemento(
-            tarjeta,
-            "📦 Máximo: " +
-            (
-              r.maximo ||
-              "—"
-            ),
-            "resultado-detalle"
-          );
-
-
-          contenedor.appendChild(
-            tarjeta
-          );
-
-        }
-      );
-
-    }
-
-
-    // =====================================================
-    // CONTEXTO CONVERSACIONAL
-    // =====================================================
-
-    function guardarContexto(
-      datos
-    ) {
-
-      if (
-        !datos ||
-        !datos.encontrado ||
-        !datos.resultados ||
-        !datos.resultados.length
-      ) {
-
-        return;
-
-      }
-
-
-      contextoActual = {
-
-        tipo:
-          String(
-            datos.tipo ||
-            ""
-          ),
-
-        valor:
-          String(
-            datos.valor ||
-            ""
-          ),
-
-        resultados:
-          datos.resultados
-
-      };
-
-    }
-
-
-    function detectarPreguntaContextual(
-      texto
-    ) {
-
-      if (
-        !contextoActual
-      ) {
-
-        return null;
-
-      }
-
-
-      const t =
-        normalizarParaComparar(
-          texto
-        );
-
-
-      if (
-        /\bRUTA\b/.test(t) &&
-        (
-          /\bQUE\b/.test(t) ||
-          /\bCUAL\b/.test(t) ||
-          /\bTIENE\b/.test(t) ||
-          /\bES\b/.test(t)
-        )
-      ) {
-
-        return "RUTA";
-
-      }
-
-
-      if (
-        /\bMAXIMO\b/.test(t) ||
-        /\bMAXIMA\b/.test(t) ||
-        /\bCAPACIDAD\b/.test(t)
-      ) {
-
-        return "MAXIMO";
-
-      }
-
-
-      if (
-        /\bNUMERO\b/.test(t) &&
-        /\bPROVEEDOR\b/.test(t)
-      ) {
-
-        return "NUMERO";
-
-      }
-
-
-      if (
-        /\bACTUALIZ/.test(t) ||
-        /\bFECHA\b/.test(t) ||
-        /\bCUANDO\b/.test(t)
-      ) {
-
-        return "FECHA";
-
-      }
-
-
-      if (
-        /\bUBICACION\b/.test(t) &&
-        (
-          /\bQUE\b/.test(t) ||
-          /\bCUAL\b/.test(t) ||
-          /\bDONDE\b/.test(t) ||
-          /\bESTA\b/.test(t)
-        )
-      ) {
-
-        return "UBICACION";
-
-      }
-
-
-      if (
-        /\bPROVEEDOR\b/.test(t) &&
-        (
-          /\bQUE\b/.test(t) ||
-          /\bCUAL\b/.test(t) ||
-          /\bQUIEN\b/.test(t) ||
-          /\bES\b/.test(t)
-        )
-      ) {
-
-        return "PROVEEDOR";
-
-      }
-
-
-      return null;
-
-    }
-
-
-    function responderPreguntaContextual(
-      campo
-    ) {
-
-      if (
-        !contextoActual ||
-        !contextoActual.resultados ||
-        !contextoActual.resultados.length
-      ) {
-
-        return;
-
-      }
-
-
-      const mapa = {
-
-        RUTA: [
-          "ruta",
-          "Ruta",
-          "La ruta"
-        ],
-
-        MAXIMO: [
-          "maximo",
-          "Máximo",
-          "El máximo"
-        ],
-
-        NUMERO: [
-          "numeroProveedor",
-          "Número de proveedor",
-          "El número de proveedor"
-        ],
-
-        FECHA: [
-          "fechaActualizacion",
-          "Última actualización",
-          "La última actualización"
-        ],
-
-        UBICACION: [
-          "ubicacion",
-          "Ubicación",
-          "La ubicación"
-        ],
-
-        PROVEEDOR: [
-          "proveedor",
-          "Proveedor",
-          "El proveedor"
-        ]
-
-      };
-
-
-      const configuracion =
-        mapa[campo];
-
-
-      if (
-        !configuracion
-      ) {
-
-        return;
-
-      }
-
-
-      const valores =
-        obtenerUnicos(
-          contextoActual.resultados,
-          configuracion[0]
-        );
-
-
-      if (
-        !valores.length
-      ) {
-
-        mostrarRespuestaContextual(
-          configuracion[1],
-          "Sin información"
-        );
-
-
-        hablar(
-          "No hay información disponible para ese dato."
-        );
-
-
-        return;
-
-      }
-
-
-      mostrarRespuestaContextual(
-
-        configuracion[1],
-
-        valores.join(
-          ", "
-        )
-
-      );
-
-
-      hablar(
-
-        configuracion[2] +
-        " es " +
-        valores
-          .map(
-            decirCodigo
+        const codigoRegistro =
+          normalizarComparacion(
+            r.codigo || ""
           )
-          .join(
-            ", "
-          ) +
-        "."
+            .replace(/\s+/g, "");
 
-      );
-
-    }
-
-
-    function mostrarRespuestaContextual(
-      titulo,
-      valor
-    ) {
-
-      const contenedor =
-        document
-          .getElementById(
-            "resultados"
-          );
-
-
-      contenedor.innerHTML =
-        "";
-
-
-      const tarjeta =
-        document
-          .createElement(
-            "div"
-          );
-
-
-      tarjeta.className =
-        "respuesta-contextual";
-
-
-      const tituloElemento =
-        document
-          .createElement(
-            "div"
-          );
-
-
-      tituloElemento.className =
-        "respuesta-contextual-titulo";
-
-
-      tituloElemento.textContent =
-        titulo;
-
-
-      const valorElemento =
-        document
-          .createElement(
-            "div"
-          );
-
-
-      valorElemento.className =
-        "respuesta-contextual-valor";
-
-
-      valorElemento.textContent =
-        valor;
-
-
-      tarjeta.appendChild(
-        tituloElemento
-      );
-
-
-      tarjeta.appendChild(
-        valorElemento
-      );
-
-
-      contenedor.appendChild(
-        tarjeta
-      );
-
-    }
-
-
-    // =====================================================
-    // RESPUESTA HABLADA
-    // =====================================================
-
-    function responderConVoz(
-      datos
-    ) {
-
-      if (
-        !datos.resultados ||
-        !datos.resultados.length
-      ) {
-
-        return;
+        return codigoRegistro === codigoLeido;
 
       }
+    );
 
 
-      const resultados =
-        datos.resultados;
+  if (!registro) {
 
+    estado.className = "qr-estado error";
+    estado.textContent =
+      "Este código QR no está registrado en el catálogo.";
 
-      const tipo =
-        String(
-          datos.tipo ||
-          ""
-        ).toUpperCase();
+    setTimeout(
+      function() {
 
+        qrProcesando = false;
 
-      const valor =
-        String(
-          datos.valor ||
-          ""
-        );
+        if (qrActivo) {
 
-
-      if (
-        tipo ===
-        "UBICACION"
-      ) {
-
-        if (
-          resultados.length ===
-          1
-        ) {
-
-          const r =
-            resultados[0];
-
-
-          let frase =
-            "En la ubicación " +
-            decirCodigo(
-              r.ubicacion
-            ) +
-            " se encuentra el proveedor " +
-            decirCodigo(
-              r.proveedor
-            ) +
-            ".";
-
-
-          if (
-            r.ruta
-          ) {
-
-            frase +=
-              " Ruta " +
-              decirCodigo(
-                r.ruta
-              ) +
-              ".";
-
-          }
-
-
-          if (
-            r.maximo
-          ) {
-
-            frase +=
-              " Máximo " +
-              r.maximo +
-              ".";
-
-          }
-
-
-          hablar(
-            frase
-          );
-
-
-          return;
+          estado.className = "qr-estado activo";
+          estado.textContent =
+            "Cámara activa. Intenta con otro código.";
 
         }
 
+      },
+      1800
+    );
 
-        const proveedores =
-          obtenerUnicos(
-            resultados,
-            "proveedor"
-          );
-
-
-        let frase =
-          "En la ubicación " +
-          decirCodigo(
-            valor
-          ) +
-          " encontré " +
-          resultados.length +
-          " registros.";
+    return;
+  }
 
 
-        if (
-          proveedores.length <=
-          5
-        ) {
-
-          frase +=
-            " Proveedores: " +
-            proveedores
-              .map(
-                decirCodigo
-              )
-              .join(
-                ", "
-              ) +
-            ".";
-
-        }
+  estado.className = "qr-estado activo";
+  estado.textContent = "Ubicación encontrada.";
 
 
-        hablar(
-          frase
-        );
+  await detenerEscanerQR(false);
 
 
-        return;
+  vistaAnterior = "qr";
 
+
+  abrirFichaPorRegistro(
+    registro
+  );
+
+}
+
+
+async function detenerEscanerQR(
+  limpiarEstado = true
+) {
+
+  const reader = document.getElementById("qrReader");
+  const iniciar = document.getElementById("qrIniciarBtn");
+  const cancelar = document.getElementById("qrCancelarBtn");
+  const estado = document.getElementById("qrEstado");
+
+
+  if (qrScanner) {
+
+    try {
+
+      if (qrActivo) {
+        await qrScanner.stop();
       }
 
+    } catch (error) {
 
-      if (
-        tipo ===
-        "PROVEEDOR" ||
-        tipo ===
-        "NUMERO"
-      ) {
-
-        const ubicaciones =
-          obtenerUnicos(
-            resultados,
-            "ubicacion"
-          );
-
-
-        const proveedor =
-          resultados[0]
-            .proveedor ||
-          valor;
-
-
-        if (
-          ubicaciones.length ===
-          1
-        ) {
-
-          hablar(
-
-            "El proveedor " +
-            decirCodigo(
-              proveedor
-            ) +
-            " se encuentra en la ubicación " +
-            decirCodigo(
-              ubicaciones[0]
-            ) +
-            "."
-
-          );
-
-
-          return;
-
-        }
-
-
-        if (
-          ubicaciones.length <=
-          5
-        ) {
-
-          hablar(
-
-            "El proveedor " +
-            decirCodigo(
-              proveedor
-            ) +
-            " se encuentra en " +
-            ubicaciones.length +
-            " ubicaciones: " +
-            ubicaciones
-              .map(
-                decirCodigo
-              )
-              .join(
-                ", "
-              ) +
-            "."
-
-          );
-
-
-          return;
-
-        }
-
-
-        hablar(
-
-          "Encontré " +
-          ubicaciones.length +
-          " ubicaciones para el proveedor " +
-          decirCodigo(
-            proveedor
-          ) +
-          ". Los resultados están en pantalla."
-
-        );
-
-
-        return;
-
-      }
-
-
-      if (
-        tipo ===
-        "RUTA"
-      ) {
-
-        const ubicaciones =
-          obtenerUnicos(
-            resultados,
-            "ubicacion"
-          );
-
-
-        if (
-          ubicaciones.length <=
-          5
-        ) {
-
-          hablar(
-
-            "La ruta " +
-            decirCodigo(
-              valor
-            ) +
-            " tiene " +
-            ubicaciones.length +
-            " ubicaciones: " +
-            ubicaciones
-              .map(
-                decirCodigo
-              )
-              .join(
-                ", "
-              ) +
-            "."
-
-          );
-
-
-          return;
-
-        }
-
-
-        hablar(
-
-          "Encontré " +
-          ubicaciones.length +
-          " ubicaciones para la ruta " +
-          decirCodigo(
-            valor
-          ) +
-          ". Los resultados están en pantalla."
-
-        );
-
-
-        return;
-
-      }
-
-
-      hablar(
-
-        "Encontré " +
-        resultados.length +
-        " resultados."
-
-      );
-
-    }
-
-
-    // =====================================================
-    // SONIDO
-    // =====================================================
-
-    function alternarSonido() {
-
-      sonidoActivado =
-        !sonidoActivado;
-
-
-      const boton =
-        document
-          .getElementById(
-            "soundBtn"
-          );
-
-
-      if (
-        sonidoActivado
-      ) {
-
-        boton.textContent =
-          "🔊 Respuesta por voz activada";
-
-      } else {
-
-        boton.textContent =
-          "🔇 Respuesta por voz desactivada";
-
-
-        if (
-          "speechSynthesis"
-          in window
-        ) {
-
-          window
-            .speechSynthesis
-            .cancel();
-
-        }
-
-      }
-
-    }
-
-
-    function hablar(
-      texto
-    ) {
-
-      if (
-        !sonidoActivado
-      ) {
-
-        return;
-
-      }
-
-
-      if (
-        !(
-          "speechSynthesis"
-          in window
-        )
-      ) {
-
-        return;
-
-      }
-
-
-      window
-        .speechSynthesis
-        .cancel();
-
-
-      const mensaje =
-        new SpeechSynthesisUtterance(
-          texto
-        );
-
-
-      mensaje.lang =
-        "es-MX";
-
-
-      mensaje.rate =
-        1;
-
-
-      mensaje.pitch =
-        1;
-
-
-      const voces =
-        window
-          .speechSynthesis
-          .getVoices();
-
-
-      const vozMX =
-        voces.find(
-          function(voz) {
-
-            return (
-              voz.lang &&
-              voz.lang
-                .toLowerCase()
-                .startsWith(
-                  "es-mx"
-                )
-            );
-
-          }
-        );
-
-
-      const vozES =
-        voces.find(
-          function(voz) {
-
-            return (
-              voz.lang &&
-              voz.lang
-                .toLowerCase()
-                .startsWith(
-                  "es"
-                )
-            );
-
-          }
-        );
-
-
-      if (
-        vozMX
-      ) {
-
-        mensaje.voice =
-          vozMX;
-
-      }
-
-      else if (
-        vozES
-      ) {
-
-        mensaje.voice =
-          vozES;
-
-      }
-
-
-      window
-        .speechSynthesis
-        .speak(
-          mensaje
-        );
-
-    }
-
-
-    // =====================================================
-    // CANDIDATOS DE VOZ
-    // =====================================================
-
-    function generarCandidatos(
-      texto
-    ) {
-
-      const candidatos =
-        new Set();
-
-
-      const normal =
-        normalizarVoz(
-          texto
-        );
-
-
-      const palabras =
-        normal
-          .split(
-            " "
-          )
-          .filter(
-            Boolean
-          );
-
-
-      palabras.forEach(
-        function(palabra) {
-
-          const limpia =
-            limpiarCodigo(
-              palabra
-            );
-
-
-          if (
-            limpia.length >=
-            2
-          ) {
-
-            candidatos.add(
-              limpia
-            );
-
-          }
-
-        }
-      );
-
-
-      for (
-        let inicio = 0;
-        inicio < palabras.length;
-        inicio++
-      ) {
-
-        let acumulado =
-          "";
-
-
-        for (
-          let fin = inicio;
-          fin <
-          palabras.length &&
-          fin <
-          inicio + 7;
-          fin++
-        ) {
-
-          acumulado +=
-            limpiarCodigo(
-              palabras[fin]
-            );
-
-
-          if (
-            acumulado.length >=
-            2
-          ) {
-
-            candidatos.add(
-              acumulado
-            );
-
-          }
-
-        }
-
-      }
-
-
-      const compacto =
-        compactarVoz(
-          texto
-        );
-
-
-      if (
-        compacto.length >=
-        2
-      ) {
-
-        candidatos.add(
-          compacto
-        );
-
-      }
-
-
-      return Array.from(
-        candidatos
-      );
-
-    }
-
-
-    function compactarVoz(
-      texto
-    ) {
-
-      return normalizarVoz(
-        texto
-      )
-        .replace(/\bQUE\b/g, " ")
-        .replace(/\bHAY\b/g, " ")
-        .replace(/\bDONDE\b/g, " ")
-        .replace(/\bESTA\b/g, " ")
-        .replace(/\bESTAN\b/g, " ")
-        .replace(/\bEL\b/g, " ")
-        .replace(/\bLA\b/g, " ")
-        .replace(/\bLOS\b/g, " ")
-        .replace(/\bLAS\b/g, " ")
-        .replace(/\bEN\b/g, " ")
-        .replace(/\bUN\b/g, " ")
-        .replace(/\bUNA\b/g, " ")
-        .replace(/\bDE\b/g, " ")
-        .replace(/\bDEL\b/g, " ")
-        .replace(/\bDAME\b/g, " ")
-        .replace(/\bBUSCA\b/g, " ")
-        .replace(/\bBUSCAME\b/g, " ")
-        .replace(/\bNECESITO\b/g, " ")
-        .replace(/\bQUIERO\b/g, " ")
-        .replace(/\bUBICACION\b/g, " ")
-        .replace(/\bPROVEEDOR\b/g, " ")
-        .replace(/\bRUTA\b/g, " ")
-        .replace(/\bNUMERO\b/g, " ")
-        .replace(/\bPOR\b/g, " ")
-        .replace(/\bFAVOR\b/g, " ")
-        .replace(/[^A-Z0-9]/g, "");
-
-    }
-
-
-    // =====================================================
-    // NORMALIZACIÓN
-    // =====================================================
-
-    function normalizarParaComparar(
-      texto
-    ) {
-
-      return quitarAcentos(
-        String(
-          texto || ""
-        )
-      )
-        .toUpperCase()
-        .replace(
-          /[¿?¡!,.;:]/g,
-          " "
-        )
-        .replace(
-          /\s+/g,
-          " "
-        )
-        .trim();
-
-    }
-
-
-    function normalizarComparacion(
-      texto
-    ) {
-
-      return quitarAcentos(
-        String(
-          texto || ""
-        )
-      )
-        .toUpperCase()
-        .trim();
-
-    }
-
-
-    function normalizarVoz(
-      texto
-    ) {
-
-      let t =
-        normalizarParaComparar(
-          texto
-        );
-
-
-      const letras = {
-
-        A: "A",
-
-        BE: "B",
-        B: "B",
-
-        CE: "C",
-        C: "C",
-
-        DE: "D",
-        D: "D",
-
-        E: "E",
-
-        EFE: "F",
-        F: "F",
-
-        GE: "G",
-        G: "G",
-
-        HACHE: "H",
-        H: "H",
-
-        I: "I",
-
-        JOTA: "J",
-        J: "J",
-
-        KA: "K",
-        K: "K",
-
-        ELE: "L",
-        L: "L",
-
-        EME: "M",
-        M: "M",
-
-        ENE: "N",
-        N: "N",
-
-        O: "O",
-
-        PE: "P",
-        P: "P",
-
-        CU: "Q",
-        Q: "Q",
-
-        ERRE: "R",
-        R: "R",
-
-        ESE: "S",
-        S: "S",
-
-        TE: "T",
-        T: "T",
-
-        U: "U",
-
-        UVE: "V",
-        V: "V",
-
-        DOBLEU: "W",
-
-        EQUIS: "X",
-        X: "X",
-
-        YE: "Y",
-        Y: "Y",
-
-        ZETA: "Z",
-        Z: "Z"
-
-      };
-
-
-      const numeros = {
-
-        CERO: "0",
-        UNO: "1",
-        DOS: "2",
-        TRES: "3",
-        CUATRO: "4",
-        CINCO: "5",
-        SEIS: "6",
-        SIETE: "7",
-        OCHO: "8",
-        NUEVE: "9",
-
-        DIEZ: "10",
-        ONCE: "11",
-        DOCE: "12",
-        TRECE: "13",
-        CATORCE: "14",
-        QUINCE: "15",
-        DIECISEIS: "16",
-        DIECISIETE: "17",
-        DIECIOCHO: "18",
-        DIECINUEVE: "19",
-
-        VEINTE: "20",
-        VEINTIUNO: "21",
-        VEINTIDOS: "22",
-        VEINTITRES: "23",
-        VEINTICUATRO: "24",
-        VEINTICINCO: "25",
-        VEINTISEIS: "26",
-        VEINTISIETE: "27",
-        VEINTIOCHO: "28",
-        VEINTINUEVE: "29",
-
-        TREINTA: "30"
-
-      };
-
-
-      const palabras =
-        t.split(
-          " "
-        );
-
-
-      const convertidas =
-        [];
-
-
-      for (
-        let i = 0;
-        i < palabras.length;
-        i++
-      ) {
-
-        const palabra =
-          palabras[i];
-
-
-        if (
-          palabra ===
-          "DOBLE" &&
-          palabras[i + 1] ===
-          "U"
-        ) {
-
-          convertidas.push(
-            "W"
-          );
-
-
-          i++;
-
-
-          continue;
-
-        }
-
-
-        if (
-          numeros[palabra] !==
-          undefined
-        ) {
-
-          convertidas.push(
-            numeros[palabra]
-          );
-
-
-          continue;
-
-        }
-
-
-        if (
-          letras[palabra] !==
-          undefined
-        ) {
-
-          convertidas.push(
-            letras[palabra]
-          );
-
-
-          continue;
-
-        }
-
-
-        convertidas.push(
-          palabra
-        );
-
-      }
-
-
-      return convertidas
-        .join(
-          " "
-        )
-        .replace(
-          /\s+/g,
-          " "
-        )
-        .trim();
-
-    }
-
-
-    function limpiarCodigo(
-      texto
-    ) {
-
-      return String(
-        texto || ""
-      )
-        .toUpperCase()
-        .replace(
-          /[^A-Z0-9]/g,
-          ""
-        );
-
-    }
-
-
-    function quitarAcentos(
-      texto
-    ) {
-
-      return String(
-        texto
-      )
-        .normalize(
-          "NFD"
-        )
-        .replace(
-          /[\u0300-\u036f]/g,
-          ""
-        );
-
-    }
-
-
-    // =====================================================
-    // LEVENSHTEIN
-    // =====================================================
-
-    function distanciaLevenshtein(
-      a,
-      b
-    ) {
-
-      a =
-        String(
-          a || ""
-        );
-
-
-      b =
-        String(
-          b || ""
-        );
-
-
-      const matriz =
-        [];
-
-
-      for (
-        let i = 0;
-        i <= b.length;
-        i++
-      ) {
-
-        matriz[i] =
-          [i];
-
-      }
-
-
-      for (
-        let j = 0;
-        j <= a.length;
-        j++
-      ) {
-
-        matriz[0][j] =
-          j;
-
-      }
-
-
-      for (
-        let i = 1;
-        i <= b.length;
-        i++
-      ) {
-
-        for (
-          let j = 1;
-          j <= a.length;
-          j++
-        ) {
-
-          if (
-            b.charAt(
-              i - 1
-            ) ===
-            a.charAt(
-              j - 1
-            )
-          ) {
-
-            matriz[i][j] =
-              matriz[
-                i - 1
-              ][
-                j - 1
-              ];
-
-          } else {
-
-            matriz[i][j] =
-              Math.min(
-
-                matriz[
-                  i - 1
-                ][
-                  j - 1
-                ] + 1,
-
-                matriz[
-                  i
-                ][
-                  j - 1
-                ] + 1,
-
-                matriz[
-                  i - 1
-                ][
-                  j
-                ] + 1
-
-              );
-
-          }
-
-        }
-
-      }
-
-
-      return matriz[
-        b.length
-      ][
-        a.length
-      ];
-
-    }
-
-
-    // =====================================================
-    // UTILIDADES
-    // =====================================================
-
-    function obtenerUnicos(
-      resultados,
-      campo
-    ) {
-
-      const valores =
-        new Set();
-
-
-      resultados.forEach(
-        function(r) {
-
-          const valor =
-            String(
-              r[campo] ||
-              ""
-            ).trim();
-
-
-          if (
-            valor
-          ) {
-
-            valores.add(
-              valor
-            );
-
-          }
-
-        }
-      );
-
-
-      return Array.from(
-        valores
-      );
-
-    }
-
-
-    function decirCodigo(
-      codigo
-    ) {
-
-      codigo =
-        String(
-          codigo || ""
-        )
-          .toUpperCase()
-          .trim();
-
-
-      if (
-        !codigo
-      ) {
-
-        return "";
-
-      }
-
-
-      if (
-        /^\d+$/.test(
-          codigo
-        )
-      ) {
-
-        return codigo;
-
-      }
-
-
-      const combinado =
-        codigo.match(
-          /^([A-Z]+)(\d+)$/
-        );
-
-
-      if (
-        combinado
-      ) {
-
-        const letras =
-          combinado[1]
-            .split(
-              ""
-            )
-            .join(
-              " "
-            );
-
-
-        const numero =
-          combinado[2];
-
-
-        return (
-          letras +
-          " " +
-          numero
-        );
-
-      }
-
-
-      if (
-        /^[A-Z]+$/.test(
-          codigo
-        )
-      ) {
-
-        return codigo
-          .split(
-            ""
-          )
-          .join(
-            " "
-          );
-
-      }
-
-
-      return codigo;
-
-    }
-
-
-    function mostrarError(
-      mensaje
-    ) {
-
-      const contenedor =
-        document
-          .getElementById(
-            "resultados"
-          );
-
-
-      contenedor.innerHTML =
-        "";
-
-
-      const error =
-        document
-          .createElement(
-            "div"
-          );
-
-
-      error.className =
-        "error";
-
-
-      error.textContent =
-        mensaje;
-
-
-      contenedor.appendChild(
+      console.warn(
+        "No fue necesario detener el lector:",
         error
       );
 
     }
 
 
-    function restaurarMicrofono() {
+    try {
 
-      const boton =
-        document
-          .getElementById(
-            "micBtn"
+      qrScanner.clear();
+
+    } catch (error) {}
+
+  }
+
+
+  qrScanner = null;
+  qrActivo = false;
+  qrProcesando = false;
+
+
+  reader.style.display = "none";
+  iniciar.disabled = false;
+  cancelar.style.display = "none";
+
+
+  if (limpiarEstado) {
+
+    estado.className = "qr-estado";
+    estado.textContent = "";
+
+  }
+
+}
+
+
+/* =====================================================
+   NAVEGACIÓN
+===================================================== */
+
+function ocultarVistas() {
+
+  document.getElementById("vistaInicio").style.display = "none";
+  document.getElementById("vistaVoz").style.display = "none";
+  document.getElementById("vistaCatalogo").style.display = "none";
+  document.getElementById("vistaQR").style.display = "none";
+  document.getElementById("vistaFicha").style.display = "none";
+
+}
+
+
+function abrirSeccion(seccion) {
+
+  ocultarVistas();
+
+  vistaAnterior = seccion;
+
+
+  if (seccion === "voz") {
+
+    document.getElementById("vistaVoz").style.display = "block";
+
+  }
+
+
+  if (seccion === "catalogo") {
+
+    document.getElementById("vistaCatalogo").style.display = "block";
+
+  }
+
+
+  if (seccion === "qr") {
+
+    document.getElementById("vistaQR").style.display = "block";
+
+  }
+
+
+  window.scrollTo(0, 0);
+
+}
+
+
+async function volverInicio() {
+
+  if (reconocimiento) {
+
+    try {
+      reconocimiento.abort();
+    } catch (e) {}
+
+  }
+
+
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+
+
+  if (qrScanner || qrActivo) {
+    await detenerEscanerQR();
+  }
+
+
+  ocultarVistas();
+
+  document.getElementById("vistaInicio").style.display = "block";
+
+  vistaAnterior = "inicio";
+
+  window.scrollTo(0, 0);
+
+}
+
+
+function volverVistaAnterior() {
+
+  ocultarVistas();
+
+
+  if (vistaAnterior === "voz") {
+
+    document.getElementById("vistaVoz").style.display = "block";
+
+  }
+
+  else if (vistaAnterior === "catalogo") {
+
+    document.getElementById("vistaCatalogo").style.display = "block";
+
+  }
+
+  else if (vistaAnterior === "qr") {
+
+    document.getElementById("vistaQR").style.display = "block";
+
+  }
+
+  else {
+
+    document.getElementById("vistaInicio").style.display = "block";
+
+  }
+
+
+  window.scrollTo(0, 0);
+
+}
+
+
+/* =====================================================
+   JSONP
+===================================================== */
+
+function cargarJSONP(parametros) {
+
+  return new Promise(function(resolve, reject) {
+
+    const callback =
+      "jsonp_" +
+      Date.now() +
+      "_" +
+      Math.random().toString(36).slice(2);
+
+
+    const script =
+      document.createElement("script");
+
+
+    let terminado = false;
+
+
+    const timer =
+      setTimeout(
+        function() {
+
+          limpiar();
+
+          reject(
+            new Error(
+              "Tiempo de espera agotado."
+            )
+          );
+
+        },
+        15000
+      );
+
+
+    function limpiar() {
+
+      if (terminado) {
+        return;
+      }
+
+      terminado = true;
+
+      clearTimeout(timer);
+
+      try {
+        delete window[callback];
+      } catch (e) {
+        window[callback] = undefined;
+      }
+
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+
+    }
+
+
+    window[callback] =
+      function(datos) {
+
+        limpiar();
+        resolve(datos);
+
+      };
+
+
+    const params =
+      new URLSearchParams(
+        parametros || {}
+      );
+
+
+    params.set(
+      "callback",
+      callback
+    );
+
+
+    script.src =
+      API_BASE +
+      "?" +
+      params.toString();
+
+
+    script.onerror =
+      function() {
+
+        limpiar();
+
+        reject(
+          new Error(
+            "No fue posible conectar con la API."
+          )
+        );
+
+      };
+
+
+    document.body.appendChild(script);
+
+  });
+
+}
+
+
+/* =====================================================
+   INICIALIZACIÓN
+===================================================== */
+
+async function iniciarAplicacion() {
+
+  try {
+
+    const resultados =
+      await Promise.all([
+
+        cargarJSONP({
+          catalogo: "1"
+        }),
+
+        cargarJSONP({
+          voz: "1"
+        })
+
+      ]);
+
+
+    const datos = resultados[0];
+    const voz = resultados[1];
+
+
+    if (!Array.isArray(datos)) {
+
+      throw new Error(
+        "Formato de catálogo incorrecto."
+      );
+
+    }
+
+
+    datosCatalogo =
+      datos.filter(
+        function(r) {
+
+          return (
+            r &&
+            String(
+              r.ubicacion || ""
+            ).trim()
+          );
+
+        }
+      );
+
+
+    if (
+      voz &&
+      voz.ok &&
+      voz.catalogo
+    ) {
+
+      catalogoVoz =
+        voz.catalogo;
+
+    }
+
+    else {
+
+      crearCatalogoVozLocal();
+
+    }
+
+
+    renderizarCatalogo();
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    document
+      .getElementById("contador")
+      .textContent =
+      "Error de conexión";
+
+  }
+
+}
+
+
+function crearCatalogoVozLocal() {
+
+  catalogoVoz = {
+
+    ubicaciones:
+      valoresUnicos("ubicacion"),
+
+    rutas:
+      valoresUnicos("ruta"),
+
+    proveedores:
+      valoresUnicos("proveedor"),
+
+    numerosProveedor:
+      valoresUnicos("numeroProveedor")
+
+  };
+
+}
+
+
+function valoresUnicos(campo) {
+
+  return Array.from(
+
+    new Set(
+
+      datosCatalogo
+        .map(
+          function(r) {
+            return String(
+              r[campo] || ""
+            ).trim();
+          }
+        )
+        .filter(Boolean)
+
+    )
+
+  );
+
+}
+
+
+/* =====================================================
+   CATÁLOGO
+===================================================== */
+
+function renderizarCatalogo() {
+
+  const grid =
+    document.getElementById(
+      "catalogoGrid"
+    );
+
+
+  const contador =
+    document.getElementById(
+      "contador"
+    );
+
+
+  grid.innerHTML = "";
+
+
+  datosCatalogo.forEach(
+    function(registro) {
+
+      const tarjeta =
+        document.createElement(
+          "div"
+        );
+
+
+      tarjeta.className =
+        "catalogo-card";
+
+
+      tarjeta.addEventListener(
+        "click",
+        function() {
+
+          abrirFichaPorRegistro(
+            registro
+          );
+
+        }
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        registro.ubicacion,
+        "catalogo-ubicacion"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        registro.proveedor,
+        "catalogo-proveedor"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        registro.ruta,
+        "catalogo-ruta"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        "Proveedor #" +
+        (
+          registro.numeroProveedor ||
+          "—"
+        ),
+        "catalogo-numero"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        "Máximo: " +
+        (
+          registro.maximo ||
+          "—"
+        ),
+        "catalogo-maximo"
+      );
+
+
+      grid.appendChild(
+        tarjeta
+      );
+
+    }
+  );
+
+
+  contador.textContent =
+    datosCatalogo.length +
+    " ubicaciones";
+
+}
+
+
+function agregarElemento(
+  padre,
+  texto,
+  clase
+) {
+
+  const elemento =
+    document.createElement(
+      "div"
+    );
+
+
+  elemento.className =
+    clase;
+
+
+  elemento.textContent =
+    texto || "—";
+
+
+  padre.appendChild(
+    elemento
+  );
+
+}
+
+
+/* =====================================================
+   FICHA
+===================================================== */
+
+function abrirFichaPorRegistro(
+  registro
+) {
+
+  if (!registro) {
+    return;
+  }
+
+
+  const ubicacion =
+    normalizarComparacion(
+      registro.ubicacion
+    );
+
+
+  const registros =
+    datosCatalogo.filter(
+      function(r) {
+
+        return (
+          normalizarComparacion(
+            r.ubicacion
+          ) === ubicacion
+        );
+
+      }
+    );
+
+
+  mostrarFicha(
+
+    registro.ubicicacion ||
+    registro.ubicacion,
+
+    registros.length
+      ? registros
+      : [registro]
+
+  );
+
+}
+
+
+function mostrarFicha(
+  ubicacion,
+  registros
+) {
+
+  ocultarVistas();
+
+
+  document
+    .getElementById(
+      "vistaFicha"
+    )
+    .style.display =
+    "block";
+
+
+  document
+    .getElementById(
+      "fichaUbicacion"
+    )
+    .textContent =
+    ubicacion || "—";
+
+
+  const contenedor =
+    document.getElementById(
+      "fichaRegistros"
+    );
+
+
+  contenedor.innerHTML = "";
+
+
+  registros.forEach(
+    function(registro, indice) {
+
+      if (
+        registros.length > 1
+      ) {
+
+        const separador =
+          document.createElement(
+            "div"
           );
 
 
+        separador.className =
+          "separador";
+
+
+        separador.textContent =
+          "Proveedor " +
+          (indice + 1);
+
+
+        contenedor.appendChild(
+          separador
+        );
+
+      }
+
+
+      const tarjeta =
+        document.createElement(
+          "div"
+        );
+
+
+      tarjeta.className =
+        "registro";
+
+
+      crearFilaFicha(
+        tarjeta,
+        "No. proveedor",
+        registro.numeroProveedor
+      );
+
+
+      crearFilaFicha(
+        tarjeta,
+        "Proveedor",
+        registro.proveedor,
+        "proveedor"
+      );
+
+
+      crearFilaFicha(
+        tarjeta,
+        "Ruta",
+        registro.ruta
+      );
+
+
+      crearFilaFicha(
+        tarjeta,
+        "Máximo por ubicación",
+        registro.maximo,
+        "maximo"
+      );
+
+
+      contenedor.appendChild(
+        tarjeta
+      );
+
+    }
+  );
+
+
+  mostrarFechaFicha(
+    registros
+  );
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+function crearFilaFicha(
+  padre,
+  etiqueta,
+  valor,
+  claseExtra
+) {
+
+  const fila =
+    document.createElement(
+      "div"
+    );
+
+
+  fila.className =
+    "fila";
+
+
+  const etiquetaElemento =
+    document.createElement(
+      "div"
+    );
+
+
+  etiquetaElemento.className =
+    "etiqueta";
+
+
+  etiquetaElemento.textContent =
+    etiqueta;
+
+
+  const valorElemento =
+    document.createElement(
+      "div"
+    );
+
+
+  valorElemento.className =
+    "valor";
+
+
+  if (claseExtra) {
+
+    valorElemento
+      .classList
+      .add(
+        claseExtra
+      );
+
+  }
+
+
+  valorElemento.textContent =
+    valor || "—";
+
+
+  fila.appendChild(
+    etiquetaElemento
+  );
+
+
+  fila.appendChild(
+    valorElemento
+  );
+
+
+  padre.appendChild(
+    fila
+  );
+
+}
+
+
+function mostrarFechaFicha(
+  registros
+) {
+
+  const pie =
+    document.getElementById(
+      "fichaPie"
+    );
+
+
+  const fechas =
+    Array.from(
+
+      new Set(
+
+        registros
+          .map(
+            function(r) {
+
+              return String(
+                r.fechaActualizacion ||
+                ""
+              ).trim();
+
+            }
+          )
+          .filter(Boolean)
+
+      )
+
+    );
+
+
+  if (!fechas.length) {
+
+    pie.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  pie.style.display =
+    "block";
+
+
+  if (fechas.length === 1) {
+
+    pie.textContent =
+      "Última actualización: " +
+      fechas[0];
+
+  }
+
+  else {
+
+    pie.textContent =
+      "Actualizaciones: " +
+      fechas.join(" • ");
+
+  }
+
+}
+
+
+/* =====================================================
+   RECONOCIMIENTO DE VOZ
+===================================================== */
+
+const SpeechRecognition =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
+
+let reconocimiento = null;
+
+
+function escuchar() {
+
+  if (
+    "speechSynthesis" in window
+  ) {
+
+    window
+      .speechSynthesis
+      .cancel();
+
+  }
+
+
+  if (!SpeechRecognition) {
+
+    mostrarError(
+      "Este navegador no permite reconocimiento de voz."
+    );
+
+    return;
+
+  }
+
+
+  if (reconocimiento) {
+
+    try {
+      reconocimiento.abort();
+    } catch (e) {}
+
+  }
+
+
+  reconocimiento =
+    new SpeechRecognition();
+
+
+  reconocimiento.lang =
+    "es-MX";
+
+
+  reconocimiento.continuous =
+    false;
+
+
+  reconocimiento.interimResults =
+    false;
+
+
+  reconocimiento.maxAlternatives =
+    3;
+
+
+  const boton =
+    document.getElementById(
+      "micBtn"
+    );
+
+
+  const textoBoton =
+    document.getElementById(
+      "micText"
+    );
+
+
+  reconocimiento.onstart =
+    function() {
+
       boton
         .classList
-        .remove(
+        .add(
           "listening"
         );
 
@@ -5188,12 +2193,8 @@
         );
 
 
-      document
-        .getElementById(
-          "micText"
-        )
-        .textContent =
-        "HABLAR";
+      textoBoton.textContent =
+        "ESCUCHANDO...";
 
 
       document
@@ -5201,20 +2202,2196 @@
           "estado"
         )
         .textContent =
-        "";
+        "Habla ahora";
+
+    };
+
+
+  reconocimiento.onresult =
+    function(event) {
+
+      boton
+        .classList
+        .remove(
+          "listening"
+        );
+
+
+      boton
+        .classList
+        .add(
+          "processing"
+        );
+
+
+      textoBoton.textContent =
+        "PROCESANDO";
+
+
+      const alternativas = [];
+
+
+      for (
+        let i = 0;
+        i <
+        event.results[0].length;
+        i++
+      ) {
+
+        alternativas.push(
+
+          event
+            .results[0][i]
+            .transcript
+            .trim()
+
+        );
+
+      }
+
+
+      document
+        .getElementById(
+          "speechInfo"
+        )
+        .style.display =
+        "block";
+
+
+      document
+        .getElementById(
+          "escuchado"
+        )
+        .textContent =
+        alternativas[0] || "";
+
+
+      procesarAlternativas(
+        alternativas
+      );
+
+    };
+
+
+  reconocimiento.onerror =
+    function(event) {
+
+      restaurarMicrofono();
+
+
+      let mensaje =
+        "No pude escuchar correctamente. Intenta nuevamente.";
+
+
+      if (
+        event.error ===
+        "not-allowed"
+      ) {
+
+        mensaje =
+          "Necesitas permitir el acceso al micrófono.";
+
+      }
+
+
+      if (
+        event.error ===
+        "no-speech"
+      ) {
+
+        mensaje =
+          "No detecté voz. Intenta nuevamente.";
+
+      }
+
+
+      mostrarError(
+        mensaje
+      );
+
+    };
+
+
+  reconocimiento.onend =
+    function() {
+
+      if (
+        !boton
+          .classList
+          .contains(
+            "processing"
+          )
+      ) {
+
+        restaurarMicrofono();
+
+      }
+
+    };
+
+
+  try {
+
+    reconocimiento.start();
+
+  }
+
+  catch (error) {
+
+    restaurarMicrofono();
+
+    mostrarError(
+      "No fue posible iniciar el micrófono."
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   PROCESAR VOZ
+===================================================== */
+
+async function procesarAlternativas(
+  alternativas
+) {
+
+  for (
+    let i = 0;
+    i < alternativas.length;
+    i++
+  ) {
+
+    const contextual =
+      detectarPreguntaContextual(
+        alternativas[i]
+      );
+
+
+    if (contextual) {
+
+      document
+        .getElementById(
+          "interpretado"
+        )
+        .textContent =
+        "CONTEXTO: " +
+        contextual;
+
+
+      responderPreguntaContextual(
+        contextual
+      );
+
+
+      restaurarMicrofono();
+
+      return;
+
+    }
+
+  }
+
+
+  for (
+    let i = 0;
+    i < alternativas.length;
+    i++
+  ) {
+
+    const deteccion =
+      detectarConsultaSegura(
+        alternativas[i]
+      );
+
+
+    if (
+      deteccion &&
+      deteccion.estado ===
+      "EXACTA"
+    ) {
+
+      document
+        .getElementById(
+          "interpretado"
+        )
+        .textContent =
+        deteccion.opcion.tipo +
+        ": " +
+        deteccion.opcion.valor;
+
+
+      await consultarAPI(
+
+        deteccion.opcion.tipo +
+        " " +
+        deteccion.opcion.valor,
+
+        true
+
+      );
+
+
+      restaurarMicrofono();
+
+      return;
+
+    }
+
+  }
+
+
+  for (
+    let i = 0;
+    i < alternativas.length;
+    i++
+  ) {
+
+    const deteccion =
+      detectarConsultaSegura(
+        alternativas[i]
+      );
+
+
+    if (
+      deteccion &&
+      deteccion.estado ===
+      "AMBIGUA"
+    ) {
+
+      mostrarAmbiguedad(
+        deteccion.opciones
+      );
+
+
+      restaurarMicrofono();
+
+      return;
+
+    }
+
+  }
+
+
+  const consulta =
+    normalizarVoz(
+      alternativas[0] || ""
+    );
+
+
+  document
+    .getElementById(
+      "interpretado"
+    )
+    .textContent =
+    consulta;
+
+
+  await consultarAPI(
+    consulta,
+    true
+  );
+
+
+  restaurarMicrofono();
+
+}
+
+
+/* =====================================================
+   DETECCIÓN
+===================================================== */
+
+function detectarConsultaSegura(
+  texto
+) {
+
+  const normal =
+    normalizarParaComparar(
+      texto
+    );
+
+
+  let tipoPreferido = null;
+
+
+  if (
+    /\bUBICACION\b/.test(
+      normal
+    )
+  ) {
+
+    tipoPreferido =
+      "UBICACION";
+
+  }
+
+  else if (
+    /\bRUTA\b/.test(
+      normal
+    )
+  ) {
+
+    tipoPreferido =
+      "RUTA";
+
+  }
+
+  else if (
+    /\bPROVEEDOR\b/.test(
+      normal
+    )
+  ) {
+
+    tipoPreferido =
+      "PROVEEDOR";
+
+  }
+
+
+  const exactas =
+    buscarCoincidenciasExactas(
+      texto,
+      tipoPreferido
+    );
+
+
+  if (
+    exactas.length === 1
+  ) {
+
+    return {
+      estado: "EXACTA",
+      opcion: exactas[0]
+    };
+
+  }
+
+
+  if (
+    exactas.length > 1
+  ) {
+
+    return {
+      estado: "AMBIGUA",
+      opciones: exactas.slice(0,4)
+    };
+
+  }
+
+
+  const aproximadas =
+    buscarCoincidenciasAproximadas(
+      texto,
+      tipoPreferido
+    );
+
+
+  if (!aproximadas.length) {
+    return null;
+  }
+
+
+  if (
+    aproximadas.length === 1
+  ) {
+
+    if (
+      aproximadas[0].distancia ===
+      0
+    ) {
+
+      return {
+        estado: "EXACTA",
+        opcion: aproximadas[0]
+      };
 
     }
 
 
-    // =====================================================
-    // ARRANQUE
-    // =====================================================
+    return {
+      estado: "AMBIGUA",
+      opciones:
+        aproximadas.slice(0,3)
+    };
 
-    iniciarAplicacion();
+  }
 
 
-  </script>
+  const mejor =
+    aproximadas[0];
+
+
+  const segunda =
+    aproximadas[1];
+
+
+  if (
+    mejor.distancia <= 1 &&
+    segunda.distancia >=
+    mejor.distancia + 2
+  ) {
+
+    return {
+      estado: "EXACTA",
+      opcion: mejor
+    };
+
+  }
+
+
+  return {
+    estado: "AMBIGUA",
+    opciones:
+      aproximadas.slice(0,3)
+  };
+
+}
+
+
+function buscarCoincidenciasExactas(
+  texto,
+  tipoPreferido
+) {
+
+  const candidatos =
+    generarCandidatos(texto);
+
+
+  const set =
+    new Set(
+      candidatos.map(
+        limpiarCodigo
+      )
+    );
+
+
+  return eliminarDuplicados(
+
+    obtenerEntradasCatalogo(
+      tipoPreferido
+    )
+      .filter(
+        function(entrada) {
+
+          return set.has(
+            limpiarCodigo(
+              entrada.valor
+            )
+          );
+
+        }
+      )
+
+  );
+
+}
+
+
+function buscarCoincidenciasAproximadas(
+  texto,
+  tipoPreferido
+) {
+
+  const candidatos =
+    generarCandidatos(texto)
+      .map(limpiarCodigo)
+      .filter(
+        function(c) {
+          return c.length >= 2;
+        }
+      );
+
+
+  const resultados = [];
+
+
+  obtenerEntradasCatalogo(
+    tipoPreferido
+  )
+    .forEach(
+      function(entrada) {
+
+        const codigo =
+          limpiarCodigo(
+            entrada.valor
+          );
+
+
+        let mejor =
+          Infinity;
+
+
+        candidatos.forEach(
+          function(candidato) {
+
+            if (
+              Math.abs(
+                candidato.length -
+                codigo.length
+              ) > 2
+            ) {
+              return;
+            }
+
+
+            const distancia =
+              distanciaLevenshtein(
+                codigo,
+                candidato
+              );
+
+
+            if (
+              distancia < mejor
+            ) {
+
+              mejor =
+                distancia;
+
+            }
+
+          }
+        );
+
+
+        const limite =
+          codigo.length >= 6
+            ? 2
+            : 1;
+
+
+        if (
+          mejor <= limite
+        ) {
+
+          resultados.push({
+
+            tipo:
+              entrada.tipo,
+
+            valor:
+              entrada.valor,
+
+            distancia:
+              mejor
+
+          });
+
+        }
+
+      }
+    );
+
+
+  resultados.sort(
+    function(a,b) {
+
+      if (
+        a.distancia !==
+        b.distancia
+      ) {
+
+        return (
+          a.distancia -
+          b.distancia
+        );
+
+      }
+
+
+      return String(a.valor)
+        .localeCompare(
+          String(b.valor)
+        );
+
+    }
+  );
+
+
+  return eliminarDuplicados(
+    resultados
+  );
+
+}
+
+
+function obtenerEntradasCatalogo(
+  tipoPreferido
+) {
+
+  const entradas = [];
+
+
+  function agregar(
+    tipo,
+    lista
+  ) {
+
+    if (
+      tipoPreferido &&
+      tipo !== tipoPreferido
+    ) {
+      return;
+    }
+
+
+    (lista || [])
+      .forEach(
+        function(valor) {
+
+          entradas.push({
+            tipo: tipo,
+            valor: valor
+          });
+
+        }
+      );
+
+  }
+
+
+  agregar(
+    "UBICACION",
+    catalogoVoz.ubicaciones
+  );
+
+
+  agregar(
+    "RUTA",
+    catalogoVoz.rutas
+  );
+
+
+  agregar(
+    "PROVEEDOR",
+    catalogoVoz.proveedores
+  );
+
+
+  agregar(
+    "NUMERO",
+    catalogoVoz.numerosProveedor
+  );
+
+
+  return entradas;
+
+}
+
+
+function eliminarDuplicados(
+  opciones
+) {
+
+  const mapa =
+    new Map();
+
+
+  opciones.forEach(
+    function(opcion) {
+
+      const clave =
+        opcion.tipo +
+        "|" +
+        opcion.valor;
+
+
+      if (!mapa.has(clave)) {
+
+        mapa.set(
+          clave,
+          opcion
+        );
+
+      }
+
+    }
+  );
+
+
+  return Array.from(
+    mapa.values()
+  );
+
+}
+
+
+/* =====================================================
+   AMBIGÜEDAD
+===================================================== */
+
+function mostrarAmbiguedad(
+  opciones
+) {
+
+  const contenedor =
+    document.getElementById(
+      "resultados"
+    );
+
+
+  contenedor.innerHTML = "";
+
+
+  const tarjeta =
+    document.createElement(
+      "div"
+    );
+
+
+  tarjeta.className =
+    "ambiguedad";
+
+
+  const titulo =
+    document.createElement(
+      "div"
+    );
+
+
+  titulo.className =
+    "ambiguedad-titulo";
+
+
+  titulo.textContent =
+    "No estoy completamente seguro";
+
+
+  const texto =
+    document.createElement(
+      "div"
+    );
+
+
+  texto.className =
+    "ambiguedad-texto";
+
+
+  texto.textContent =
+    "¿Te refieres a una de estas opciones?";
+
+
+  const zona =
+    document.createElement(
+      "div"
+    );
+
+
+  zona.className =
+    "ambiguedad-opciones";
+
+
+  opciones.forEach(
+    function(opcion) {
+
+      const boton =
+        document.createElement(
+          "button"
+        );
+
+
+      boton.className =
+        "ambiguedad-btn";
+
+
+      boton.textContent =
+        opcion.valor;
+
+
+      boton.onclick =
+        function() {
+
+          document
+            .getElementById(
+              "interpretado"
+            )
+            .textContent =
+            opcion.tipo +
+            ": " +
+            opcion.valor;
+
+
+          consultarAPI(
+
+            opcion.tipo +
+            " " +
+            opcion.valor,
+
+            true
+
+          );
+
+        };
+
+
+      zona.appendChild(
+        boton
+      );
+
+    }
+  );
+
+
+  tarjeta.appendChild(titulo);
+  tarjeta.appendChild(texto);
+  tarjeta.appendChild(zona);
+
+  contenedor.appendChild(
+    tarjeta
+  );
+
+
+  hablar(
+    "No estoy completamente seguro. Selecciona una de las opciones en pantalla."
+  );
+
+}
+
+
+/* =====================================================
+   API VOZ
+===================================================== */
+
+async function consultarAPI(
+  consulta,
+  debeHablar
+) {
+
+  const estado =
+    document.getElementById(
+      "estado"
+    );
+
+
+  const contenedor =
+    document.getElementById(
+      "resultados"
+    );
+
+
+  estado.textContent =
+    "Buscando...";
+
+
+  contenedor.innerHTML =
+    "";
+
+
+  try {
+
+    const datos =
+      await cargarJSONP({
+        q: consulta
+      });
+
+
+    estado.textContent = "";
+
+
+    if (
+      !datos ||
+      !datos.ok
+    ) {
+
+      mostrarError(
+        datos &&
+        datos.mensaje
+          ? datos.mensaje
+          : "Ocurrió un error."
+      );
+
+      return;
+
+    }
+
+
+    if (
+      !datos.encontrado
+    ) {
+
+      mostrarError(
+        "No encontré información para esa consulta."
+      );
+
+
+      if (debeHablar) {
+
+        hablar(
+          "No encontré información para esa consulta."
+        );
+
+      }
+
+      return;
+
+    }
+
+
+    mostrarResultados(
+      datos
+    );
+
+
+    guardarContexto(
+      datos
+    );
+
+
+    if (debeHablar) {
+
+      responderConVoz(
+        datos
+      );
+
+    }
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    estado.textContent = "";
+
+    mostrarError(
+      "No fue posible consultar la base de datos."
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   RESULTADOS
+===================================================== */
+
+function mostrarResultados(
+  datos
+) {
+
+  const contenedor =
+    document.getElementById(
+      "resultados"
+    );
+
+
+  contenedor.innerHTML = "";
+
+
+  datos.resultados.forEach(
+    function(r) {
+
+      const tarjeta =
+        document.createElement(
+          "div"
+        );
+
+
+      tarjeta.className =
+        "resultado";
+
+
+      tarjeta.onclick =
+        function() {
+
+          abrirFichaPorRegistro(
+            r
+          );
+
+        };
+
+
+      agregarElemento(
+        tarjeta,
+        r.ubicacion,
+        "resultado-ubicacion"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        r.proveedor,
+        "resultado-proveedor"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        "Proveedor #" +
+        (r.numeroProveedor || "—"),
+        "resultado-detalle"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        "🚛 Ruta: " +
+        (r.ruta || "—"),
+        "resultado-detalle"
+      );
+
+
+      agregarElemento(
+        tarjeta,
+        "📦 Máximo: " +
+        (r.maximo || "—"),
+        "resultado-detalle"
+      );
+
+
+      contenedor.appendChild(
+        tarjeta
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   CONTEXTO
+===================================================== */
+
+function guardarContexto(
+  datos
+) {
+
+  if (
+    !datos ||
+    !datos.encontrado ||
+    !datos.resultados ||
+    !datos.resultados.length
+  ) {
+    return;
+  }
+
+
+  contextoActual = {
+    tipo: datos.tipo,
+    valor: datos.valor,
+    resultados: datos.resultados
+  };
+
+}
+
+
+function detectarPreguntaContextual(
+  texto
+) {
+
+  if (!contextoActual) {
+    return null;
+  }
+
+
+  const t =
+    normalizarParaComparar(
+      texto
+    );
+
+
+  if (
+    /\bRUTA\b/.test(t)
+  ) {
+    return "RUTA";
+  }
+
+
+  if (
+    /\bMAXIMO\b/.test(t) ||
+    /\bMAXIMA\b/.test(t) ||
+    /\bCAPACIDAD\b/.test(t)
+  ) {
+    return "MAXIMO";
+  }
+
+
+  if (
+    /\bNUMERO\b/.test(t) &&
+    /\bPROVEEDOR\b/.test(t)
+  ) {
+    return "NUMERO";
+  }
+
+
+  if (
+    /\bACTUALIZ/.test(t) ||
+    /\bFECHA\b/.test(t) ||
+    /\bCUANDO\b/.test(t)
+  ) {
+    return "FECHA";
+  }
+
+
+  if (
+    /\bUBICACION\b/.test(t)
+  ) {
+    return "UBICACION";
+  }
+
+
+  if (
+    /\bPROVEEDOR\b/.test(t)
+  ) {
+    return "PROVEEDOR";
+  }
+
+
+  return null;
+
+}
+
+
+function responderPreguntaContextual(
+  campo
+) {
+
+  if (
+    !contextoActual ||
+    !contextoActual.resultados ||
+    !contextoActual.resultados.length
+  ) {
+    return;
+  }
+
+
+  const mapa = {
+
+    RUTA:
+      ["ruta", "La ruta"],
+
+    MAXIMO:
+      ["maximo", "El máximo"],
+
+    NUMERO:
+      [
+        "numeroProveedor",
+        "El número de proveedor"
+      ],
+
+    FECHA:
+      [
+        "fechaActualizacion",
+        "La última actualización"
+      ],
+
+    UBICACION:
+      [
+        "ubicacion",
+        "La ubicación"
+      ],
+
+    PROVEEDOR:
+      [
+        "proveedor",
+        "El proveedor"
+      ]
+
+  };
+
+
+  const configuracion =
+    mapa[campo];
+
+
+  if (!configuracion) {
+    return;
+  }
+
+
+  const valores =
+    obtenerUnicos(
+      contextoActual.resultados,
+      configuracion[0]
+    );
+
+
+  if (!valores.length) {
+
+    hablar(
+      "No hay información disponible."
+    );
+
+    return;
+
+  }
+
+
+  const contenedor =
+    document.getElementById(
+      "resultados"
+    );
+
+
+  contenedor.innerHTML = "";
+
+
+  const tarjeta =
+    document.createElement(
+      "div"
+    );
+
+
+  tarjeta.className =
+    "respuesta-contextual";
+
+
+  agregarElemento(
+    tarjeta,
+    configuracion[1],
+    "respuesta-contextual-titulo"
+  );
+
+
+  agregarElemento(
+    tarjeta,
+    valores.join(", "),
+    "respuesta-contextual-valor"
+  );
+
+
+  contenedor.appendChild(
+    tarjeta
+  );
+
+
+  hablar(
+    configuracion[1] +
+    " es " +
+    valores
+      .map(decirCodigo)
+      .join(", ") +
+    "."
+  );
+
+}
+
+
+/* =====================================================
+   RESPUESTA HABLADA
+===================================================== */
+
+function responderConVoz(
+  datos
+) {
+
+  const resultados =
+    datos.resultados || [];
+
+
+  if (!resultados.length) {
+    return;
+  }
+
+
+  const tipo =
+    String(
+      datos.tipo || ""
+    ).toUpperCase();
+
+
+  const valor =
+    String(
+      datos.valor || ""
+    );
+
+
+  if (
+    tipo === "UBICACION"
+  ) {
+
+    if (
+      resultados.length === 1
+    ) {
+
+      const r =
+        resultados[0];
+
+
+      let frase =
+        "En la ubicación " +
+        decirCodigo(
+          r.ubicacion
+        ) +
+        " se encuentra el proveedor " +
+        decirCodigo(
+          r.proveedor
+        ) +
+        ".";
+
+
+      if (r.ruta) {
+
+        frase +=
+          " Ruta " +
+          decirCodigo(
+            r.ruta
+          ) +
+          ".";
+
+      }
+
+
+      if (r.maximo) {
+
+        frase +=
+          " Máximo " +
+          r.maximo +
+          ".";
+
+      }
+
+
+      hablar(frase);
+
+      return;
+
+    }
+
+  }
+
+
+  if (
+    tipo === "PROVEEDOR" ||
+    tipo === "NUMERO"
+  ) {
+
+    const ubicaciones =
+      obtenerUnicos(
+        resultados,
+        "ubicacion"
+      );
+
+
+    const proveedor =
+      resultados[0].proveedor ||
+      valor;
+
+
+    if (
+      ubicaciones.length === 1
+    ) {
+
+      hablar(
+        "El proveedor " +
+        decirCodigo(
+          proveedor
+        ) +
+        " se encuentra en la ubicación " +
+        decirCodigo(
+          ubicaciones[0]
+        ) +
+        "."
+      );
+
+      return;
+
+    }
+
+
+    hablar(
+      "Encontré " +
+      ubicaciones.length +
+      " ubicaciones para el proveedor " +
+      decirCodigo(
+        proveedor
+      ) +
+      "."
+    );
+
+    return;
+
+  }
+
+
+  if (
+    tipo === "RUTA"
+  ) {
+
+    const ubicaciones =
+      obtenerUnicos(
+        resultados,
+        "ubicacion"
+      );
+
+
+    hablar(
+      "La ruta " +
+      decirCodigo(valor) +
+      " tiene " +
+      ubicaciones.length +
+      " ubicaciones."
+    );
+
+    return;
+
+  }
+
+
+  hablar(
+    "Encontré " +
+    resultados.length +
+    " resultados."
+  );
+
+}
+
+
+/* =====================================================
+   SONIDO
+===================================================== */
+
+function alternarSonido() {
+
+  sonidoActivado =
+    !sonidoActivado;
+
+
+  const boton =
+    document.getElementById(
+      "soundBtn"
+    );
+
+
+  if (sonidoActivado) {
+
+    boton.textContent =
+      "🔊 Respuesta por voz activada";
+
+  }
+
+  else {
+
+    boton.textContent =
+      "🔇 Respuesta por voz desactivada";
+
+
+    if (
+      "speechSynthesis" in window
+    ) {
+
+      window
+        .speechSynthesis
+        .cancel();
+
+    }
+
+  }
+
+}
+
+
+function hablar(texto) {
+
+  if (!sonidoActivado) {
+    return;
+  }
+
+
+  if (
+    !("speechSynthesis" in window)
+  ) {
+    return;
+  }
+
+
+  window
+    .speechSynthesis
+    .cancel();
+
+
+  const mensaje =
+    new SpeechSynthesisUtterance(
+      texto
+    );
+
+
+  mensaje.lang = "es-MX";
+  mensaje.rate = 1;
+  mensaje.pitch = 1;
+
+
+  window
+    .speechSynthesis
+    .speak(
+      mensaje
+    );
+
+}
+
+
+/* =====================================================
+   NORMALIZACIÓN VOZ
+===================================================== */
+
+function generarCandidatos(
+  texto
+) {
+
+  const candidatos =
+    new Set();
+
+
+  const normal =
+    normalizarVoz(texto);
+
+
+  const palabras =
+    normal
+      .split(" ")
+      .filter(Boolean);
+
+
+  palabras.forEach(
+    function(palabra) {
+
+      const limpia =
+        limpiarCodigo(
+          palabra
+        );
+
+
+      if (
+        limpia.length >= 2
+      ) {
+
+        candidatos.add(
+          limpia
+        );
+
+      }
+
+    }
+  );
+
+
+  for (
+    let inicio = 0;
+    inicio < palabras.length;
+    inicio++
+  ) {
+
+    let acumulado = "";
+
+
+    for (
+      let fin = inicio;
+      fin < palabras.length &&
+      fin < inicio + 7;
+      fin++
+    ) {
+
+      acumulado +=
+        limpiarCodigo(
+          palabras[fin]
+        );
+
+
+      if (
+        acumulado.length >= 2
+      ) {
+
+        candidatos.add(
+          acumulado
+        );
+
+      }
+
+    }
+
+  }
+
+
+  const compacto =
+    compactarVoz(texto);
+
+
+  if (
+    compacto.length >= 2
+  ) {
+
+    candidatos.add(
+      compacto
+    );
+
+  }
+
+
+  return Array.from(
+    candidatos
+  );
+
+}
+
+
+function compactarVoz(
+  texto
+) {
+
+  return normalizarVoz(texto)
+    .replace(/\bQUE\b/g," ")
+    .replace(/\bHAY\b/g," ")
+    .replace(/\bDONDE\b/g," ")
+    .replace(/\bESTA\b/g," ")
+    .replace(/\bESTAN\b/g," ")
+    .replace(/\bEL\b/g," ")
+    .replace(/\bLA\b/g," ")
+    .replace(/\bLOS\b/g," ")
+    .replace(/\bLAS\b/g," ")
+    .replace(/\bEN\b/g," ")
+    .replace(/\bUN\b/g," ")
+    .replace(/\bUNA\b/g," ")
+    .replace(/\bDE\b/g," ")
+    .replace(/\bDEL\b/g," ")
+    .replace(/\bDAME\b/g," ")
+    .replace(/\bBUSCA\b/g," ")
+    .replace(/\bBUSCAME\b/g," ")
+    .replace(/\bNECESITO\b/g," ")
+    .replace(/\bQUIERO\b/g," ")
+    .replace(/\bUBICACION\b/g," ")
+    .replace(/\bPROVEEDOR\b/g," ")
+    .replace(/\bRUTA\b/g," ")
+    .replace(/\bNUMERO\b/g," ")
+    .replace(/\bPOR\b/g," ")
+    .replace(/\bFAVOR\b/g," ")
+    .replace(/[^A-Z0-9]/g,"");
+
+}
+
+
+function normalizarParaComparar(
+  texto
+) {
+
+  return quitarAcentos(
+    String(texto || "")
+  )
+    .toUpperCase()
+    .replace(
+      /[¿?¡!,.;:]/g,
+      " "
+    )
+    .replace(
+      /\s+/g,
+      " "
+    )
+    .trim();
+
+}
+
+
+function normalizarComparacion(
+  texto
+) {
+
+  return quitarAcentos(
+    String(texto || "")
+  )
+    .toUpperCase()
+    .trim();
+
+}
+
+
+function normalizarVoz(
+  texto
+) {
+
+  let t =
+    normalizarParaComparar(
+      texto
+    );
+
+
+  const letras = {
+
+    A:"A",
+
+    BE:"B",
+    B:"B",
+
+    CE:"C",
+    C:"C",
+
+    DE:"D",
+    D:"D",
+
+    E:"E",
+
+    EFE:"F",
+    F:"F",
+
+    GE:"G",
+    G:"G",
+
+    HACHE:"H",
+    H:"H",
+
+    I:"I",
+
+    JOTA:"J",
+    J:"J",
+
+    KA:"K",
+    K:"K",
+
+    ELE:"L",
+    L:"L",
+
+    EME:"M",
+    M:"M",
+
+    ENE:"N",
+    N:"N",
+
+    O:"O",
+
+    PE:"P",
+    P:"P",
+
+    CU:"Q",
+    Q:"Q",
+
+    ERRE:"R",
+    R:"R",
+
+    ESE:"S",
+    S:"S",
+
+    TE:"T",
+    T:"T",
+
+    U:"U",
+
+    UVE:"V",
+    V:"V",
+
+    DOBLEU:"W",
+
+    EQUIS:"X",
+    X:"X",
+
+    YE:"Y",
+    Y:"Y",
+
+    ZETA:"Z",
+    Z:"Z"
+
+  };
+
+
+  const numeros = {
+
+    CERO:"0",
+    UNO:"1",
+    DOS:"2",
+    TRES:"3",
+    CUATRO:"4",
+    CINCO:"5",
+    SEIS:"6",
+    SIETE:"7",
+    OCHO:"8",
+    NUEVE:"9",
+
+    DIEZ:"10",
+    ONCE:"11",
+    DOCE:"12",
+    TRECE:"13",
+    CATORCE:"14",
+    QUINCE:"15",
+    DIECISEIS:"16",
+    DIECISIETE:"17",
+    DIECIOCHO:"18",
+    DIECINUEVE:"19",
+
+    VEINTE:"20",
+    VEINTIUNO:"21",
+    VEINTIDOS:"22",
+    VEINTITRES:"23",
+    VEINTICUATRO:"24",
+    VEINTICINCO:"25",
+    VEINTISEIS:"26",
+    VEINTISIETE:"27",
+    VEINTIOCHO:"28",
+    VEINTINUEVE:"29",
+
+    TREINTA:"30"
+
+  };
+
+
+  const palabras =
+    t.split(" ");
+
+
+  const convertidas = [];
+
+
+  for (
+    let i = 0;
+    i < palabras.length;
+    i++
+  ) {
+
+    const palabra =
+      palabras[i];
+
+
+    if (
+      palabra === "DOBLE" &&
+      palabras[i + 1] === "U"
+    ) {
+
+      convertidas.push("W");
+
+      i++;
+
+      continue;
+
+    }
+
+
+    if (
+      numeros[palabra] !==
+      undefined
+    ) {
+
+      convertidas.push(
+        numeros[palabra]
+      );
+
+      continue;
+
+    }
+
+
+    if (
+      letras[palabra] !==
+      undefined
+    ) {
+
+      convertidas.push(
+        letras[palabra]
+      );
+
+      continue;
+
+    }
+
+
+    convertidas.push(
+      palabra
+    );
+
+  }
+
+
+  return convertidas
+    .join(" ")
+    .replace(/\s+/g," ")
+    .trim();
+
+}
+
+
+function limpiarCodigo(
+  texto
+) {
+
+  return String(
+    texto || ""
+  )
+    .toUpperCase()
+    .replace(
+      /[^A-Z0-9]/g,
+      ""
+    );
+
+}
+
+
+function quitarAcentos(
+  texto
+) {
+
+  return String(texto)
+    .normalize("NFD")
+    .replace(
+      /[\u0300-\u036f]/g,
+      ""
+    );
+
+}
+
+
+/* =====================================================
+   LEVENSHTEIN
+===================================================== */
+
+function distanciaLevenshtein(
+  a,
+  b
+) {
+
+  a = String(a || "");
+  b = String(b || "");
+
+
+  const matriz = [];
+
+
+  for (
+    let i = 0;
+    i <= b.length;
+    i++
+  ) {
+
+    matriz[i] = [i];
+
+  }
+
+
+  for (
+    let j = 0;
+    j <= a.length;
+    j++
+  ) {
+
+    matriz[0][j] = j;
+
+  }
+
+
+  for (
+    let i = 1;
+    i <= b.length;
+    i++
+  ) {
+
+    for (
+      let j = 1;
+      j <= a.length;
+      j++
+    ) {
+
+      if (
+        b.charAt(i - 1) ===
+        a.charAt(j - 1)
+      ) {
+
+        matriz[i][j] =
+          matriz[i - 1][j - 1];
+
+      }
+
+      else {
+
+        matriz[i][j] =
+          Math.min(
+
+            matriz[i-1][j-1] + 1,
+
+            matriz[i][j-1] + 1,
+
+            matriz[i-1][j] + 1
+
+          );
+
+      }
+
+    }
+
+  }
+
+
+  return matriz[
+    b.length
+  ][
+    a.length
+  ];
+
+}
+
+
+/* =====================================================
+   UTILIDADES
+===================================================== */
+
+function obtenerUnicos(
+  resultados,
+  campo
+) {
+
+  return Array.from(
+
+    new Set(
+
+      resultados
+        .map(
+          function(r) {
+
+            return String(
+              r[campo] || ""
+            ).trim();
+
+          }
+        )
+        .filter(Boolean)
+
+    )
+
+  );
+
+}
+
+
+function decirCodigo(
+  codigo
+) {
+
+  codigo =
+    String(
+      codigo || ""
+    )
+      .toUpperCase()
+      .trim();
+
+
+  if (!codigo) {
+    return "";
+  }
+
+
+  if (
+    /^\d+$/.test(codigo)
+  ) {
+
+    return codigo;
+
+  }
+
+
+  const combinado =
+    codigo.match(
+      /^([A-Z]+)(\d+)$/
+    );
+
+
+  if (combinado) {
+
+    return (
+      combinado[1]
+        .split("")
+        .join(" ") +
+      " " +
+      combinado[2]
+    );
+
+  }
+
+
+  if (
+    /^[A-Z]+$/.test(codigo)
+  ) {
+
+    return codigo
+      .split("")
+      .join(" ");
+
+  }
+
+
+  return codigo;
+
+}
+
+
+function mostrarError(
+  mensaje
+) {
+
+  const contenedor =
+    document.getElementById(
+      "resultados"
+    );
+
+
+  contenedor.innerHTML = "";
+
+
+  const elemento =
+    document.createElement(
+      "div"
+    );
+
+
+  elemento.className =
+    "error";
+
+
+  elemento.textContent =
+    mensaje;
+
+
+  contenedor.appendChild(
+    elemento
+  );
+
+}
+
+
+function restaurarMicrofono() {
+
+  const boton =
+    document.getElementById(
+      "micBtn"
+    );
+
+
+  boton
+    .classList
+    .remove(
+      "listening"
+    );
+
+
+  boton
+    .classList
+    .remove(
+      "processing"
+    );
+
+
+  document
+    .getElementById(
+      "micText"
+    )
+    .textContent =
+    "HABLAR";
+
+
+  document
+    .getElementById(
+      "estado"
+    )
+    .textContent =
+    "";
+
+}
+
+
+/* =====================================================
+   ARRANQUE
+===================================================== */
+
+iniciarAplicacion();
+
+
+</script>
 
 </body>
-
 </html>
