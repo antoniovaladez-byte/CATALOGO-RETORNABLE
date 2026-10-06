@@ -678,9 +678,7 @@
 
       .catalogo-grid { grid-template-columns: 1fr; }
 
-      .catalogo-buscador-input {
-        font-size: 16px;
-      }
+      .catalogo-buscador-input { font-size: 16px; }
 
       .qr-card { padding: 24px 14px; }
       .ficha-toolbar { padding: 12px 12px 0; }
@@ -928,7 +926,7 @@
 ===================================================== */
 
 const API_BASE =
-  "https://script.google.com/macros/s/AKfycbzKO78SOXC2oC0OHCe3lOETFjYV5tTWgFdR0N5u9RYMGcGyagaAtd-u_9JrkaqxPxq_/exec";
+  "https://catalogo-retornable-api.antonio-valadez.workers.dev/";
 
 let datosCatalogo = [];
 
@@ -1023,59 +1021,42 @@ function volverVistaAnterior() {
 
 
 /* =====================================================
-   JSONP
+   CONEXIÓN API - CLOUDFLARE
 ===================================================== */
 
-function cargarJSONP(parametros = {}) {
+async function consultarServidor(parametros = {}) {
 
-  return new Promise(function(resolve, reject) {
+  const url = new URL(API_BASE);
 
-    const callback =
-      "jsonp_" +
-      Date.now() +
-      "_" +
-      Math.random().toString(36).slice(2);
-
-    const script = document.createElement("script");
-
-    const timer = setTimeout(function() {
-      limpiar();
-      reject(new Error("Tiempo de espera agotado."));
-    }, 15000);
-
-    function limpiar() {
-      clearTimeout(timer);
-
-      try {
-        delete window[callback];
-      } catch (e) {
-        window[callback] = undefined;
-      }
-
-      if (script.parentNode) {
-        script.parentNode.removeChild(script);
-      }
+  Object.entries(parametros).forEach(function([clave, valor]) {
+    if (valor !== undefined && valor !== null) {
+      url.searchParams.set(clave, valor);
     }
+  });
 
-    window[callback] = function(datos) {
-      limpiar();
-      resolve(datos);
-    };
+  const controlador = new AbortController();
 
-    const params = new URLSearchParams({
-      ...parametros,
-      callback: callback
+  const timer = setTimeout(function() {
+    controlador.abort();
+  }, 15000);
+
+  try {
+
+    const respuesta = await fetch(url.toString(), {
+      method: "GET",
+      cache: "no-store",
+      signal: controlador.signal
     });
 
-    script.src = API_BASE + "?" + params.toString();
+    if (!respuesta.ok) {
+      throw new Error("Error HTTP " + respuesta.status);
+    }
 
-    script.onerror = function() {
-      limpiar();
-      reject(new Error("No fue posible conectar con la API."));
-    };
+    return await respuesta.json();
 
-    document.body.appendChild(script);
-  });
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 
@@ -1087,10 +1068,7 @@ async function iniciarAplicacion() {
 
   try {
 
-    const [datos, voz] = await Promise.all([
-      cargarJSONP({ catalogo: "1" }),
-      cargarJSONP({ voz: "1" })
-    ]);
+    const datos = await consultarServidor({ catalogo: "1" });
 
     if (!Array.isArray(datos)) {
       throw new Error("Formato de catálogo incorrecto.");
@@ -1100,11 +1078,13 @@ async function iniciarAplicacion() {
       return r && String(r.ubicacion || "").trim();
     });
 
-    if (voz && voz.ok && voz.catalogo) {
-      catalogoVoz = voz.catalogo;
-    } else {
-      crearCatalogoVozLocal();
-    }
+    /*
+      Creamos el catálogo de voz directamente con la misma
+      base que ya descargamos.
+
+      Esto evita una segunda consulta innecesaria al servidor.
+    */
+    crearCatalogoVozLocal();
 
     renderizarCatalogo(datosCatalogo);
 
@@ -1209,8 +1189,8 @@ function filtrarCatalogo() {
   const input = document.getElementById("buscadorCatalogo");
   const limpiar = document.getElementById("limpiarBuscador");
 
-  const consulta = normalizarComparacion(input.value);
-  const consultaCompacta = consulta.replace(/\s+/g, "");
+  const consulta =
+    normalizarComparacion(input.value).replace(/\s+/g, "");
 
   limpiar.style.display = consulta ? "block" : "none";
 
@@ -1219,35 +1199,88 @@ function filtrarCatalogo() {
     return;
   }
 
-  const filtrados = datosCatalogo.filter(function(registro) {
+  const resultados = datosCatalogo
+    .map(function(registro, indice) {
 
-    /*
-      IMPORTANTE:
-      NO incluimos registro.codigo.
-      Por eso PNK01, PNK02, etc. no forman parte
-      de la búsqueda escrita.
-    */
+      /*
+        PNK NO participa en la búsqueda.
 
-    const campos = [
-      registro.ubicacion,
-      registro.proveedor,
-      registro.numeroProveedor,
-      registro.ruta
-    ];
+        PRIORIDAD:
+        1. Ubicación exacta
+        2. Ubicación que comienza con lo escrito
+        3. Ubicación que contiene lo escrito
+        4. Proveedor que comienza con lo escrito
+        5. Número de proveedor que comienza con lo escrito
+        6. Ruta que comienza con lo escrito
+        7. Coincidencia parcial en proveedor, número o ruta
+      */
 
-    return campos.some(function(valor) {
+      const ubicacion =
+        normalizarComparacion(registro.ubicacion || "")
+          .replace(/\s+/g, "");
 
-      const normal = normalizarComparacion(valor || "");
-      const compacto = normal.replace(/\s+/g, "");
+      const proveedor =
+        normalizarComparacion(registro.proveedor || "")
+          .replace(/\s+/g, "");
 
-      return (
-        normal.includes(consulta) ||
-        compacto.includes(consultaCompacta)
-      );
+      const numero =
+        normalizarComparacion(registro.numeroProveedor || "")
+          .replace(/\s+/g, "");
+
+      const ruta =
+        normalizarComparacion(registro.ruta || "")
+          .replace(/\s+/g, "");
+
+      let prioridad = 999;
+
+      if (ubicacion === consulta) {
+        prioridad = 1;
+      }
+      else if (ubicacion.startsWith(consulta)) {
+        prioridad = 2;
+      }
+      else if (ubicacion.includes(consulta)) {
+        prioridad = 3;
+      }
+      else if (proveedor.startsWith(consulta)) {
+        prioridad = 4;
+      }
+      else if (numero.startsWith(consulta)) {
+        prioridad = 5;
+      }
+      else if (ruta.startsWith(consulta)) {
+        prioridad = 6;
+      }
+      else if (
+        proveedor.includes(consulta) ||
+        numero.includes(consulta) ||
+        ruta.includes(consulta)
+      ) {
+        prioridad = 7;
+      }
+
+      return {
+        registro: registro,
+        prioridad: prioridad,
+        indiceOriginal: indice
+      };
+    })
+    .filter(function(item) {
+      return item.prioridad !== 999;
+    })
+    .sort(function(a, b) {
+
+      if (a.prioridad !== b.prioridad) {
+        return a.prioridad - b.prioridad;
+      }
+
+      return a.indiceOriginal - b.indiceOriginal;
+    })
+    .map(function(item) {
+      return item.registro;
     });
-  });
 
-  renderizarCatalogo(filtrados);
+  renderizarCatalogo(resultados);
 }
 
 function limpiarFiltroCatalogo() {
@@ -1890,7 +1923,7 @@ async function consultarAPI(consulta, debeHablar) {
 
   try {
 
-    const datos = await cargarJSONP({ q: consulta });
+    const datos = await consultarServidor({ q: consulta });
 
     estado.textContent = "";
 
