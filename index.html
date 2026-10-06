@@ -677,9 +677,7 @@
       }
 
       .catalogo-grid { grid-template-columns: 1fr; }
-
       .catalogo-buscador-input { font-size: 16px; }
-
       .qr-card { padding: 24px 14px; }
       .ficha-toolbar { padding: 12px 12px 0; }
       .ficha-contenedor { padding: 12px; }
@@ -1078,14 +1076,7 @@ async function iniciarAplicacion() {
       return r && String(r.ubicacion || "").trim();
     });
 
-    /*
-      Creamos el catálogo de voz directamente con la misma
-      base que ya descargamos.
-
-      Esto evita una segunda consulta innecesaria al servidor.
-    */
     crearCatalogoVozLocal();
-
     renderizarCatalogo(datosCatalogo);
 
   } catch (error) {
@@ -1098,6 +1089,7 @@ async function iniciarAplicacion() {
 }
 
 function crearCatalogoVozLocal() {
+
   catalogoVoz = {
     ubicaciones: valoresUnicos("ubicacion"),
     rutas: valoresUnicos("ruta"),
@@ -1107,9 +1099,12 @@ function crearCatalogoVozLocal() {
 }
 
 function valoresUnicos(campo) {
+
   return Array.from(new Set(
     datosCatalogo
-      .map(r => String(r[campo] || "").trim())
+      .map(function(r) {
+        return String(r[campo] || "").trim();
+      })
       .filter(Boolean)
   ));
 }
@@ -1202,19 +1197,6 @@ function filtrarCatalogo() {
   const resultados = datosCatalogo
     .map(function(registro, indice) {
 
-      /*
-        PNK NO participa en la búsqueda.
-
-        PRIORIDAD:
-        1. Ubicación exacta
-        2. Ubicación que comienza con lo escrito
-        3. Ubicación que contiene lo escrito
-        4. Proveedor que comienza con lo escrito
-        5. Número de proveedor que comienza con lo escrito
-        6. Ruta que comienza con lo escrito
-        7. Coincidencia parcial en proveedor, número o ruta
-      */
-
       const ubicacion =
         normalizarComparacion(registro.ubicacion || "")
           .replace(/\s+/g, "");
@@ -1288,11 +1270,9 @@ function limpiarFiltroCatalogo() {
   const input = document.getElementById("buscadorCatalogo");
 
   input.value = "";
-
   document.getElementById("limpiarBuscador").style.display = "none";
 
   renderizarCatalogo(datosCatalogo);
-
   input.focus();
 }
 
@@ -1395,12 +1375,14 @@ async function procesarCodigoQR(textoLeido) {
     estado.textContent = "Código QR no registrado.";
 
     setTimeout(function() {
+
       qrProcesando = false;
 
       if (qrActivo) {
         estado.className = "qr-estado activo";
         estado.textContent = "Cámara activa. Intenta con otro código.";
       }
+
     }, 1500);
 
     return;
@@ -1409,7 +1391,6 @@ async function procesarCodigoQR(textoLeido) {
   vistaAnterior = "qr";
 
   await detenerEscanerQR(false);
-
   abrirFichaPorRegistro(registro);
 }
 
@@ -1481,6 +1462,7 @@ function mostrarFicha(ubicacion, registros) {
   registros.forEach(function(registro, indice) {
 
     if (registros.length > 1) {
+
       const separador = document.createElement("div");
       separador.className = "separador";
       separador.textContent = "Proveedor " + (indice + 1);
@@ -1531,7 +1513,9 @@ function mostrarFechaFicha(registros) {
 
   const fechas = Array.from(new Set(
     registros
-      .map(r => String(r.fechaActualizacion || "").trim())
+      .map(function(r) {
+        return String(r.fechaActualizacion || "").trim();
+      })
       .filter(Boolean)
   ));
 
@@ -1554,6 +1538,7 @@ function mostrarFechaFicha(registros) {
 ===================================================== */
 
 function agregarElemento(padre, texto, clase) {
+
   const elemento = document.createElement("div");
   elemento.className = clase;
   elemento.textContent = texto || "—";
@@ -1582,6 +1567,11 @@ function escuchar() {
     return;
   }
 
+  if (!datosCatalogo.length) {
+    mostrarError("La base de datos todavía no está disponible.");
+    return;
+  }
+
   if (reconocimiento) {
     try { reconocimiento.abort(); } catch (e) {}
   }
@@ -1596,8 +1586,10 @@ function escuchar() {
   const textoBoton = document.getElementById("micText");
 
   reconocimiento.onstart = function() {
+
     boton.classList.add("listening");
     boton.classList.remove("processing");
+
     textoBoton.textContent = "ESCUCHANDO...";
     document.getElementById("estado").textContent = "Habla ahora";
   };
@@ -1606,6 +1598,7 @@ function escuchar() {
 
     boton.classList.remove("listening");
     boton.classList.add("processing");
+
     textoBoton.textContent = "PROCESANDO";
 
     const alternativas = [];
@@ -1615,7 +1608,9 @@ function escuchar() {
     }
 
     document.getElementById("speechInfo").style.display = "block";
-    document.getElementById("escuchado").textContent = alternativas[0] || "";
+
+    document.getElementById("escuchado").textContent =
+      alternativas[0] || "";
 
     procesarAlternativas(alternativas);
   };
@@ -1639,6 +1634,7 @@ function escuchar() {
   };
 
   reconocimiento.onend = function() {
+
     if (!boton.classList.contains("processing")) {
       restaurarMicrofono();
     }
@@ -1652,13 +1648,25 @@ function escuchar() {
   }
 }
 
+
+/* =====================================================
+   PROCESAR LAS 3 ALTERNATIVAS
+===================================================== */
+
 async function procesarAlternativas(alternativas) {
+
+  /*
+    1. Primero comprobamos si la persona está haciendo
+       una pregunta sobre el resultado anterior.
+  */
 
   for (const alternativa of alternativas) {
 
-    const contextual = detectarPreguntaContextual(alternativa);
+    const contextual =
+      detectarPreguntaContextual(alternativa);
 
     if (contextual) {
+
       document.getElementById("interpretado").textContent =
         "CONTEXTO: " + contextual;
 
@@ -1668,39 +1676,93 @@ async function procesarAlternativas(alternativas) {
     }
   }
 
+
+  /*
+    2. Analizamos TODAS las alternativas que entregó
+       SpeechRecognition.
+
+       Una coincidencia exacta contra la base tiene
+       prioridad sobre una interpretación aproximada.
+  */
+
+  const deteccionesExactas = [];
+
   for (const alternativa of alternativas) {
 
-    const deteccion = detectarConsultaSegura(alternativa);
+    const deteccion =
+      detectarConsultaSegura(alternativa);
 
-    if (deteccion && deteccion.estado === "EXACTA") {
+    if (
+      deteccion &&
+      deteccion.estado === "EXACTA"
+    ) {
 
-      document.getElementById("interpretado").textContent =
-        deteccion.opcion.tipo + ": " + deteccion.opcion.valor;
-
-      await consultarAPI(
-        deteccion.opcion.tipo + " " + deteccion.opcion.valor,
-        true
-      );
-
-      restaurarMicrofono();
-      return;
+      deteccionesExactas.push({
+        texto: alternativa,
+        deteccion: deteccion
+      });
     }
   }
 
+
+  if (deteccionesExactas.length) {
+
+    /*
+      Si varias alternativas terminan detectando exactamente
+      lo mismo, simplemente usamos la primera.
+    */
+
+    const elegida = deteccionesExactas[0].deteccion;
+
+    document.getElementById("interpretado").textContent =
+      elegida.opcion.tipo +
+      ": " +
+      elegida.opcion.valor;
+
+    await consultarAPI(
+      elegida.opcion.tipo +
+      " " +
+      elegida.opcion.valor,
+      true
+    );
+
+    restaurarMicrofono();
+    return;
+  }
+
+
+  /*
+    3. Si no hubo coincidencia exacta, buscamos una
+       interpretación ambigua/aproximada.
+  */
+
   for (const alternativa of alternativas) {
 
-    const deteccion = detectarConsultaSegura(alternativa);
+    const deteccion =
+      detectarConsultaSegura(alternativa);
 
-    if (deteccion && deteccion.estado === "AMBIGUA") {
+    if (
+      deteccion &&
+      deteccion.estado === "AMBIGUA"
+    ) {
+
       mostrarAmbiguedad(deteccion.opciones);
       restaurarMicrofono();
       return;
     }
   }
 
-  const consulta = normalizarVoz(alternativas[0] || "");
 
-  document.getElementById("interpretado").textContent = consulta;
+  /*
+    4. Último recurso:
+       mandamos la frase normalizada al backend.
+  */
+
+  const consulta =
+    normalizarVoz(alternativas[0] || "");
+
+  document.getElementById("interpretado").textContent =
+    consulta;
 
   await consultarAPI(consulta, true);
   restaurarMicrofono();
@@ -1708,114 +1770,506 @@ async function procesarAlternativas(alternativas) {
 
 
 /* =====================================================
-   DETECCIÓN VOZ
+   MOTOR DE DETECCIÓN DINÁMICA
 ===================================================== */
 
 function detectarConsultaSegura(texto) {
 
   const normal = normalizarParaComparar(texto);
+
+  const mencionaUbicacion =
+    /\bUBICACION\b/.test(normal);
+
+  const mencionaRuta =
+    /\bRUTA\b/.test(normal);
+
+  const mencionaProveedor =
+    /\bPROVEEDOR\b/.test(normal);
+
+  const mencionaNumero =
+    /\bNUMERO\b/.test(normal);
+
+
+  /*
+    Generamos múltiples posibilidades a partir de lo que
+    escuchó el teléfono.
+
+    Ejemplo:
+    "proveedor 20 80 1"
+
+    puede generar:
+    20
+    80
+    1
+    2080
+    20801
+    etc.
+
+    Después son LOS DATOS REALES los que deciden
+    cuál candidato tiene sentido.
+  */
+
+  const candidatos =
+    generarCandidatos(texto)
+      .map(limpiarCodigo)
+      .filter(Boolean);
+
+  const candidatosSet =
+    new Set(candidatos);
+
+
+  /*
+    -----------------------------------------------------
+    UBICACIÓN EXPLÍCITA
+    -----------------------------------------------------
+  */
+
+  if (mencionaUbicacion) {
+
+    const coincidencia =
+      encontrarValorExacto(
+        catalogoVoz.ubicaciones,
+        candidatosSet
+      );
+
+    if (coincidencia) {
+      return {
+        estado: "EXACTA",
+        opcion: {
+          tipo: "UBICACION",
+          valor: coincidencia
+        }
+      };
+    }
+  }
+
+
+  /*
+    -----------------------------------------------------
+    RUTA EXPLÍCITA
+    -----------------------------------------------------
+  */
+
+  if (mencionaRuta) {
+
+    const coincidencia =
+      encontrarValorExacto(
+        catalogoVoz.rutas,
+        candidatosSet
+      );
+
+    if (coincidencia) {
+      return {
+        estado: "EXACTA",
+        opcion: {
+          tipo: "RUTA",
+          valor: coincidencia
+        }
+      };
+    }
+  }
+
+
+  /*
+    -----------------------------------------------------
+    PROVEEDOR / NÚMERO DE PROVEEDOR
+    -----------------------------------------------------
+
+    Esta es la mejora importante.
+
+    Si alguien dice:
+
+       "proveedor 12345"
+
+    NO asumimos que 12345 pertenece al campo PROVEEDOR.
+
+    Comprobamos los dos campos reales:
+
+       PROVEEDOR
+       NUMERO DE PROVEEDOR
+
+    y la base decide cuál existe.
+  */
+
+  if (mencionaProveedor || mencionaNumero) {
+
+    const numeroExacto =
+      encontrarValorExacto(
+        catalogoVoz.numerosProveedor,
+        candidatosSet
+      );
+
+    const proveedorExacto =
+      encontrarValorExacto(
+        catalogoVoz.proveedores,
+        candidatosSet
+      );
+
+
+    /*
+      Si dijo explícitamente "número", el número
+      tiene prioridad.
+    */
+
+    if (mencionaNumero && numeroExacto) {
+
+      return {
+        estado: "EXACTA",
+        opcion: {
+          tipo: "NUMERO",
+          valor: numeroExacto
+        }
+      };
+    }
+
+
+    /*
+      Si solo uno de los dos campos coincide,
+      sabemos exactamente qué quiso decir.
+    */
+
+    if (numeroExacto && !proveedorExacto) {
+
+      return {
+        estado: "EXACTA",
+        opcion: {
+          tipo: "NUMERO",
+          valor: numeroExacto
+        }
+      };
+    }
+
+    if (proveedorExacto && !numeroExacto) {
+
+      return {
+        estado: "EXACTA",
+        opcion: {
+          tipo: "PROVEEDOR",
+          valor: proveedorExacto
+        }
+      };
+    }
+
+
+    /*
+      Caso raro: el mismo texto existe tanto como
+      proveedor como número.
+
+      No adivinamos.
+    */
+
+    if (numeroExacto && proveedorExacto) {
+
+      return {
+        estado: "AMBIGUA",
+        opciones: [
+          {
+            tipo: "PROVEEDOR",
+            valor: proveedorExacto
+          },
+          {
+            tipo: "NUMERO",
+            valor: numeroExacto
+          }
+        ]
+      };
+    }
+  }
+
+
+  /*
+    -----------------------------------------------------
+    SIN TIPO EXPLÍCITO
+    -----------------------------------------------------
+
+    Si simplemente dice:
+
+      "F1"
+      "ABC25"
+      "12345"
+      "SGUG"
+
+    buscamos en TODOS los campos permitidos.
+
+    PNK NO está incluido.
+  */
+
+  const coincidenciasGenerales =
+    buscarCoincidenciasExactas(texto, null);
+
+  if (coincidenciasGenerales.length === 1) {
+
+    return {
+      estado: "EXACTA",
+      opcion: coincidenciasGenerales[0]
+    };
+  }
+
+
+  if (coincidenciasGenerales.length > 1) {
+
+    /*
+      Si la frase mencionaba un tipo, intentamos
+      quedarnos con ese tipo antes de declarar
+      ambigüedad.
+    */
+
+    let filtradas = coincidenciasGenerales;
+
+    if (mencionaUbicacion) {
+      filtradas =
+        coincidenciasGenerales.filter(
+          o => o.tipo === "UBICACION"
+        );
+    }
+    else if (mencionaRuta) {
+      filtradas =
+        coincidenciasGenerales.filter(
+          o => o.tipo === "RUTA"
+        );
+    }
+
+    if (filtradas.length === 1) {
+
+      return {
+        estado: "EXACTA",
+        opcion: filtradas[0]
+      };
+    }
+
+    return {
+      estado: "AMBIGUA",
+      opciones:
+        (filtradas.length ? filtradas : coincidenciasGenerales)
+          .slice(0, 4)
+    };
+  }
+
+
+  /*
+    -----------------------------------------------------
+    BÚSQUEDA APROXIMADA
+    -----------------------------------------------------
+  */
+
   let tipoPreferido = null;
 
-  if (/\bUBICACION\b/.test(normal)) {
+  if (mencionaUbicacion) {
     tipoPreferido = "UBICACION";
-  } else if (/\bRUTA\b/.test(normal)) {
+  }
+  else if (mencionaRuta) {
     tipoPreferido = "RUTA";
-  } else if (/\bPROVEEDOR\b/.test(normal)) {
-    tipoPreferido = "PROVEEDOR";
   }
 
-  const exactas = buscarCoincidenciasExactas(texto, tipoPreferido);
 
-  if (exactas.length === 1) {
-    return { estado: "EXACTA", opcion: exactas[0] };
+  /*
+    Para "proveedor" NO restringimos inmediatamente
+    a PROVEEDOR porque también puede estar diciendo
+    un número de proveedor.
+
+    Buscamos ambos.
+  */
+
+  let aproximadas = [];
+
+  if (mencionaProveedor || mencionaNumero) {
+
+    const aproxProveedor =
+      buscarCoincidenciasAproximadas(
+        texto,
+        "PROVEEDOR"
+      );
+
+    const aproxNumero =
+      buscarCoincidenciasAproximadas(
+        texto,
+        "NUMERO"
+      );
+
+    aproximadas =
+      eliminarDuplicados(
+        aproxProveedor.concat(aproxNumero)
+      );
+
+    aproximadas.sort(function(a, b) {
+
+      if (a.distancia !== b.distancia) {
+        return a.distancia - b.distancia;
+      }
+
+      return String(a.valor)
+        .localeCompare(String(b.valor));
+    });
+
+  } else {
+
+    aproximadas =
+      buscarCoincidenciasAproximadas(
+        texto,
+        tipoPreferido
+      );
   }
 
-  if (exactas.length > 1) {
-    return { estado: "AMBIGUA", opciones: exactas.slice(0,4) };
+
+  if (!aproximadas.length) {
+    return null;
   }
 
-  const aproximadas =
-    buscarCoincidenciasAproximadas(texto, tipoPreferido);
-
-  if (!aproximadas.length) return null;
 
   if (aproximadas.length === 1) {
-    return aproximadas[0].distancia === 0
-      ? { estado: "EXACTA", opcion: aproximadas[0] }
-      : { estado: "AMBIGUA", opciones: aproximadas.slice(0,3) };
+
+    if (aproximadas[0].distancia === 0) {
+
+      return {
+        estado: "EXACTA",
+        opcion: aproximadas[0]
+      };
+    }
+
+    return {
+      estado: "AMBIGUA",
+      opciones: aproximadas.slice(0, 3)
+    };
   }
+
 
   const mejor = aproximadas[0];
   const segunda = aproximadas[1];
+
+
+  /*
+    Solo aceptamos automáticamente una aproximación
+    cuando es claramente mejor que la siguiente.
+  */
 
   if (
     mejor.distancia <= 1 &&
     segunda.distancia >= mejor.distancia + 2
   ) {
-    return { estado: "EXACTA", opcion: mejor };
+
+    return {
+      estado: "EXACTA",
+      opcion: mejor
+    };
   }
+
 
   return {
     estado: "AMBIGUA",
-    opciones: aproximadas.slice(0,3)
+    opciones: aproximadas.slice(0, 3)
   };
+}
+
+
+/* =====================================================
+   COINCIDENCIA EXACTA
+===================================================== */
+
+function encontrarValorExacto(lista, candidatosSet) {
+
+  return (lista || []).find(function(valor) {
+
+    return candidatosSet.has(
+      limpiarCodigo(valor)
+    );
+  }) || null;
 }
 
 function buscarCoincidenciasExactas(texto, tipoPreferido) {
 
   const candidatos = generarCandidatos(texto);
-  const set = new Set(candidatos.map(limpiarCodigo));
+
+  const set =
+    new Set(
+      candidatos.map(limpiarCodigo)
+    );
 
   return eliminarDuplicados(
-    obtenerEntradasCatalogo(tipoPreferido).filter(function(entrada) {
-      return set.has(limpiarCodigo(entrada.valor));
-    })
+    obtenerEntradasCatalogo(tipoPreferido)
+      .filter(function(entrada) {
+
+        return set.has(
+          limpiarCodigo(entrada.valor)
+        );
+      })
   );
 }
 
+
+/* =====================================================
+   COINCIDENCIA APROXIMADA
+===================================================== */
+
 function buscarCoincidenciasAproximadas(texto, tipoPreferido) {
 
-  const candidatos = generarCandidatos(texto)
-    .map(limpiarCodigo)
-    .filter(c => c.length >= 2);
+  const candidatos =
+    generarCandidatos(texto)
+      .map(limpiarCodigo)
+      .filter(function(c) {
+        return c.length >= 2;
+      });
 
   const resultados = [];
 
-  obtenerEntradasCatalogo(tipoPreferido).forEach(function(entrada) {
+  obtenerEntradasCatalogo(tipoPreferido)
+    .forEach(function(entrada) {
 
-    const codigo = limpiarCodigo(entrada.valor);
-    let mejor = Infinity;
+      const codigo =
+        limpiarCodigo(entrada.valor);
 
-    candidatos.forEach(function(candidato) {
+      let mejor = Infinity;
 
-      if (Math.abs(candidato.length - codigo.length) > 2) return;
+      candidatos.forEach(function(candidato) {
 
-      const distancia = distanciaLevenshtein(codigo, candidato);
+        if (
+          Math.abs(
+            candidato.length - codigo.length
+          ) > 2
+        ) {
+          return;
+        }
 
-      if (distancia < mejor) mejor = distancia;
+        const distancia =
+          distanciaLevenshtein(
+            codigo,
+            candidato
+          );
+
+        if (distancia < mejor) {
+          mejor = distancia;
+        }
+      });
+
+      const limite =
+        codigo.length >= 6 ? 2 : 1;
+
+      if (mejor <= limite) {
+
+        resultados.push({
+          tipo: entrada.tipo,
+          valor: entrada.valor,
+          distancia: mejor
+        });
+      }
     });
 
-    const limite = codigo.length >= 6 ? 2 : 1;
+  resultados.sort(function(a, b) {
 
-    if (mejor <= limite) {
-      resultados.push({
-        tipo: entrada.tipo,
-        valor: entrada.valor,
-        distancia: mejor
-      });
-    }
-  });
-
-  resultados.sort(function(a,b) {
     if (a.distancia !== b.distancia) {
       return a.distancia - b.distancia;
     }
 
-    return String(a.valor).localeCompare(String(b.valor));
+    return String(a.valor)
+      .localeCompare(String(b.valor));
   });
 
   return eliminarDuplicados(resultados);
 }
+
+
+/* =====================================================
+   DICCIONARIO DINÁMICO
+===================================================== */
 
 function obtenerEntradasCatalogo(tipoPreferido) {
 
@@ -1823,17 +2277,50 @@ function obtenerEntradasCatalogo(tipoPreferido) {
 
   function agregar(tipo, lista) {
 
-    if (tipoPreferido && tipo !== tipoPreferido) return;
+    if (
+      tipoPreferido &&
+      tipo !== tipoPreferido
+    ) {
+      return;
+    }
 
     (lista || []).forEach(function(valor) {
-      entradas.push({ tipo, valor });
+
+      entradas.push({
+        tipo: tipo,
+        valor: valor
+      });
     });
   }
 
-  agregar("UBICACION", catalogoVoz.ubicaciones);
-  agregar("RUTA", catalogoVoz.rutas);
-  agregar("PROVEEDOR", catalogoVoz.proveedores);
-  agregar("NUMERO", catalogoVoz.numerosProveedor);
+  /*
+    IMPORTANTE:
+
+    Aquí están los únicos campos que puede usar
+    el buscador por voz.
+
+    CODIGO / PNK deliberadamente NO aparece.
+  */
+
+  agregar(
+    "UBICACION",
+    catalogoVoz.ubicaciones
+  );
+
+  agregar(
+    "RUTA",
+    catalogoVoz.rutas
+  );
+
+  agregar(
+    "PROVEEDOR",
+    catalogoVoz.proveedores
+  );
+
+  agregar(
+    "NUMERO",
+    catalogoVoz.numerosProveedor
+  );
 
   return entradas;
 }
@@ -1843,7 +2330,11 @@ function eliminarDuplicados(opciones) {
   const mapa = new Map();
 
   opciones.forEach(function(opcion) {
-    const clave = opcion.tipo + "|" + opcion.valor;
+
+    const clave =
+      opcion.tipo +
+      "|" +
+      opcion.valor;
 
     if (!mapa.has(clave)) {
       mapa.set(clave, opcion);
@@ -1860,36 +2351,62 @@ function eliminarDuplicados(opciones) {
 
 function mostrarAmbiguedad(opciones) {
 
-  const contenedor = document.getElementById("resultados");
+  const contenedor =
+    document.getElementById("resultados");
+
   contenedor.innerHTML = "";
 
-  const tarjeta = document.createElement("div");
+  const tarjeta =
+    document.createElement("div");
+
   tarjeta.className = "ambiguedad";
 
-  const titulo = document.createElement("div");
-  titulo.className = "ambiguedad-titulo";
-  titulo.textContent = "No estoy completamente seguro";
+  const titulo =
+    document.createElement("div");
 
-  const texto = document.createElement("div");
-  texto.className = "ambiguedad-texto";
-  texto.textContent = "¿Te refieres a una de estas opciones?";
+  titulo.className =
+    "ambiguedad-titulo";
 
-  const zona = document.createElement("div");
-  zona.className = "ambiguedad-opciones";
+  titulo.textContent =
+    "No estoy completamente seguro";
+
+  const texto =
+    document.createElement("div");
+
+  texto.className =
+    "ambiguedad-texto";
+
+  texto.textContent =
+    "¿Te refieres a una de estas opciones?";
+
+  const zona =
+    document.createElement("div");
+
+  zona.className =
+    "ambiguedad-opciones";
 
   opciones.forEach(function(opcion) {
 
-    const boton = document.createElement("button");
-    boton.className = "ambiguedad-btn";
-    boton.textContent = opcion.valor;
+    const boton =
+      document.createElement("button");
+
+    boton.className =
+      "ambiguedad-btn";
+
+    boton.textContent =
+      opcion.valor;
 
     boton.onclick = function() {
 
       document.getElementById("interpretado").textContent =
-        opcion.tipo + ": " + opcion.valor;
+        opcion.tipo +
+        ": " +
+        opcion.valor;
 
       consultarAPI(
-        opcion.tipo + " " + opcion.valor,
+        opcion.tipo +
+        " " +
+        opcion.valor,
         true
       );
     };
@@ -1915,33 +2432,45 @@ function mostrarAmbiguedad(opciones) {
 
 async function consultarAPI(consulta, debeHablar) {
 
-  const estado = document.getElementById("estado");
-  const contenedor = document.getElementById("resultados");
+  const estado =
+    document.getElementById("estado");
+
+  const contenedor =
+    document.getElementById("resultados");
 
   estado.textContent = "Buscando...";
   contenedor.innerHTML = "";
 
   try {
 
-    const datos = await consultarServidor({ q: consulta });
+    const datos =
+      await consultarServidor({
+        q: consulta
+      });
 
     estado.textContent = "";
 
     if (!datos || !datos.ok) {
+
       mostrarError(
         datos && datos.mensaje
           ? datos.mensaje
           : "Ocurrió un error."
       );
+
       return;
     }
 
     if (!datos.encontrado) {
 
-      mostrarError("No encontré información para esa consulta.");
+      mostrarError(
+        "No encontré información para esa consulta."
+      );
 
       if (debeHablar) {
-        hablar("No encontré información para esa consulta.");
+        hablar(
+          "No encontré información para esa consulta."
+        );
       }
 
       return;
@@ -1959,48 +2488,68 @@ async function consultarAPI(consulta, debeHablar) {
     console.error(error);
     estado.textContent = "";
 
-    mostrarError("No fue posible consultar la base de datos.");
+    mostrarError(
+      "No fue posible consultar la base de datos."
+    );
   }
 }
 
 function mostrarResultados(datos) {
 
-  const contenedor = document.getElementById("resultados");
+  const contenedor =
+    document.getElementById("resultados");
+
   contenedor.innerHTML = "";
 
-  datos.resultados.forEach(function(r) {
+  (datos.resultados || [])
+    .forEach(function(r) {
 
-    const tarjeta = document.createElement("div");
-    tarjeta.className = "resultado";
+      const tarjeta =
+        document.createElement("div");
 
-    tarjeta.onclick = function() {
-      vistaAnterior = "voz";
-      abrirFichaPorRegistro(r);
-    };
+      tarjeta.className = "resultado";
 
-    agregarElemento(tarjeta, r.ubicacion, "resultado-ubicacion");
-    agregarElemento(tarjeta, r.proveedor, "resultado-proveedor");
+      tarjeta.onclick = function() {
 
-    agregarElemento(
-      tarjeta,
-      "Proveedor #" + (r.numeroProveedor || "—"),
-      "resultado-detalle"
-    );
+        vistaAnterior = "voz";
+        abrirFichaPorRegistro(r);
+      };
 
-    agregarElemento(
-      tarjeta,
-      "🚛 Ruta: " + (r.ruta || "—"),
-      "resultado-detalle"
-    );
+      agregarElemento(
+        tarjeta,
+        r.ubicacion,
+        "resultado-ubicacion"
+      );
 
-    agregarElemento(
-      tarjeta,
-      "📦 Máximo: " + (r.maximo || "—"),
-      "resultado-detalle"
-    );
+      agregarElemento(
+        tarjeta,
+        r.proveedor,
+        "resultado-proveedor"
+      );
 
-    contenedor.appendChild(tarjeta);
-  });
+      agregarElemento(
+        tarjeta,
+        "Proveedor #" +
+        (r.numeroProveedor || "—"),
+        "resultado-detalle"
+      );
+
+      agregarElemento(
+        tarjeta,
+        "🚛 Ruta: " +
+        (r.ruta || "—"),
+        "resultado-detalle"
+      );
+
+      agregarElemento(
+        tarjeta,
+        "📦 Máximo: " +
+        (r.maximo || "—"),
+        "resultado-detalle"
+      );
+
+      contenedor.appendChild(tarjeta);
+    });
 }
 
 
@@ -2015,7 +2564,9 @@ function guardarContexto(datos) {
     !datos.encontrado ||
     !datos.resultados ||
     !datos.resultados.length
-  ) return;
+  ) {
+    return;
+  }
 
   contextoActual = {
     tipo: datos.tipo,
@@ -2026,19 +2577,58 @@ function guardarContexto(datos) {
 
 function detectarPreguntaContextual(texto) {
 
-  if (!contextoActual) return null;
+  if (!contextoActual) {
+    return null;
+  }
 
-  const t = normalizarParaComparar(texto);
+  const t =
+    normalizarParaComparar(texto);
 
-  if (/\bRUTA\b/.test(t)) return "RUTA";
+  /*
+    Evitamos tratar como pregunta contextual una nueva
+    búsqueda completa.
+
+    Por ejemplo:
+    "proveedor 12345"
+
+    debe ser una NUEVA búsqueda, no una pregunta sobre
+    el proveedor anterior.
+  */
+
+  const candidatos =
+    generarCandidatos(texto)
+      .map(limpiarCodigo);
+
+  const contieneValorReal =
+    obtenerEntradasCatalogo(null)
+      .some(function(entrada) {
+
+        return candidatos.includes(
+          limpiarCodigo(entrada.valor)
+        );
+      });
+
+  if (contieneValorReal) {
+    return null;
+  }
+
+
+  if (/\bRUTA\b/.test(t)) {
+    return "RUTA";
+  }
 
   if (
     /\bMAXIMO\b/.test(t) ||
     /\bMAXIMA\b/.test(t) ||
     /\bCAPACIDAD\b/.test(t)
-  ) return "MAXIMO";
+  ) {
+    return "MAXIMO";
+  }
 
-  if (/\bNUMERO\b/.test(t) && /\bPROVEEDOR\b/.test(t)) {
+  if (
+    /\bNUMERO\b/.test(t) &&
+    /\bPROVEEDOR\b/.test(t)
+  ) {
     return "NUMERO";
   }
 
@@ -2046,10 +2636,17 @@ function detectarPreguntaContextual(texto) {
     /\bACTUALIZ/.test(t) ||
     /\bFECHA\b/.test(t) ||
     /\bCUANDO\b/.test(t)
-  ) return "FECHA";
+  ) {
+    return "FECHA";
+  }
 
-  if (/\bUBICACION\b/.test(t)) return "UBICACION";
-  if (/\bPROVEEDOR\b/.test(t)) return "PROVEEDOR";
+  if (/\bUBICACION\b/.test(t)) {
+    return "UBICACION";
+  }
+
+  if (/\bPROVEEDOR\b/.test(t)) {
+    return "PROVEEDOR";
+  }
 
   return null;
 }
@@ -2060,34 +2657,74 @@ function responderPreguntaContextual(campo) {
     !contextoActual ||
     !contextoActual.resultados ||
     !contextoActual.resultados.length
-  ) return;
-
-  const mapa = {
-    RUTA: ["ruta", "La ruta"],
-    MAXIMO: ["maximo", "El máximo"],
-    NUMERO: ["numeroProveedor", "El número de proveedor"],
-    FECHA: ["fechaActualizacion", "La última actualización"],
-    UBICACION: ["ubicacion", "La ubicación"],
-    PROVEEDOR: ["proveedor", "El proveedor"]
-  };
-
-  const configuracion = mapa[campo];
-
-  if (!configuracion) return;
-
-  const valores =
-    obtenerUnicos(contextoActual.resultados, configuracion[0]);
-
-  if (!valores.length) {
-    hablar("No hay información disponible.");
+  ) {
     return;
   }
 
-  const contenedor = document.getElementById("resultados");
+  const mapa = {
+    RUTA: [
+      "ruta",
+      "La ruta"
+    ],
+
+    MAXIMO: [
+      "maximo",
+      "El máximo"
+    ],
+
+    NUMERO: [
+      "numeroProveedor",
+      "El número de proveedor"
+    ],
+
+    FECHA: [
+      "fechaActualizacion",
+      "La última actualización"
+    ],
+
+    UBICACION: [
+      "ubicacion",
+      "La ubicación"
+    ],
+
+    PROVEEDOR: [
+      "proveedor",
+      "El proveedor"
+    ]
+  };
+
+  const configuracion =
+    mapa[campo];
+
+  if (!configuracion) {
+    return;
+  }
+
+  const valores =
+    obtenerUnicos(
+      contextoActual.resultados,
+      configuracion[0]
+    );
+
+  if (!valores.length) {
+
+    hablar(
+      "No hay información disponible."
+    );
+
+    return;
+  }
+
+  const contenedor =
+    document.getElementById("resultados");
+
   contenedor.innerHTML = "";
 
-  const tarjeta = document.createElement("div");
-  tarjeta.className = "respuesta-contextual";
+  const tarjeta =
+    document.createElement("div");
+
+  tarjeta.className =
+    "respuesta-contextual";
 
   agregarElemento(
     tarjeta,
@@ -2106,7 +2743,9 @@ function responderPreguntaContextual(campo) {
   hablar(
     configuracion[1] +
     " es " +
-    valores.map(decirCodigo).join(", ") +
+    valores
+      .map(decirCodigo)
+      .join(", ") +
     "."
   );
 }
@@ -2118,16 +2757,28 @@ function responderPreguntaContextual(campo) {
 
 function responderConVoz(datos) {
 
-  const resultados = datos.resultados || [];
+  const resultados =
+    datos.resultados || [];
 
-  if (!resultados.length) return;
+  if (!resultados.length) {
+    return;
+  }
 
-  const tipo = String(datos.tipo || "").toUpperCase();
-  const valor = String(datos.valor || "");
+  const tipo =
+    String(datos.tipo || "")
+      .toUpperCase();
 
-  if (tipo === "UBICACION" && resultados.length === 1) {
+  const valor =
+    String(datos.valor || "");
 
-    const r = resultados[0];
+
+  if (
+    tipo === "UBICACION" &&
+    resultados.length === 1
+  ) {
+
+    const r =
+      resultados[0];
 
     let frase =
       "En la ubicación " +
@@ -2137,21 +2788,38 @@ function responderConVoz(datos) {
       ".";
 
     if (r.ruta) {
-      frase += " Ruta " + decirCodigo(r.ruta) + ".";
+      frase +=
+        " Ruta " +
+        decirCodigo(r.ruta) +
+        ".";
     }
 
     if (r.maximo) {
-      frase += " Máximo " + r.maximo + ".";
+      frase +=
+        " Máximo " +
+        r.maximo +
+        ".";
     }
 
     hablar(frase);
     return;
   }
 
-  if (tipo === "PROVEEDOR" || tipo === "NUMERO") {
 
-    const ubicaciones = obtenerUnicos(resultados, "ubicacion");
-    const proveedor = resultados[0].proveedor || valor;
+  if (
+    tipo === "PROVEEDOR" ||
+    tipo === "NUMERO"
+  ) {
+
+    const ubicaciones =
+      obtenerUnicos(
+        resultados,
+        "ubicacion"
+      );
+
+    const proveedor =
+      resultados[0].proveedor ||
+      valor;
 
     if (ubicaciones.length === 1) {
 
@@ -2177,9 +2845,14 @@ function responderConVoz(datos) {
     return;
   }
 
+
   if (tipo === "RUTA") {
 
-    const ubicaciones = obtenerUnicos(resultados, "ubicacion");
+    const ubicaciones =
+      obtenerUnicos(
+        resultados,
+        "ubicacion"
+      );
 
     hablar(
       "La ruta " +
@@ -2192,7 +2865,11 @@ function responderConVoz(datos) {
     return;
   }
 
-  hablar("Encontré " + resultados.length + " resultados.");
+  hablar(
+    "Encontré " +
+    resultados.length +
+    " resultados."
+  );
 }
 
 
@@ -2202,15 +2879,21 @@ function responderConVoz(datos) {
 
 function alternarSonido() {
 
-  sonidoActivado = !sonidoActivado;
+  sonidoActivado =
+    !sonidoActivado;
 
-  const boton = document.getElementById("soundBtn");
+  const boton =
+    document.getElementById("soundBtn");
 
   if (sonidoActivado) {
-    boton.textContent = "🔊 Respuesta por voz activada";
+
+    boton.textContent =
+      "🔊 Respuesta por voz activada";
+
   } else {
 
-    boton.textContent = "🔇 Respuesta por voz desactivada";
+    boton.textContent =
+      "🔇 Respuesta por voz desactivada";
 
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
@@ -2225,7 +2908,8 @@ function hablar(texto) {
 
   window.speechSynthesis.cancel();
 
-  const mensaje = new SpeechSynthesisUtterance(texto);
+  const mensaje =
+    new SpeechSynthesisUtterance(texto);
 
   mensaje.lang = "es-MX";
   mensaje.rate = 1;
@@ -2236,85 +2920,155 @@ function hablar(texto) {
 
 
 /* =====================================================
-   NORMALIZACIÓN
+   GENERACIÓN DE CANDIDATOS
 ===================================================== */
 
 function generarCandidatos(texto) {
 
-  const candidatos = new Set();
-  const normal = normalizarVoz(texto);
+  const candidatos =
+    new Set();
 
-  const palabras = normal.split(" ").filter(Boolean);
+  const normal =
+    normalizarVoz(texto);
+
+  const palabras =
+    normal.split(" ")
+      .filter(Boolean);
+
+
+  /*
+    Palabras individuales
+  */
 
   palabras.forEach(function(palabra) {
 
-    const limpia = limpiarCodigo(palabra);
+    const limpia =
+      limpiarCodigo(palabra);
 
-    if (limpia.length >= 2) {
+    if (limpia.length >= 1) {
       candidatos.add(limpia);
     }
   });
 
-  for (let inicio = 0; inicio < palabras.length; inicio++) {
+
+  /*
+    Combinaciones consecutivas.
+
+    Esto permite reconstruir cosas como:
+
+      F 1       → F1
+      DEN 28    → DEN28
+      2080 1    → 20801
+      S G U G   → SGUG
+  */
+
+  for (
+    let inicio = 0;
+    inicio < palabras.length;
+    inicio++
+  ) {
 
     let acumulado = "";
 
     for (
       let fin = inicio;
-      fin < palabras.length && fin < inicio + 7;
+      fin < palabras.length &&
+      fin < inicio + 8;
       fin++
     ) {
 
-      acumulado += limpiarCodigo(palabras[fin]);
+      acumulado +=
+        limpiarCodigo(
+          palabras[fin]
+        );
 
-      if (acumulado.length >= 2) {
+      if (acumulado.length >= 1) {
         candidatos.add(acumulado);
       }
     }
   }
 
-  const compacto = compactarVoz(texto);
 
-  if (compacto.length >= 2) {
+  /*
+    Versión sin palabras de relleno.
+  */
+
+  const compacto =
+    compactarVoz(texto);
+
+  if (compacto.length >= 1) {
     candidatos.add(compacto);
   }
+
+
+  /*
+    Extraemos secuencias numéricas aunque SpeechRecognition
+    las haya separado con espacios.
+
+    No contiene ningún número fijo.
+  */
+
+  const soloNumeros =
+    normal
+      .replace(/[^0-9\s]/g, " ")
+      .replace(/\s+/g, "")
+      .trim();
+
+  if (soloNumeros) {
+    candidatos.add(soloNumeros);
+  }
+
 
   return Array.from(candidatos);
 }
 
+
+/* =====================================================
+   COMPACTAR FRASE
+===================================================== */
+
 function compactarVoz(texto) {
 
   return normalizarVoz(texto)
-    .replace(/\bQUE\b/g," ")
-    .replace(/\bHAY\b/g," ")
-    .replace(/\bDONDE\b/g," ")
-    .replace(/\bESTA\b/g," ")
-    .replace(/\bESTAN\b/g," ")
-    .replace(/\bEL\b/g," ")
-    .replace(/\bLA\b/g," ")
-    .replace(/\bLOS\b/g," ")
-    .replace(/\bLAS\b/g," ")
-    .replace(/\bEN\b/g," ")
-    .replace(/\bUN\b/g," ")
-    .replace(/\bUNA\b/g," ")
-    .replace(/\bDE\b/g," ")
-    .replace(/\bDEL\b/g," ")
-    .replace(/\bDAME\b/g," ")
-    .replace(/\bBUSCA\b/g," ")
-    .replace(/\bBUSCAME\b/g," ")
-    .replace(/\bNECESITO\b/g," ")
-    .replace(/\bQUIERO\b/g," ")
-    .replace(/\bUBICACION\b/g," ")
-    .replace(/\bPROVEEDOR\b/g," ")
-    .replace(/\bRUTA\b/g," ")
-    .replace(/\bNUMERO\b/g," ")
-    .replace(/\bPOR\b/g," ")
-    .replace(/\bFAVOR\b/g," ")
-    .replace(/[^A-Z0-9]/g,"");
+    .replace(/\bQUE\b/g, " ")
+    .replace(/\bHAY\b/g, " ")
+    .replace(/\bDONDE\b/g, " ")
+    .replace(/\bESTA\b/g, " ")
+    .replace(/\bESTAN\b/g, " ")
+    .replace(/\bEL\b/g, " ")
+    .replace(/\bLA\b/g, " ")
+    .replace(/\bLOS\b/g, " ")
+    .replace(/\bLAS\b/g, " ")
+    .replace(/\bEN\b/g, " ")
+    .replace(/\bUN\b/g, " ")
+    .replace(/\bUNA\b/g, " ")
+    .replace(/\bDE\b/g, " ")
+    .replace(/\bDEL\b/g, " ")
+    .replace(/\bDAME\b/g, " ")
+    .replace(/\bBUSCA\b/g, " ")
+    .replace(/\bBUSCAME\b/g, " ")
+    .replace(/\bBUSCAR\b/g, " ")
+    .replace(/\bNECESITO\b/g, " ")
+    .replace(/\bQUIERO\b/g, " ")
+    .replace(/\bUBICACION\b/g, " ")
+    .replace(/\bPROVEEDOR\b/g, " ")
+    .replace(/\bRUTA\b/g, " ")
+    .replace(/\bNUMERO\b/g, " ")
+    .replace(/\bPOR\b/g, " ")
+    .replace(/\bFAVOR\b/g, " ")
+    .replace(/[^A-Z0-9]/g, "");
 }
 
+
+/* =====================================================
+   NORMALIZACIÓN
+===================================================== */
+
 function normalizarParaComparar(texto) {
-  return quitarAcentos(String(texto || ""))
+
+  return quitarAcentos(
+    String(texto || "")
+  )
     .toUpperCase()
     .replace(/[¿?¡!,.;:]/g, " ")
     .replace(/\s+/g, " ")
@@ -2322,14 +3076,18 @@ function normalizarParaComparar(texto) {
 }
 
 function normalizarComparacion(texto) {
-  return quitarAcentos(String(texto || ""))
+
+  return quitarAcentos(
+    String(texto || "")
+  )
     .toUpperCase()
     .trim();
 }
 
 function normalizarVoz(texto) {
 
-  let t = normalizarParaComparar(texto);
+  let t =
+    normalizarParaComparar(texto);
 
   const letras = {
     A:"A",
@@ -2394,45 +3152,73 @@ function normalizarVoz(texto) {
     TREINTA:"30"
   };
 
-  const palabras = t.split(" ");
+  const palabras =
+    t.split(" ");
+
   const convertidas = [];
 
-  for (let i = 0; i < palabras.length; i++) {
+  for (
+    let i = 0;
+    i < palabras.length;
+    i++
+  ) {
 
-    const palabra = palabras[i];
+    const palabra =
+      palabras[i];
 
-    if (palabra === "DOBLE" && palabras[i + 1] === "U") {
+    if (
+      palabra === "DOBLE" &&
+      palabras[i + 1] === "U"
+    ) {
+
       convertidas.push("W");
       i++;
       continue;
     }
 
-    if (numeros[palabra] !== undefined) {
-      convertidas.push(numeros[palabra]);
+    if (
+      numeros[palabra] !== undefined
+    ) {
+
+      convertidas.push(
+        numeros[palabra]
+      );
+
       continue;
     }
 
-    if (letras[palabra] !== undefined) {
-      convertidas.push(letras[palabra]);
+    if (
+      letras[palabra] !== undefined
+    ) {
+
+      convertidas.push(
+        letras[palabra]
+      );
+
       continue;
     }
 
     convertidas.push(palabra);
   }
 
-  return convertidas.join(" ").replace(/\s+/g," ").trim();
+  return convertidas
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function limpiarCodigo(texto) {
+
   return String(texto || "")
     .toUpperCase()
-    .replace(/[^A-Z0-9]/g,"");
+    .replace(/[^A-Z0-9]/g, "");
 }
 
 function quitarAcentos(texto) {
+
   return String(texto)
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"");
+    .replace(/[\u0300-\u036f]/g, "");
 }
 
 
@@ -2447,26 +3233,50 @@ function distanciaLevenshtein(a, b) {
 
   const matriz = [];
 
-  for (let i = 0; i <= b.length; i++) {
+  for (
+    let i = 0;
+    i <= b.length;
+    i++
+  ) {
     matriz[i] = [i];
   }
 
-  for (let j = 0; j <= a.length; j++) {
+  for (
+    let j = 0;
+    j <= a.length;
+    j++
+  ) {
     matriz[0][j] = j;
   }
 
-  for (let i = 1; i <= b.length; i++) {
+  for (
+    let i = 1;
+    i <= b.length;
+    i++
+  ) {
 
-    for (let j = 1; j <= a.length; j++) {
+    for (
+      let j = 1;
+      j <= a.length;
+      j++
+    ) {
 
-      if (b.charAt(i - 1) === a.charAt(j - 1)) {
-        matriz[i][j] = matriz[i - 1][j - 1];
+      if (
+        b.charAt(i - 1) ===
+        a.charAt(j - 1)
+      ) {
+
+        matriz[i][j] =
+          matriz[i - 1][j - 1];
+
       } else {
-        matriz[i][j] = Math.min(
-          matriz[i-1][j-1] + 1,
-          matriz[i][j-1] + 1,
-          matriz[i-1][j] + 1
-        );
+
+        matriz[i][j] =
+          Math.min(
+            matriz[i - 1][j - 1] + 1,
+            matriz[i][j - 1] + 1,
+            matriz[i - 1][j] + 1
+          );
       }
     }
   }
@@ -2480,31 +3290,50 @@ function distanciaLevenshtein(a, b) {
 ===================================================== */
 
 function obtenerUnicos(resultados, campo) {
+
   return Array.from(new Set(
     resultados
-      .map(r => String(r[campo] || "").trim())
+      .map(function(r) {
+        return String(r[campo] || "").trim();
+      })
       .filter(Boolean)
   ));
 }
 
 function decirCodigo(codigo) {
 
-  codigo = String(codigo || "").toUpperCase().trim();
+  codigo =
+    String(codigo || "")
+      .toUpperCase()
+      .trim();
 
-  if (!codigo) return "";
+  if (!codigo) {
+    return "";
+  }
 
   if (/^\d+$/.test(codigo)) {
     return codigo;
   }
 
-  const combinado = codigo.match(/^([A-Z]+)(\d+)$/);
+  const combinado =
+    codigo.match(
+      /^([A-Z]+)(\d+)$/
+    );
 
   if (combinado) {
-    return combinado[1].split("").join(" ") + " " + combinado[2];
+
+    return combinado[1]
+      .split("")
+      .join(" ") +
+      " " +
+      combinado[2];
   }
 
   if (/^[A-Z]+$/.test(codigo)) {
-    return codigo.split("").join(" ");
+
+    return codigo
+      .split("")
+      .join(" ");
   }
 
   return codigo;
@@ -2512,10 +3341,14 @@ function decirCodigo(codigo) {
 
 function mostrarError(mensaje) {
 
-  const contenedor = document.getElementById("resultados");
+  const contenedor =
+    document.getElementById("resultados");
+
   contenedor.innerHTML = "";
 
-  const elemento = document.createElement("div");
+  const elemento =
+    document.createElement("div");
+
   elemento.className = "error";
   elemento.textContent = mensaje;
 
@@ -2524,13 +3357,17 @@ function mostrarError(mensaje) {
 
 function restaurarMicrofono() {
 
-  const boton = document.getElementById("micBtn");
+  const boton =
+    document.getElementById("micBtn");
 
   boton.classList.remove("listening");
   boton.classList.remove("processing");
 
-  document.getElementById("micText").textContent = "HABLAR";
-  document.getElementById("estado").textContent = "";
+  document.getElementById("micText").textContent =
+    "HABLAR";
+
+  document.getElementById("estado").textContent =
+    "";
 }
 
 
