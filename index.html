@@ -470,8 +470,19 @@ function configurarControlesCamara(){
    z.min=caps.zoom.min;
    z.max=caps.zoom.max;
    z.step=caps.zoom.step||.1;
-   z.value=Math.max(caps.zoom.min,Math.min(caps.zoom.max,settings.zoom||caps.zoom.min));
-   $("qrZoomValor").textContent=Number(z.value).toFixed(1)+"×";
+   const zoomInicial = Math.max(
+  caps.zoom.min,
+  Math.min(5, caps.zoom.max)
+);
+
+z.value = zoomInicial;
+$("qrZoomValor").textContent = zoomInicial.toFixed(1) + "×";
+
+qrTrack.applyConstraints({
+  advanced: [{ zoom: zoomInicial }]
+}).catch(function(error) {
+  console.log("No se pudo aplicar el zoom inicial:", error);
+});
    $("qrZoomContenedor").style.display="flex";
   }else $("qrZoomNoDisponible").style.display="inline";
   if(caps.torch===true)$("qrLinternaBtn").style.display="inline-block";
