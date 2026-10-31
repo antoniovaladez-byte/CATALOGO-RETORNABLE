@@ -1,3382 +1,919 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Catálogo de Retornables</title>
-
-  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-
-  <style>
-    * { box-sizing: border-box; }
-
-    html, body {
-      margin: 0;
-      min-height: 100%;
-    }
-
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #eef2f7;
-      color: #111827;
-    }
-
-    button, input { font-family: inherit; }
-
-    .header {
-      width: 100%;
-      background: #003A8C;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .header h1 {
-      margin: 0;
-      font-size: 30px;
-      font-weight: 900;
-      letter-spacing: .5px;
-    }
-
-    .header p {
-      margin: 7px 0 0;
-      font-size: 15px;
-      opacity: .9;
-    }
-
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 22px;
-    }
-
-    .vista-seccion { display: none; }
-    #vistaInicio { display: block; }
-
-    .inicio-contenedor {
-      max-width: 950px;
-      margin: auto;
-      padding: 45px 22px;
-    }
-
-    .inicio-bienvenida {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .inicio-bienvenida h2 {
-      margin: 0;
-      color: #003A8C;
-      font-size: 30px;
-      font-weight: 900;
-    }
-
-    .inicio-bienvenida p {
-      margin: 9px 0 0;
-      color: #6b7280;
-      font-size: 16px;
-    }
-
-    .menu-principal {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .menu-card {
-      min-height: 240px;
-      background: white;
-      border: 2px solid transparent;
-      border-radius: 22px;
-      padding: 25px 18px;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0,0,0,.08);
-      transition: .18s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .menu-card:hover {
-      border-color: #003A8C;
-      transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(0,58,140,.12);
-    }
-
-    .menu-icono {
-      font-size: 65px;
-      margin-bottom: 15px;
-    }
-
-    .menu-titulo {
-      color: #003A8C;
-      font-size: 21px;
-      font-weight: 900;
-    }
-
-    .menu-descripcion {
-      color: #6b7280;
-      font-size: 14px;
-      line-height: 1.45;
-      margin-top: 9px;
-    }
-
-    .barra-navegacion {
-      max-width: 1100px;
-      margin: auto;
-      padding: 16px 22px 0;
-    }
-
-    .inicio-btn, .volver-btn {
-      border: none;
-      background: white;
-      color: #003A8C;
-      padding: 11px 17px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,.07);
-    }
-
-    /* VOZ */
-
-    .voice-card {
-      max-width: 800px;
-      margin: auto;
-      background: white;
-      border-radius: 22px;
-      padding: 30px 20px;
-      text-align: center;
-      box-shadow: 0 3px 12px rgba(0,0,0,.08);
-    }
-
-    .voice-title {
-      font-size: 21px;
-      font-weight: 900;
-      margin-bottom: 20px;
-    }
-
-    .mic-btn {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      border: none;
-      background: #003A8C;
-      color: white;
-      cursor: pointer;
-      font-size: 62px;
-      transition: .2s;
-      box-shadow: 0 5px 15px rgba(0,58,140,.25);
-    }
-
-    .mic-btn.listening {
-      background: #16a34a;
-      transform: scale(1.05);
-    }
-
-    .mic-btn.processing { background: #ea580c; }
-
-    .mic-text {
-      display: block;
-      font-size: 17px;
-      font-weight: 900;
-      margin-top: 5px;
-    }
-
-    .voice-help {
-      margin-top: 18px;
-      color: #6b7280;
-      font-size: 15px;
-    }
-
-    .sound-row { margin-top: 18px; }
-
-    .sound-btn {
-      border: 1px solid #d6dce5;
-      background: #f7f9fc;
-      color: #444;
-      padding: 9px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .speech-info {
-      display: none;
-      max-width: 650px;
-      margin: 20px auto 0;
-      background: #f7f9fc;
-      border-radius: 14px;
-      padding: 15px;
-      text-align: left;
-    }
-
-    .speech-label {
-      color: #777;
-      font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-      margin-top: 8px;
-    }
-
-    .speech-value {
-      font-size: 18px;
-      margin-top: 3px;
-    }
-
-    .interpretado {
-      color: #003A8C;
-      font-weight: 900;
-    }
-
-    #estado {
-      margin-top: 18px;
-      text-align: center;
-      font-size: 17px;
-      color: #666;
-      font-weight: 900;
-    }
-
-    .resultados-voz {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .resultado {
-      background: white;
-      margin-top: 15px;
-      padding: 22px;
-      border-radius: 18px;
-      border-left: 7px solid #003A8C;
-      box-shadow: 0 3px 10px rgba(0,0,0,.08);
-      cursor: pointer;
-    }
-
-    .resultado-ubicacion {
-      font-size: 48px;
-      font-weight: 900;
-      color: #003A8C;
-    }
-
-    .resultado-proveedor {
-      font-size: 28px;
-      font-weight: 900;
-      margin-top: 8px;
-    }
-
-    .resultado-detalle {
-      font-size: 19px;
-      margin-top: 6px;
-    }
-
-    .respuesta-contextual {
-      background: white;
-      margin-top: 15px;
-      padding: 24px;
-      border-radius: 18px;
-      border-left: 7px solid #16a34a;
-      box-shadow: 0 3px 10px rgba(0,0,0,.08);
-    }
-
-    .respuesta-contextual-titulo {
-      color: #777;
-      font-size: 12px;
-      font-weight: 900;
-      text-transform: uppercase;
-      margin-bottom: 7px;
-    }
-
-    .respuesta-contextual-valor {
-      color: #003A8C;
-      font-size: 30px;
-      font-weight: 900;
-    }
-
-    .ambiguedad {
-      background: white;
-      margin-top: 15px;
-      padding: 24px;
-      border-radius: 18px;
-      border-left: 7px solid #ea580c;
-      text-align: center;
-    }
-
-    .ambiguedad-titulo {
-      font-size: 23px;
-      font-weight: 900;
-    }
-
-    .ambiguedad-texto {
-      color: #666;
-      margin-top: 7px;
-    }
-
-    .ambiguedad-opciones {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .ambiguedad-btn {
-      border: 2px solid #003A8C;
-      background: white;
-      color: #003A8C;
-      border-radius: 14px;
-      padding: 13px 20px;
-      cursor: pointer;
-      font-size: 19px;
-      font-weight: 900;
-    }
-
-    .error {
-      background: white;
-      margin-top: 18px;
-      padding: 22px;
-      border-radius: 15px;
-      color: #b91c1c;
-      text-align: center;
-      font-weight: 900;
-    }
-
-    /* CATÁLOGO */
-
-    .catalogo-seccion { margin-top: 5px; }
-
-    .catalogo-buscador {
-      position: relative;
-      margin-bottom: 22px;
-    }
-
-    .catalogo-buscador-icono {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 21px;
-      pointer-events: none;
-    }
-
-    .catalogo-buscador-input {
-      width: 100%;
-      height: 58px;
-      border: 2px solid #d7dde6;
-      border-radius: 16px;
-      background: white;
-      padding: 0 52px;
-      font-size: 17px;
-      color: #111827;
-      outline: none;
-      box-shadow: 0 3px 10px rgba(0,0,0,.05);
-      transition: .15s;
-    }
-
-    .catalogo-buscador-input:focus {
-      border-color: #003A8C;
-      box-shadow: 0 4px 14px rgba(0,58,140,.10);
-    }
-
-    .catalogo-buscador-input::placeholder { color: #9ca3af; }
-
-    .catalogo-limpiar {
-      position: absolute;
-      right: 13px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 34px;
-      height: 34px;
-      border: none;
-      border-radius: 50%;
-      background: #eef2f7;
-      color: #4b5563;
-      font-size: 17px;
-      font-weight: 900;
-      cursor: pointer;
-      display: none;
-    }
-
-    .catalogo-cabecera {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-
-    .catalogo-titulo {
-      font-size: 25px;
-      font-weight: 900;
-      color: #003A8C;
-    }
-
-    .contador {
-      color: #6b7280;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .catalogo-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    .catalogo-card {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      cursor: pointer;
-      box-shadow: 0 3px 10px rgba(0,0,0,.06);
-      border: 2px solid transparent;
-    }
-
-    .catalogo-card:hover { border-color: #003A8C; }
-
-    .catalogo-ubicacion {
-      font-size: 38px;
-      color: #003A8C;
-      font-weight: 900;
-    }
-
-    .catalogo-proveedor {
-      margin-top: 8px;
-      font-size: 20px;
-      font-weight: 900;
-    }
-
-    .catalogo-ruta {
-      display: inline-block;
-      margin-top: 10px;
-      background: #eef2f7;
-      color: #003A8C;
-      border-radius: 20px;
-      padding: 6px 10px;
-      font-size: 13px;
-      font-weight: 900;
-    }
-
-    .catalogo-numero, .catalogo-maximo {
-      margin-top: 8px;
-      color: #4b5563;
-      font-size: 14px;
-    }
-
-    .catalogo-sin-resultados {
-      grid-column: 1 / -1;
-      background: white;
-      border-radius: 16px;
-      padding: 38px 20px;
-      text-align: center;
-      color: #6b7280;
-      font-size: 17px;
-    }
-
-    .catalogo-sin-resultados strong {
-      display: block;
-      color: #003A8C;
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
-
-    /* QR */
-
-    .qr-card {
-      max-width: 700px;
-      margin: 20px auto;
-      background: white;
-      border-radius: 22px;
-      padding: 28px;
-      text-align: center;
-      box-shadow: 0 3px 12px rgba(0,0,0,.08);
-    }
-
-    .qr-icono { font-size: 65px; }
-
-    .qr-titulo {
-      color: #003A8C;
-      font-size: 27px;
-      font-weight: 900;
-      margin-top: 10px;
-    }
-
-    .qr-texto {
-      color: #6b7280;
-      margin-top: 8px;
-      line-height: 1.5;
-    }
-
-    .qr-iniciar-btn {
-      width: 100%;
-      max-width: 380px;
-      margin-top: 24px;
-      border: none;
-      background: #003A8C;
-      color: white;
-      padding: 17px 20px;
-      border-radius: 14px;
-      font-size: 18px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    .qr-iniciar-btn:disabled {
-      opacity: .55;
-      cursor: default;
-    }
-
-    #qrReader {
-      width: 100%;
-      max-width: 600px;
-      margin: 22px auto 0;
-      overflow: hidden;
-      border-radius: 16px;
-      display: none;
-    }
-
-    #qrReader video { border-radius: 16px; }
-
-    .qr-estado {
-      margin-top: 18px;
-      font-size: 16px;
-      font-weight: 900;
-      min-height: 24px;
-    }
-
-    .qr-estado.activo { color: #16a34a; }
-
-    .qr-estado.error {
-      color: #b91c1c;
-      background: transparent;
-      padding: 0;
-      box-shadow: none;
-    }
-
-    .qr-cancelar-btn {
-      display: none;
-      margin: 16px auto 0;
-      border: 1px solid #d1d5db;
-      background: #f7f9fc;
-      color: #374151;
-      padding: 11px 18px;
-      border-radius: 12px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-
-    /* FICHA */
-
-    #vistaFicha { display: none; }
-
-    .ficha-toolbar {
-      max-width: 1100px;
-      margin: auto;
-      padding: 18px 22px 0;
-    }
-
-    .ficha-contenedor {
-      max-width: 1100px;
-      margin: auto;
-      padding: 16px 22px 30px;
-    }
-
-    .bloque-ubicacion {
-      background: white;
-      border-radius: 16px 16px 0 0;
-      border-bottom: 1px solid #e5e7eb;
-      padding: 18px 25px 25px;
-      text-align: center;
-    }
-
-    .etiqueta {
-      color: #374151;
-      font-size: 15px;
-      font-weight: 800;
-      text-transform: uppercase;
-      text-align: left;
-    }
-
-    .ficha-ubicacion {
-      color: #003A8C;
-      font-size: clamp(70px, 10vw, 125px);
-      line-height: 1;
-      font-weight: 900;
-      margin-top: 5px;
-    }
-
-    .registro {
-      background: white;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .fila {
-      min-height: 105px;
-      display: grid;
-      grid-template-columns: 230px 1fr;
-      align-items: center;
-      border-bottom: 1px solid #e5e7eb;
-      padding: 15px 25px;
-    }
-
-    .fila:last-child { border-bottom: none; }
-
-    .valor {
-      text-align: center;
-      font-size: clamp(30px, 4vw, 48px);
-      font-weight: 900;
-      overflow-wrap: anywhere;
-    }
-
-    .valor.proveedor {
-      font-size: clamp(34px, 4.5vw, 54px);
-    }
-
-    .valor.maximo {
-      font-size: clamp(28px, 4vw, 48px);
-    }
-
-    .separador {
-      background: #eef2f7;
-      color: #003A8C;
-      padding: 10px 25px;
-      font-size: 14px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-
-    .pie {
-      background: white;
-      border-radius: 0 0 16px 16px;
-      padding: 13px 25px;
-      text-align: right;
-      color: #6b7280;
-      font-size: 13px;
-    }
-
-    @media(max-width: 800px) {
-      .menu-principal { grid-template-columns: 1fr; }
-      .menu-card { min-height: 175px; }
-      .menu-icono { font-size: 52px; }
-      .catalogo-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media(max-width: 600px) {
-      .header { padding: 17px 12px; }
-      .header h1 { font-size: 23px; }
-      .inicio-contenedor { padding: 28px 14px; }
-      .container { padding: 13px; }
-      .barra-navegacion { padding: 12px 13px 0; }
-      .voice-card { padding: 24px 12px; }
-
-      .mic-btn {
-        width: 155px;
-        height: 155px;
-      }
-
-      .catalogo-grid { grid-template-columns: 1fr; }
-      .catalogo-buscador-input { font-size: 16px; }
-      .qr-card { padding: 24px 14px; }
-      .ficha-toolbar { padding: 12px 12px 0; }
-      .ficha-contenedor { padding: 12px; }
-
-      .fila {
-        min-height: auto;
-        grid-template-columns: 1fr;
-        gap: 7px;
-        padding: 18px;
-      }
-
-      .fila .etiqueta {
-        text-align: center;
-        font-size: 12px;
-        color: #6b7280;
-      }
-
-      .valor { font-size: 30px; }
-      .valor.proveedor { font-size: 38px; }
-      .valor.maximo { font-size: 30px; }
-      .pie { text-align: center; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Catálogo de Retornables</title>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef2f7;color:#111827}
+button,input{font:inherit}
+button{cursor:pointer}
+.header{background:#003a8c;color:white;text-align:center;padding:19px 12px}
+.header h1{font-size:clamp(22px,4vw,30px);margin:0;font-weight:900}
+.header p{margin:8px 0 0;opacity:.9}
+.container{max-width:1100px;margin:auto;padding:20px}
+.vista{display:none}
+#vistaInicio{display:block}
+.inicio-contenedor{max-width:950px;margin:auto;padding:40px 20px}
+.inicio-bienvenida{text-align:center;margin-bottom:30px}
+.inicio-bienvenida h2{color:#003a8c;font-size:32px;margin:0}
+.inicio-bienvenida p{color:#6b7280}
+.menu-principal{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.menu-card{background:#fff;border:2px solid transparent;border-radius:22px;padding:25px 18px;min-height:230px;text-align:center;box-shadow:0 4px 14px #0001;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.menu-card:hover{border-color:#003a8c}
+.menu-icono{font-size:62px;margin-bottom:15px}
+.menu-titulo{font-size:21px;font-weight:900;color:#003a8c}
+.menu-descripcion{color:#6b7280;line-height:1.5;margin-top:10px}
+.barra-navegacion,.ficha-toolbar{max-width:1100px;margin:auto;padding:15px 20px 0}
+.inicio-btn,.volver-btn{background:white;color:#003a8c;border:0;border-radius:12px;padding:12px 18px;font-weight:900;box-shadow:0 2px 8px #0001}
+.voice-card{max-width:800px;margin:auto;background:white;border-radius:22px;padding:30px 20px;text-align:center;box-shadow:0 3px 12px #0001}
+.voice-title{font-size:21px;font-weight:900;margin-bottom:20px}
+.mic-btn{width:175px;height:175px;border:0;border-radius:50%;background:#003a8c;color:white;font-size:60px;box-shadow:0 5px 15px #003a8c40}
+.mic-btn.listening{background:#16a34a}
+.mic-btn.processing{background:#ea580c}
+.mic-text{display:block;font-size:16px;font-weight:900}
+.voice-help{color:#6b7280;margin:18px 0}
+.sound-btn{border:1px solid #d6dce5;background:#f7f9fc;border-radius:20px;padding:9px 14px}
+.speech-info{display:none;max-width:650px;margin:20px auto 0;background:#f7f9fc;border-radius:14px;padding:15px;text-align:left}
+.speech-label{color:#777;font-size:12px;font-weight:900;text-transform:uppercase;margin-top:8px}
+.speech-value{font-size:18px;margin-top:3px}
+.interpretado{color:#003a8c;font-weight:900}
+#estado{margin-top:18px;text-align:center;font-weight:900;color:#666}
+.resultados-voz{max-width:900px;margin:auto}
+.resultado,.respuesta-contextual,.ambiguedad,.error{background:white;margin-top:15px;padding:22px;border-radius:18px;box-shadow:0 3px 10px #0001}
+.resultado{border-left:7px solid #003a8c;cursor:pointer}
+.resultado-ubicacion{font-size:46px;font-weight:900;color:#003a8c}
+.resultado-proveedor{font-size:26px;font-weight:900;margin-top:8px}
+.resultado-detalle{font-size:18px;margin-top:7px}
+.respuesta-contextual{border-left:7px solid #16a34a}
+.respuesta-contextual-titulo{font-size:13px;text-transform:uppercase;color:#777;font-weight:900}
+.respuesta-contextual-valor{font-size:29px;color:#003a8c;font-weight:900}
+.ambiguedad{border-left:7px solid #ea580c;text-align:center}
+.ambiguedad-titulo{font-size:23px;font-weight:900}
+.ambiguedad-texto{color:#666;margin:10px}
+.ambiguedad-opciones{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.ambiguedad-btn{border:2px solid #003a8c;background:white;color:#003a8c;border-radius:12px;padding:12px 18px;font-weight:900}
+.error{color:#b91c1c;text-align:center;font-weight:900}
+.catalogo-buscador{position:relative;margin-bottom:20px}
+.catalogo-buscador-input{width:100%;height:58px;border:2px solid #d7dde6;border-radius:16px;padding:0 50px;font-size:17px}
+.catalogo-buscador-icono{position:absolute;left:18px;top:17px}
+.catalogo-limpiar{display:none;position:absolute;right:12px;top:12px;border:0;border-radius:50%;width:34px;height:34px}
+.catalogo-cabecera{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;gap:12px}
+.catalogo-titulo{font-size:25px;color:#003a8c;font-weight:900}
+.contador{font-size:14px;color:#6b7280}
+.catalogo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.catalogo-card{background:white;border-radius:16px;padding:20px;box-shadow:0 3px 10px #0001;cursor:pointer}
+.catalogo-ubicacion{font-size:38px;color:#003a8c;font-weight:900}
+.catalogo-proveedor{font-size:20px;font-weight:900;margin-top:8px}
+.catalogo-ruta{display:inline-block;margin-top:10px;background:#eef2f7;color:#003a8c;border-radius:20px;padding:6px 10px;font-size:13px;font-weight:900}
+.catalogo-numero,.catalogo-maximo{color:#4b5563;margin-top:8px;font-size:14px}
+.catalogo-sin-resultados{grid-column:1/-1;background:white;border-radius:16px;padding:35px;text-align:center;color:#6b7280}
+.catalogo-sin-resultados strong{display:block;color:#003a8c;margin-bottom:8px}
+.qr-shell{max-width:800px;margin:12px auto;background:white;border-radius:20px;padding:18px;box-shadow:0 3px 12px #0001}
+.qr-head{text-align:center}
+.qr-head h2{color:#003a8c;margin:5px 0;font-size:24px}
+.qr-head p{color:#6b7280;margin:7px 0 15px}
+.qr-camara{position:relative;background:#101827;border-radius:18px;overflow:hidden;min-height:260px}
+.qr-camara #qrReader{width:100%;min-height:260px}
+.qr-camara #qrReader video{object-fit:cover!important;width:100%!important;border-radius:0!important}
+.qr-camara #qrReader img{display:none!important}
+.qr-overlay{pointer-events:none;position:absolute;inset:0;display:none;align-items:center;justify-content:center}
+.qr-marco{width:min(64vw,290px);height:min(64vw,290px);border:3px solid #ffffffdb;border-radius:16px;box-shadow:0 0 0 999px #0003;position:relative}
+.qr-marco:after{content:"";position:absolute;left:10%;right:10%;top:50%;height:2px;background:#35e68e;box-shadow:0 0 12px #35e68e}
+.qr-controles{display:none;gap:12px;flex-direction:column;margin-top:16px}
+.qr-controles-fila{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.qr-control-btn{border:1px solid #cbd5e1;background:#f8fafc;color:#003a8c;border-radius:12px;padding:12px 15px;font-weight:900}
+.qr-control-btn:disabled{opacity:.45;cursor:default}
+.qr-zoom{display:flex;align-items:center;gap:12px;flex:1}
+.qr-zoom input{width:100%;accent-color:#003a8c}
+.qr-zoom-label{font-weight:900;color:#003a8c;min-width:40px}
+.qr-estado{text-align:center;font-weight:900;margin-top:12px;min-height:24px;color:#16a34a}
+.qr-estado.error{background:none;box-shadow:none;padding:0;color:#b91c1c}
+.qr-reintentar{display:none;width:100%;border:0;border-radius:12px;background:#003a8c;color:white;padding:14px;font-weight:900;margin-top:12px}
+.ficha-contenedor{max-width:1100px;margin:auto;padding:16px 22px 30px}
+.bloque-ubicacion{background:white;border-radius:16px 16px 0 0;border-bottom:1px solid #e5e7eb;padding:18px 25px 25px;text-align:center}
+.etiqueta{color:#374151;font-size:15px;font-weight:800;text-transform:uppercase}
+.bloque-ubicacion .etiqueta{text-align:left}
+.ficha-ubicacion{color:#003a8c;font-size:clamp(70px,10vw,125px);font-weight:900;line-height:1}
+.registro{background:white;border-bottom:1px solid #e5e7eb}
+.fila{min-height:105px;display:grid;grid-template-columns:230px 1fr;align-items:center;border-bottom:1px solid #e5e7eb;padding:15px 25px}
+.fila:last-child{border-bottom:0}
+.valor{text-align:center;font-size:clamp(30px,4vw,48px);font-weight:900;overflow-wrap:anywhere}
+.valor.proveedor{font-size:clamp(34px,4.5vw,54px)}
+.separador{background:#eef2f7;color:#003a8c;padding:10px 25px;font-size:14px;font-weight:900}
+.pie{background:white;border-radius:0 0 16px 16px;padding:13px 25px;text-align:right;color:#6b7280;font-size:13px}
+@media(max-width:800px){
+.menu-principal{grid-template-columns:1fr}
+.menu-card{min-height:170px}
+.catalogo-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+.container{padding:13px}
+.inicio-contenedor{padding:28px 14px}
+.barra-navegacion,.ficha-toolbar{padding:12px 13px 0}
+.catalogo-grid{grid-template-columns:1fr}
+.qr-shell{padding:12px}
+.qr-head h2{font-size:21px}
+.qr-camara,.qr-camara #qrReader{min-height:300px}
+.ficha-contenedor{padding:12px}
+.fila{grid-template-columns:1fr;gap:7px;min-height:0;padding:18px}
+.fila .etiqueta{text-align:center;font-size:12px;color:#6b7280}
+.valor{font-size:30px}
+.pie{text-align:center}
+}
+</style>
 </head>
-
 <body>
 
-<!-- INICIO -->
-
-<div id="vistaInicio">
+<div id="vistaInicio" class="vista">
   <div class="header">
     <h1>CATÁLOGO DE RETORNABLES</h1>
     <p>PENSKE</p>
   </div>
-
   <div class="inicio-contenedor">
     <div class="inicio-bienvenida">
       <h2>¿Qué deseas hacer?</h2>
       <p>Selecciona una función</p>
     </div>
-
     <div class="menu-principal">
-
-      <div class="menu-card" onclick="abrirSeccion('voz')">
-        <div class="menu-icono">🎤</div>
-        <div class="menu-titulo">BÚSQUEDA POR VOZ</div>
-        <div class="menu-descripcion">
-          Busca ubicaciones, proveedores y rutas utilizando tu voz.
-        </div>
-      </div>
-
-      <div class="menu-card" onclick="abrirSeccion('catalogo')">
-        <div class="menu-icono">📦</div>
-        <div class="menu-titulo">CATÁLOGO</div>
-        <div class="menu-descripcion">
-          Consulta o filtra las ubicaciones registradas.
-        </div>
-      </div>
-
-      <div class="menu-card" onclick="abrirSeccion('qr')">
-        <div class="menu-icono">📷</div>
-        <div class="menu-titulo">ESCANEAR QR</div>
-        <div class="menu-descripcion">
-          Escanea el código de una ubicación para consultar su información.
-        </div>
-      </div>
-
+      <button class="menu-card" onclick="abrirSeccion('voz')">
+        <span class="menu-icono">🎤</span>
+        <span class="menu-titulo">BÚSQUEDA POR VOZ</span>
+        <span class="menu-descripcion">Busca ubicaciones, proveedores y rutas utilizando tu voz.</span>
+      </button>
+      <button class="menu-card" onclick="abrirSeccion('catalogo')">
+        <span class="menu-icono">📦</span>
+        <span class="menu-titulo">CATÁLOGO</span>
+        <span class="menu-descripcion">Consulta o filtra las ubicaciones registradas.</span>
+      </button>
+      <button class="menu-card" onclick="abrirSeccion('qr')">
+        <span class="menu-icono">📷</span>
+        <span class="menu-titulo">ESCANEAR QR</span>
+        <span class="menu-descripcion">Escanea el código de una ubicación para consultar su información.</span>
+      </button>
     </div>
   </div>
 </div>
 
-
-<!-- VOZ -->
-
-<div id="vistaVoz" class="vista-seccion">
+<div id="vistaVoz" class="vista">
   <div class="header">
     <h1>BÚSQUEDA POR VOZ</h1>
     <p>Ubicaciones • Proveedores • Rutas</p>
   </div>
-
   <div class="barra-navegacion">
     <button class="inicio-btn" onclick="volverInicio()">← Inicio</button>
   </div>
-
   <div class="container">
     <div class="voice-card">
-
       <div class="voice-title">¿Qué necesitas encontrar?</div>
-
       <button id="micBtn" class="mic-btn" onclick="escuchar()">
-        🎤
-        <span id="micText" class="mic-text">HABLAR</span>
+        🎤<span id="micText" class="mic-text">HABLAR</span>
       </button>
-
-      <div class="voice-help">
-        Toca el micrófono y haz tu pregunta
-      </div>
-
-      <div class="sound-row">
-        <button id="soundBtn" class="sound-btn" onclick="alternarSonido()">
-          🔊 Respuesta por voz activada
-        </button>
-      </div>
-
+      <p class="voice-help">Toca el micrófono y haz tu pregunta</p>
+      <button id="soundBtn" class="sound-btn" onclick="alternarSonido()">🔊 Respuesta por voz activada</button>
       <div id="speechInfo" class="speech-info">
         <div class="speech-label">Escuché</div>
         <div id="escuchado" class="speech-value"></div>
-
         <div class="speech-label">Interpretado</div>
         <div id="interpretado" class="speech-value interpretado"></div>
       </div>
-
     </div>
-
     <div id="estado"></div>
     <div id="resultados" class="resultados-voz"></div>
   </div>
 </div>
 
-
-<!-- CATÁLOGO -->
-
-<div id="vistaCatalogo" class="vista-seccion">
+<div id="vistaCatalogo" class="vista">
   <div class="header">
     <h1>CATÁLOGO</h1>
     <p>Ubicaciones registradas</p>
   </div>
-
   <div class="barra-navegacion">
     <button class="inicio-btn" onclick="volverInicio()">← Inicio</button>
   </div>
-
   <div class="container">
-    <section class="catalogo-seccion">
-
-      <div class="catalogo-buscador">
-        <span class="catalogo-buscador-icono">🔎</span>
-
-        <input
-          id="buscadorCatalogo"
-          class="catalogo-buscador-input"
-          type="text"
-          placeholder="Buscar ubicación, proveedor, número o ruta..."
-          autocomplete="off"
-          oninput="filtrarCatalogo()"
-        >
-
-        <button
-          id="limpiarBuscador"
-          class="catalogo-limpiar"
-          onclick="limpiarFiltroCatalogo()"
-          aria-label="Limpiar búsqueda"
-        >✕</button>
-      </div>
-
-      <div class="catalogo-cabecera">
-        <div class="catalogo-titulo">Ubicaciones</div>
-        <div id="contador" class="contador">Cargando...</div>
-      </div>
-
-      <div id="catalogoGrid" class="catalogo-grid"></div>
-
-    </section>
+    <div class="catalogo-buscador">
+      <span class="catalogo-buscador-icono">🔎</span>
+      <input id="buscadorCatalogo" class="catalogo-buscador-input" placeholder="Buscar ubicación, proveedor, número o ruta..." oninput="filtrarCatalogo()" autocomplete="off">
+      <button id="limpiarBuscador" class="catalogo-limpiar" onclick="limpiarFiltroCatalogo()">✕</button>
+    </div>
+    <div class="catalogo-cabecera">
+      <div class="catalogo-titulo">Ubicaciones</div>
+      <div id="contador" class="contador">Cargando...</div>
+    </div>
+    <div id="catalogoGrid" class="catalogo-grid"></div>
   </div>
 </div>
 
-
-<!-- QR -->
-
-<div id="vistaQR" class="vista-seccion">
+<div id="vistaQR" class="vista">
   <div class="header">
     <h1>ESCANEAR QR</h1>
     <p>Consulta rápida de ubicación</p>
   </div>
-
   <div class="barra-navegacion">
     <button class="inicio-btn" onclick="volverInicio()">← Inicio</button>
   </div>
-
   <div class="container">
-    <div class="qr-card">
-
-      <div class="qr-icono">📷</div>
-      <div class="qr-titulo">Escáner QR</div>
-
-      <div class="qr-texto">
-        Presiona el botón y apunta la cámara al código QR.
+    <div class="qr-shell">
+      <div class="qr-head">
+        <h2>📷 Escáner de ubicaciones</h2>
+        <p>Apunta al QR desde el piso. Ajusta el zoom si está lejos.</p>
       </div>
-
-      <button
-        id="qrIniciarBtn"
-        class="qr-iniciar-btn"
-        onclick="iniciarEscanerQR()"
-      >
-        📷 ABRIR CÁMARA
-      </button>
-
-      <div id="qrReader"></div>
-      <div id="qrEstado" class="qr-estado"></div>
-
-      <button
-        id="qrCancelarBtn"
-        class="qr-cancelar-btn"
-        onclick="detenerEscanerQR()"
-      >
-        Cerrar cámara
-      </button>
-
+      <div class="qr-camara">
+        <div id="qrReader"></div>
+        <div id="qrOverlay" class="qr-overlay">
+          <div class="qr-marco"></div>
+        </div>
+      </div>
+      <div id="qrEstado" class="qr-estado" role="status" aria-live="polite">Preparando cámara...</div>
+      <div id="qrControles" class="qr-controles">
+        <div class="qr-controles-fila">
+          <div id="qrZoomContenedor" class="qr-zoom" style="display:none">
+            <label for="qrZoom">Zoom</label>
+            <input id="qrZoom" type="range" min="1" max="3" step="0.1" value="1" oninput="ajustarZoomQR(this.value)">
+            <span id="qrZoomValor" class="qr-zoom-label">1×</span>
+          </div>
+          <span id="qrZoomNoDisponible" style="display:none;color:#64748b;font-size:13px">Zoom no disponible en esta cámara</span>
+        </div>
+        <div class="qr-controles-fila">
+          <button id="qrLinternaBtn" class="qr-control-btn" style="display:none" onclick="alternarLinternaQR()">🔦 Encender linterna</button>
+          <button class="qr-control-btn" onclick="detenerEscanerQR()">✕ Cerrar cámara</button>
+        </div>
+      </div>
+      <button id="qrReintentar" class="qr-reintentar" onclick="iniciarEscanerQR()">📷 Reintentar cámara</button>
     </div>
   </div>
 </div>
 
-
-<!-- FICHA -->
-
-<div id="vistaFicha">
+<div id="vistaFicha" class="vista">
   <div class="header">
     <h1>PENSKE</h1>
     <p>Información de ubicación</p>
   </div>
-
   <div class="ficha-toolbar">
     <button class="volver-btn" onclick="volverVistaAnterior()">← Volver</button>
   </div>
-
   <div class="ficha-contenedor">
-
     <div class="bloque-ubicacion">
       <div class="etiqueta">Ubicación</div>
       <div id="fichaUbicacion" class="ficha-ubicacion"></div>
     </div>
-
     <div id="fichaRegistros"></div>
     <div id="fichaPie" class="pie"></div>
-
   </div>
 </div>
 
-
 <script>
+const API_BASE="https://catalogo-retornable-api.antonio-valadez.workers.dev/";
+const $=id=>document.getElementById(id);
+let datosCatalogo=[];
+let catalogoVoz={ubicaciones:[],rutas:[],proveedores:[],numerosProveedor:[]};
+let sonidoActivado=true,contextoActual=null,vistaAnterior="inicio";
+let qrScanner=null,qrActivo=false,qrProcesando=false,qrTrack=null,qrLinternaEncendida=false,qrZoomTimer=null,qrInicioEnCurso=false;
+let qrSesion=0;
 
-/* =====================================================
-   CONFIGURACIÓN
-===================================================== */
-
-const API_BASE =
-  "https://catalogo-retornable-api.antonio-valadez.workers.dev/";
-
-let datosCatalogo = [];
-
-let catalogoVoz = {
-  ubicaciones: [],
-  rutas: [],
-  proveedores: [],
-  numerosProveedor: []
-};
-
-let sonidoActivado = true;
-let contextoActual = null;
-let vistaAnterior = "inicio";
-
-let qrScanner = null;
-let qrActivo = false;
-let qrProcesando = false;
-
-
-/* =====================================================
-   NAVEGACIÓN
-===================================================== */
-
-function ocultarVistas() {
-  document.getElementById("vistaInicio").style.display = "none";
-  document.getElementById("vistaVoz").style.display = "none";
-  document.getElementById("vistaCatalogo").style.display = "none";
-  document.getElementById("vistaQR").style.display = "none";
-  document.getElementById("vistaFicha").style.display = "none";
+function ocultarVistas(){
+ ["vistaInicio","vistaVoz","vistaCatalogo","vistaQR","vistaFicha"].forEach(id=>$(id).style.display="none");
+}
+async function abrirSeccion(seccion){
+ if(seccion!=="qr")await detenerEscanerQR();
+ ocultarVistas();
+ vistaAnterior=seccion;
+ const id={voz:"vistaVoz",catalogo:"vistaCatalogo",qr:"vistaQR"}[seccion]||"vistaInicio";
+ $(id).style.display="block";
+ window.scrollTo(0,0);
+ if(seccion==="qr")iniciarEscanerQR();
+}
+async function volverInicio(){
+ if(reconocimiento)try{reconocimiento.abort()}catch(e){}
+ if("speechSynthesis"in window)speechSynthesis.cancel();
+ await detenerEscanerQR();
+ ocultarVistas();
+ $("vistaInicio").style.display="block";
+ vistaAnterior="inicio";
+ window.scrollTo(0,0);
+}
+function volverVistaAnterior(){
+ ocultarVistas();
+ const id={voz:"vistaVoz",catalogo:"vistaCatalogo",qr:"vistaQR"}[vistaAnterior]||"vistaInicio";
+ $(id).style.display="block";
+ window.scrollTo(0,0);
+ if(vistaAnterior==="qr")iniciarEscanerQR();
 }
 
-async function abrirSeccion(seccion) {
-
-  if (seccion !== "qr" && (qrScanner || qrActivo)) {
-    await detenerEscanerQR();
-  }
-
-  ocultarVistas();
-  vistaAnterior = seccion;
-
-  if (seccion === "voz") {
-    document.getElementById("vistaVoz").style.display = "block";
-  }
-
-  if (seccion === "catalogo") {
-    document.getElementById("vistaCatalogo").style.display = "block";
-  }
-
-  if (seccion === "qr") {
-    document.getElementById("vistaQR").style.display = "block";
-  }
-
-  window.scrollTo(0, 0);
+async function consultarServidor(parametros={}){
+ const url=new URL(API_BASE);
+ Object.entries(parametros).forEach(([k,v])=>{if(v!==undefined&&v!==null)url.searchParams.set(k,v)});
+ const controlador=new AbortController();
+ const timer=setTimeout(()=>controlador.abort(),15000);
+ try{
+  const respuesta=await fetch(url.toString(),{method:"GET",cache:"no-store",signal:controlador.signal});
+  if(!respuesta.ok)throw Error("HTTP "+respuesta.status);
+  return await respuesta.json();
+ }finally{clearTimeout(timer)}
 }
-
-async function volverInicio() {
-
-  if (reconocimiento) {
-    try { reconocimiento.abort(); } catch (e) {}
-  }
-
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
-
-  if (qrScanner || qrActivo) {
-    await detenerEscanerQR();
-  }
-
-  ocultarVistas();
-  document.getElementById("vistaInicio").style.display = "block";
-  vistaAnterior = "inicio";
-  window.scrollTo(0, 0);
-}
-
-function volverVistaAnterior() {
-
-  ocultarVistas();
-
-  if (vistaAnterior === "voz") {
-    document.getElementById("vistaVoz").style.display = "block";
-  } else if (vistaAnterior === "catalogo") {
-    document.getElementById("vistaCatalogo").style.display = "block";
-  } else if (vistaAnterior === "qr") {
-    document.getElementById("vistaQR").style.display = "block";
-  } else {
-    document.getElementById("vistaInicio").style.display = "block";
-  }
-
-  window.scrollTo(0, 0);
-}
-
-
-/* =====================================================
-   CONEXIÓN API - CLOUDFLARE
-===================================================== */
-
-async function consultarServidor(parametros = {}) {
-
-  const url = new URL(API_BASE);
-
-  Object.entries(parametros).forEach(function([clave, valor]) {
-    if (valor !== undefined && valor !== null) {
-      url.searchParams.set(clave, valor);
-    }
-  });
-
-  const controlador = new AbortController();
-
-  const timer = setTimeout(function() {
-    controlador.abort();
-  }, 15000);
-
-  try {
-
-    const respuesta = await fetch(url.toString(), {
-      method: "GET",
-      cache: "no-store",
-      signal: controlador.signal
-    });
-
-    if (!respuesta.ok) {
-      throw new Error("Error HTTP " + respuesta.status);
-    }
-
-    return await respuesta.json();
-
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-
-/* =====================================================
-   INICIO DE LA APP
-===================================================== */
-
-async function iniciarAplicacion() {
-
-  try {
-
-    const datos = await consultarServidor({ catalogo: "1" });
-
-    if (!Array.isArray(datos)) {
-      throw new Error("Formato de catálogo incorrecto.");
-    }
-
-    datosCatalogo = datos.filter(function(r) {
-      return r && String(r.ubicacion || "").trim();
-    });
-
-    crearCatalogoVozLocal();
-    renderizarCatalogo(datosCatalogo);
-
-  } catch (error) {
-
-    console.error(error);
-
-    document.getElementById("contador").textContent =
-      "Error de conexión";
-  }
-}
-
-function crearCatalogoVozLocal() {
-
-  catalogoVoz = {
-    ubicaciones: valoresUnicos("ubicacion"),
-    rutas: valoresUnicos("ruta"),
-    proveedores: valoresUnicos("proveedor"),
-    numerosProveedor: valoresUnicos("numeroProveedor")
-  };
-}
-
-function valoresUnicos(campo) {
-
-  return Array.from(new Set(
-    datosCatalogo
-      .map(function(r) {
-        return String(r[campo] || "").trim();
-      })
-      .filter(Boolean)
-  ));
-}
-
-
-/* =====================================================
-   CATÁLOGO + FILTRO
-===================================================== */
-
-function renderizarCatalogo(registros = datosCatalogo) {
-
-  const grid = document.getElementById("catalogoGrid");
-  const contador = document.getElementById("contador");
-  const buscador = document.getElementById("buscadorCatalogo");
-
-  grid.innerHTML = "";
-
-  if (!registros.length) {
-
-    const mensaje = document.createElement("div");
-    mensaje.className = "catalogo-sin-resultados";
-
-    const titulo = document.createElement("strong");
-    titulo.textContent = "Sin resultados";
-
-    const texto = document.createElement("span");
-    texto.textContent = "No encontré coincidencias en el catálogo.";
-
-    mensaje.appendChild(titulo);
-    mensaje.appendChild(texto);
-    grid.appendChild(mensaje);
-
-    contador.textContent = "0 resultados";
-    return;
-  }
-
-  registros.forEach(function(registro) {
-
-    const tarjeta = document.createElement("div");
-    tarjeta.className = "catalogo-card";
-
-    tarjeta.addEventListener("click", function() {
-      vistaAnterior = "catalogo";
-      abrirFichaPorRegistro(registro);
-    });
-
-    agregarElemento(tarjeta, registro.ubicacion, "catalogo-ubicacion");
-    agregarElemento(tarjeta, registro.proveedor, "catalogo-proveedor");
-    agregarElemento(tarjeta, registro.ruta, "catalogo-ruta");
-
-    agregarElemento(
-      tarjeta,
-      "Proveedor #" + (registro.numeroProveedor || "—"),
-      "catalogo-numero"
-    );
-
-    agregarElemento(
-      tarjeta,
-      "Máximo: " + (registro.maximo || "—"),
-      "catalogo-maximo"
-    );
-
-    grid.appendChild(tarjeta);
-  });
-
-  const hayFiltro = buscador && buscador.value.trim();
-
-  contador.textContent =
-    registros.length +
-    (hayFiltro
-      ? (registros.length === 1 ? " resultado" : " resultados")
-      : " ubicaciones");
-}
-
-function filtrarCatalogo() {
-
-  const input = document.getElementById("buscadorCatalogo");
-  const limpiar = document.getElementById("limpiarBuscador");
-
-  const consulta =
-    normalizarComparacion(input.value).replace(/\s+/g, "");
-
-  limpiar.style.display = consulta ? "block" : "none";
-
-  if (!consulta) {
-    renderizarCatalogo(datosCatalogo);
-    return;
-  }
-
-  const resultados = datosCatalogo
-    .map(function(registro, indice) {
-
-      const ubicacion =
-        normalizarComparacion(registro.ubicacion || "")
-          .replace(/\s+/g, "");
-
-      const proveedor =
-        normalizarComparacion(registro.proveedor || "")
-          .replace(/\s+/g, "");
-
-      const numero =
-        normalizarComparacion(registro.numeroProveedor || "")
-          .replace(/\s+/g, "");
-
-      const ruta =
-        normalizarComparacion(registro.ruta || "")
-          .replace(/\s+/g, "");
-
-      let prioridad = 999;
-
-      if (ubicacion === consulta) {
-        prioridad = 1;
-      }
-      else if (ubicacion.startsWith(consulta)) {
-        prioridad = 2;
-      }
-      else if (ubicacion.includes(consulta)) {
-        prioridad = 3;
-      }
-      else if (proveedor.startsWith(consulta)) {
-        prioridad = 4;
-      }
-      else if (numero.startsWith(consulta)) {
-        prioridad = 5;
-      }
-      else if (ruta.startsWith(consulta)) {
-        prioridad = 6;
-      }
-      else if (
-        proveedor.includes(consulta) ||
-        numero.includes(consulta) ||
-        ruta.includes(consulta)
-      ) {
-        prioridad = 7;
-      }
-
-      return {
-        registro: registro,
-        prioridad: prioridad,
-        indiceOriginal: indice
-      };
-    })
-    .filter(function(item) {
-      return item.prioridad !== 999;
-    })
-    .sort(function(a, b) {
-
-      if (a.prioridad !== b.prioridad) {
-        return a.prioridad - b.prioridad;
-      }
-
-      return a.indiceOriginal - b.indiceOriginal;
-    })
-    .map(function(item) {
-      return item.registro;
-    });
-
-  renderizarCatalogo(resultados);
-}
-
-function limpiarFiltroCatalogo() {
-
-  const input = document.getElementById("buscadorCatalogo");
-
-  input.value = "";
-  document.getElementById("limpiarBuscador").style.display = "none";
-
+async function iniciarAplicacion(){
+ try{
+  const datos=await consultarServidor({catalogo:"1"});
+  if(!Array.isArray(datos))throw Error("Formato de catálogo incorrecto");
+  datosCatalogo=datos.filter(r=>r&&String(r.ubicacion||"").trim());
+  crearCatalogoVozLocal();
   renderizarCatalogo(datosCatalogo);
-  input.focus();
+ }catch(e){console.error(e);$("contador").textContent="Error de conexión"}
+}
+function valoresUnicos(campo){
+ return [...new Set(datosCatalogo.map(r=>String(r[campo]||"").trim()).filter(Boolean))];
+}
+function crearCatalogoVozLocal(){
+ catalogoVoz={
+  ubicaciones:valoresUnicos("ubicacion"),
+  rutas:valoresUnicos("ruta"),
+  proveedores:valoresUnicos("proveedor"),
+  numerosProveedor:valoresUnicos("numeroProveedor")
+ };
+}
+function agregarElemento(padre,texto,clase){
+ const e=document.createElement("div");
+ e.className=clase;
+ e.textContent=texto||"—";
+ padre.appendChild(e);
+ return e;
 }
 
-
-/* =====================================================
-   QR
-===================================================== */
-
-async function iniciarEscanerQR() {
-
-  const estado = document.getElementById("qrEstado");
-  const reader = document.getElementById("qrReader");
-  const iniciar = document.getElementById("qrIniciarBtn");
-  const cancelar = document.getElementById("qrCancelarBtn");
-
-  estado.className = "qr-estado";
-  estado.textContent = "";
-
-  if (!datosCatalogo.length) {
-    estado.className = "qr-estado error";
-    estado.textContent = "La base de datos todavía no está disponible.";
-    return;
-  }
-
-  if (typeof Html5Qrcode === "undefined") {
-    estado.className = "qr-estado error";
-    estado.textContent = "No fue posible cargar el lector QR.";
-    return;
-  }
-
-  if (qrActivo) return;
-
-  qrProcesando = false;
-
-  reader.style.display = "block";
-  iniciar.disabled = true;
-  cancelar.style.display = "block";
-
-  estado.className = "qr-estado activo";
-  estado.textContent = "Solicitando acceso a la cámara...";
-
-  qrScanner = new Html5Qrcode("qrReader");
-
-  try {
-
-    await qrScanner.start(
-      { facingMode: "environment" },
-      {
-        fps: 10,
-        qrbox: function(ancho, alto) {
-          const lado = Math.floor(Math.min(ancho, alto) * 0.7);
-          return { width: lado, height: lado };
-        }
-      },
-      procesarCodigoQR,
-      function() {}
-    );
-
-    qrActivo = true;
-
-    estado.className = "qr-estado activo";
-    estado.textContent = "Cámara activa. Apunta al código QR.";
-
-  } catch (error) {
-
-    console.error(error);
-
-    qrScanner = null;
-    qrActivo = false;
-
-    reader.style.display = "none";
-    iniciar.disabled = false;
-    cancelar.style.display = "none";
-
-    estado.className = "qr-estado error";
-    estado.textContent =
-      "No fue posible abrir la cámara. Revisa el permiso de cámara de este sitio.";
-  }
+function renderizarCatalogo(registros=datosCatalogo){
+ const grid=$("catalogoGrid");
+ grid.innerHTML="";
+ if(!registros.length){
+  const e=document.createElement("div");
+  e.className="catalogo-sin-resultados";
+  const s=document.createElement("strong");
+  s.textContent="Sin resultados";
+  e.appendChild(s);
+  e.appendChild(document.createTextNode("No encontré coincidencias en el catálogo."));
+  grid.appendChild(e);
+  $("contador").textContent="0 resultados";
+  return;
+ }
+ registros.forEach(r=>{
+  const t=document.createElement("div");
+  t.className="catalogo-card";
+  t.onclick=()=>{vistaAnterior="catalogo";abrirFichaPorRegistro(r)};
+  agregarElemento(t,r.ubicacion,"catalogo-ubicacion");
+  agregarElemento(t,r.proveedor,"catalogo-proveedor");
+  agregarElemento(t,r.ruta,"catalogo-ruta");
+  agregarElemento(t,"Proveedor #"+(r.numeroProveedor||"—"),"catalogo-numero");
+  agregarElemento(t,"Máximo: "+(r.maximo||"—"),"catalogo-maximo");
+  grid.appendChild(t);
+ });
+ const filtro=$("buscadorCatalogo").value.trim();
+ $("contador").textContent=registros.length+(filtro?" resultados":" ubicaciones");
+}
+function filtrarCatalogo(){
+ const consulta=normalizarComparacion($("buscadorCatalogo").value).replace(/\s+/g,"");
+ $("limpiarBuscador").style.display=consulta?"block":"none";
+ if(!consulta){renderizarCatalogo();return}
+ const resultados=datosCatalogo.map((registro,i)=>{
+  const u=normalizarComparacion(registro.ubicacion).replace(/\s+/g,"");
+  const p=normalizarComparacion(registro.proveedor).replace(/\s+/g,"");
+  const n=normalizarComparacion(registro.numeroProveedor).replace(/\s+/g,"");
+  const r=normalizarComparacion(registro.ruta).replace(/\s+/g,"");
+  let prioridad=999;
+  if(u===consulta)prioridad=1;
+  else if(u.startsWith(consulta))prioridad=2;
+  else if(u.includes(consulta))prioridad=3;
+  else if(p.startsWith(consulta))prioridad=4;
+  else if(n.startsWith(consulta))prioridad=5;
+  else if(r.startsWith(consulta))prioridad=6;
+  else if(p.includes(consulta)||n.includes(consulta)||r.includes(consulta))prioridad=7;
+  return{registro,prioridad,i};
+ }).filter(x=>x.prioridad!==999).sort((a,b)=>a.prioridad-b.prioridad||a.i-b.i).map(x=>x.registro);
+ renderizarCatalogo(resultados);
+}
+function limpiarFiltroCatalogo(){
+ $("buscadorCatalogo").value="";
+ $("limpiarBuscador").style.display="none";
+ renderizarCatalogo();
+ $("buscadorCatalogo").focus();
 }
 
-async function procesarCodigoQR(textoLeido) {
-
-  if (qrProcesando) return;
-
-  qrProcesando = true;
-
-  const estado = document.getElementById("qrEstado");
-
-  const codigoLeido =
-    normalizarComparacion(textoLeido).replace(/\s+/g, "");
-
-  const registro = datosCatalogo.find(function(r) {
-    return normalizarComparacion(r.codigo || "")
-      .replace(/\s+/g, "") === codigoLeido;
-  });
-
-  if (!registro) {
-
-    estado.className = "qr-estado error";
-    estado.textContent = "Código QR no registrado.";
-
-    setTimeout(function() {
-
-      qrProcesando = false;
-
-      if (qrActivo) {
-        estado.className = "qr-estado activo";
-        estado.textContent = "Cámara activa. Intenta con otro código.";
-      }
-
-    }, 1500);
-
-    return;
-  }
-
-  vistaAnterior = "qr";
-
-  await detenerEscanerQR(false);
-  abrirFichaPorRegistro(registro);
+/* ESCÁNER QR CON APERTURA AUTOMÁTICA */
+function estadoQR(texto,error=false){
+ $("qrEstado").textContent=texto;
+ $("qrEstado").className=error?"qr-estado error":"qr-estado";
 }
-
-async function detenerEscanerQR(limpiarEstado = true) {
-
-  const reader = document.getElementById("qrReader");
-  const iniciar = document.getElementById("qrIniciarBtn");
-  const cancelar = document.getElementById("qrCancelarBtn");
-  const estado = document.getElementById("qrEstado");
-
-  if (qrScanner) {
-
-    try {
-      if (qrActivo) {
-        await qrScanner.stop();
-      }
-    } catch (e) {}
-
-    try {
-      qrScanner.clear();
-    } catch (e) {}
-  }
-
-  qrScanner = null;
-  qrActivo = false;
-  qrProcesando = false;
-
-  reader.style.display = "none";
-  iniciar.disabled = false;
-  cancelar.style.display = "none";
-
-  if (limpiarEstado) {
-    estado.className = "qr-estado";
-    estado.textContent = "";
-  }
-}
-
-
-/* =====================================================
-   FICHA
-===================================================== */
-
-function abrirFichaPorRegistro(registro) {
-
-  if (!registro) return;
-
-  const ubicacion = normalizarComparacion(registro.ubicacion);
-
-  const registros = datosCatalogo.filter(function(r) {
-    return normalizarComparacion(r.ubicacion) === ubicacion;
-  });
-
-  mostrarFicha(
-    registro.ubicacion,
-    registros.length ? registros : [registro]
+async function iniciarEscanerQR(){
+ if(qrInicioEnCurso||qrActivo)return;
+ const sesion=++qrSesion;
+ if(!datosCatalogo.length){estadoQR("La base de datos todavía no está disponible.",true);$("qrReintentar").style.display="block";return}
+ if(typeof Html5Qrcode==="undefined"){estadoQR("No se pudo cargar el lector QR.",true);$("qrReintentar").style.display="block";return}
+ qrInicioEnCurso=true;
+ qrProcesando=false;
+ qrLinternaEncendida=false;
+ $("qrReintentar").style.display="none";
+ $("qrControles").style.display="none";
+ $("qrOverlay").style.display="none";
+ $("qrZoomContenedor").style.display="none";
+ $("qrZoomNoDisponible").style.display="none";
+ $("qrLinternaBtn").style.display="none";
+ estadoQR("Abriendo cámara trasera...");
+ try{
+  qrScanner=new Html5Qrcode("qrReader",{verbose:false});
+  await qrScanner.start(
+   {facingMode:"environment"},
+   {
+    fps:15,
+    qrbox:(w,h)=>{const lado=Math.max(160,Math.floor(Math.min(w,h)*.72));return{width:Math.min(lado,w),height:Math.min(lado,h)}},
+    aspectRatio:1.333333,
+    disableFlip:true
+   },
+   procesarCodigoQR,
+   ()=>{}
   );
+  if(sesion!==qrSesion){
+   try{await qrScanner.stop()}catch(e){}
+   try{qrScanner.clear()}catch(e){}
+   qrScanner=null;
+   return;
+  }
+  qrActivo=true;
+  $("qrOverlay").style.display="flex";
+  $("qrControles").style.display="flex";
+  estadoQR("Cámara activa. Apunta al código QR.");
+  configurarControlesCamara();
+ }catch(e){
+  console.error(e);
+  qrActivo=false;
+  qrTrack=null;
+  if(qrScanner)try{qrScanner.clear()}catch(err){}
+  qrScanner=null;
+  $("qrOverlay").style.display="none";
+  $("qrControles").style.display="none";
+  $("qrReintentar").style.display="block";
+  estadoQR("No se pudo abrir la cámara. Revisa los permisos de Chrome e intenta de nuevo.",true);
+ }finally{qrInicioEnCurso=false}
+}
+function configurarControlesCamara(){
+ const video=$("qrReader").querySelector("video");
+ qrTrack=video&&video.srcObject?video.srcObject.getVideoTracks()[0]:null;
+ if(!qrTrack||typeof qrTrack.getCapabilities!=="function"){
+  $("qrZoomNoDisponible").style.display="inline";
+  return;
+ }
+ try{
+  const caps=qrTrack.getCapabilities();
+  const settings=qrTrack.getSettings();
+  if(caps.zoom&&Number.isFinite(caps.zoom.min)&&Number.isFinite(caps.zoom.max)&&caps.zoom.max>caps.zoom.min){
+   const z=$("qrZoom");
+   z.min=caps.zoom.min;
+   z.max=caps.zoom.max;
+   z.step=caps.zoom.step||.1;
+   z.value=Math.max(caps.zoom.min,Math.min(caps.zoom.max,settings.zoom||caps.zoom.min));
+   $("qrZoomValor").textContent=Number(z.value).toFixed(1)+"×";
+   $("qrZoomContenedor").style.display="flex";
+  }else $("qrZoomNoDisponible").style.display="inline";
+  if(caps.torch===true)$("qrLinternaBtn").style.display="inline-block";
+ }catch(e){$("qrZoomNoDisponible").style.display="inline"}
+}
+function ajustarZoomQR(valor){
+ $("qrZoomValor").textContent=Number(valor).toFixed(1)+"×";
+ clearTimeout(qrZoomTimer);
+ qrZoomTimer=setTimeout(async()=>{
+  if(!qrTrack||qrTrack.readyState!=="live")return;
+  try{await qrTrack.applyConstraints({advanced:[{zoom:Number(valor)}]})}
+  catch(e){console.info("Zoom no compatible",e);estadoQR("El teléfono no permite ajustar el zoom desde Chrome.",true)}
+ },100);
+}
+async function alternarLinternaQR(){
+ if(!qrTrack||qrTrack.readyState!=="live")return;
+ try{
+  const nuevo=!qrLinternaEncendida;
+  await qrTrack.applyConstraints({advanced:[{torch:nuevo}]});
+  qrLinternaEncendida=nuevo;
+  $("qrLinternaBtn").textContent=nuevo?"🔦 Apagar linterna":"🔦 Encender linterna";
+ }catch(e){console.info("Linterna no compatible",e);estadoQR("La linterna no está disponible en este navegador.",true)}
+}
+async function procesarCodigoQR(texto){
+ if(qrProcesando)return;
+ qrProcesando=true;
+ const codigo=normalizarComparacion(texto).replace(/\s+/g,"");
+ const registro=datosCatalogo.find(r=>normalizarComparacion(r.codigo).replace(/\s+/g,"")===codigo);
+ if(!registro){
+  estadoQR("Código QR no registrado.",true);
+  setTimeout(()=>{qrProcesando=false;if(qrActivo)estadoQR("Cámara activa. Intenta con otro código.")},1300);
+  return;
+ }
+ vistaAnterior="qr";
+ await detenerEscanerQR(false);
+ abrirFichaPorRegistro(registro);
+}
+async function detenerEscanerQR(limpiar=true){
+ ++qrSesion;
+ clearTimeout(qrZoomTimer);
+ if(qrTrack&&qrLinternaEncendida){
+  try{await qrTrack.applyConstraints({advanced:[{torch:false}]})}catch(e){}
+ }
+ qrTrack=null;
+ qrLinternaEncendida=false;
+ const lector=qrScanner;
+ qrScanner=null;
+ if(lector){
+  try{await lector.stop()}catch(e){}
+  try{lector.clear()}catch(e){}
+ }
+ qrActivo=false;
+ qrProcesando=false;
+ qrInicioEnCurso=false;
+ $("qrOverlay").style.display="none";
+ $("qrControles").style.display="none";
+ $("qrReintentar").style.display="none";
+ $("qrReader").innerHTML="";
+ if(limpiar)estadoQR("");
 }
 
-function mostrarFicha(ubicacion, registros) {
-
-  ocultarVistas();
-
-  document.getElementById("vistaFicha").style.display = "block";
-  document.getElementById("fichaUbicacion").textContent = ubicacion || "—";
-
-  const contenedor = document.getElementById("fichaRegistros");
-  contenedor.innerHTML = "";
-
-  registros.forEach(function(registro, indice) {
-
-    if (registros.length > 1) {
-
-      const separador = document.createElement("div");
-      separador.className = "separador";
-      separador.textContent = "Proveedor " + (indice + 1);
-      contenedor.appendChild(separador);
-    }
-
-    const tarjeta = document.createElement("div");
-    tarjeta.className = "registro";
-
-    crearFilaFicha(tarjeta, "No. proveedor", registro.numeroProveedor);
-    crearFilaFicha(tarjeta, "Proveedor", registro.proveedor, "proveedor");
-    crearFilaFicha(tarjeta, "Ruta", registro.ruta);
-    crearFilaFicha(tarjeta, "Máximo por ubicación", registro.maximo, "maximo");
-
-    contenedor.appendChild(tarjeta);
-  });
-
-  mostrarFechaFicha(registros);
-  window.scrollTo(0, 0);
+/* FICHA COMPARTIDA */
+function abrirFichaPorRegistro(registro){
+ if(!registro)return;
+ const u=normalizarComparacion(registro.ubicacion);
+ const registros=datosCatalogo.filter(r=>normalizarComparacion(r.ubicacion)===u);
+ mostrarFicha(registro.ubicacion,registros.length?registros:[registro]);
+}
+function mostrarFicha(ubicacion,registros){
+ ocultarVistas();
+ $("vistaFicha").style.display="block";
+ $("fichaUbicacion").textContent=ubicacion||"—";
+ const contenedor=$("fichaRegistros");
+ contenedor.innerHTML="";
+ registros.forEach((r,i)=>{
+  if(registros.length>1)agregarElemento(contenedor,"Proveedor "+(i+1),"separador");
+  const t=document.createElement("div");
+  t.className="registro";
+  crearFilaFicha(t,"No. proveedor",r.numeroProveedor);
+  crearFilaFicha(t,"Proveedor",r.proveedor,"proveedor");
+  crearFilaFicha(t,"Ruta",r.ruta);
+  crearFilaFicha(t,"Máximo por ubicación",r.maximo,"maximo");
+  contenedor.appendChild(t);
+ });
+ const fechas=[...new Set(registros.map(r=>String(r.fechaActualizacion||"").trim()).filter(Boolean))];
+ $("fichaPie").style.display=fechas.length?"block":"none";
+ $("fichaPie").textContent=fechas.length===1?"Última actualización: "+fechas[0]:"Actualizaciones: "+fechas.join(" • ");
+ window.scrollTo(0,0);
+}
+function crearFilaFicha(padre,etiqueta,valor,extra=""){
+ const f=document.createElement("div");
+ f.className="fila";
+ agregarElemento(f,etiqueta,"etiqueta");
+ agregarElemento(f,valor,"valor "+extra);
+ padre.appendChild(f);
 }
 
-function crearFilaFicha(padre, etiqueta, valor, claseExtra) {
-
-  const fila = document.createElement("div");
-  fila.className = "fila";
-
-  const etiquetaElemento = document.createElement("div");
-  etiquetaElemento.className = "etiqueta";
-  etiquetaElemento.textContent = etiqueta;
-
-  const valorElemento = document.createElement("div");
-  valorElemento.className = "valor";
-
-  if (claseExtra) {
-    valorElemento.classList.add(claseExtra);
-  }
-
-  valorElemento.textContent = valor || "—";
-
-  fila.appendChild(etiquetaElemento);
-  fila.appendChild(valorElemento);
-  padre.appendChild(fila);
-}
-
-function mostrarFechaFicha(registros) {
-
-  const pie = document.getElementById("fichaPie");
-
-  const fechas = Array.from(new Set(
-    registros
-      .map(function(r) {
-        return String(r.fechaActualizacion || "").trim();
-      })
-      .filter(Boolean)
-  ));
-
-  if (!fechas.length) {
-    pie.style.display = "none";
-    return;
-  }
-
-  pie.style.display = "block";
-
-  pie.textContent =
-    fechas.length === 1
-      ? "Última actualización: " + fechas[0]
-      : "Actualizaciones: " + fechas.join(" • ");
-}
-
-
-/* =====================================================
-   ELEMENTOS
-===================================================== */
-
-function agregarElemento(padre, texto, clase) {
-
-  const elemento = document.createElement("div");
-  elemento.className = clase;
-  elemento.textContent = texto || "—";
-  padre.appendChild(elemento);
-}
-
-
-/* =====================================================
-   VOZ
-===================================================== */
-
-const SpeechRecognition =
-  window.SpeechRecognition ||
-  window.webkitSpeechRecognition;
-
-let reconocimiento = null;
-
-function escuchar() {
-
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
-
-  if (!SpeechRecognition) {
-    mostrarError("Este navegador no permite reconocimiento de voz.");
-    return;
-  }
-
-  if (!datosCatalogo.length) {
-    mostrarError("La base de datos todavía no está disponible.");
-    return;
-  }
-
-  if (reconocimiento) {
-    try { reconocimiento.abort(); } catch (e) {}
-  }
-
-  reconocimiento = new SpeechRecognition();
-  reconocimiento.lang = "es-MX";
-  reconocimiento.continuous = false;
-  reconocimiento.interimResults = false;
-  reconocimiento.maxAlternatives = 3;
-
-  const boton = document.getElementById("micBtn");
-  const textoBoton = document.getElementById("micText");
-
-  reconocimiento.onstart = function() {
-
-    boton.classList.add("listening");
-    boton.classList.remove("processing");
-
-    textoBoton.textContent = "ESCUCHANDO...";
-    document.getElementById("estado").textContent = "Habla ahora";
-  };
-
-  reconocimiento.onresult = function(event) {
-
-    boton.classList.remove("listening");
-    boton.classList.add("processing");
-
-    textoBoton.textContent = "PROCESANDO";
-
-    const alternativas = [];
-
-    for (let i = 0; i < event.results[0].length; i++) {
-      alternativas.push(event.results[0][i].transcript.trim());
-    }
-
-    document.getElementById("speechInfo").style.display = "block";
-
-    document.getElementById("escuchado").textContent =
-      alternativas[0] || "";
-
-    procesarAlternativas(alternativas);
-  };
-
-  reconocimiento.onerror = function(event) {
-
-    restaurarMicrofono();
-
-    let mensaje =
-      "No pude escuchar correctamente. Intenta nuevamente.";
-
-    if (event.error === "not-allowed") {
-      mensaje = "Necesitas permitir el acceso al micrófono.";
-    }
-
-    if (event.error === "no-speech") {
-      mensaje = "No detecté voz. Intenta nuevamente.";
-    }
-
-    mostrarError(mensaje);
-  };
-
-  reconocimiento.onend = function() {
-
-    if (!boton.classList.contains("processing")) {
-      restaurarMicrofono();
-    }
-  };
-
-  try {
-    reconocimiento.start();
-  } catch (error) {
-    restaurarMicrofono();
-    mostrarError("No fue posible iniciar el micrófono.");
-  }
-}
-
-
-/* =====================================================
-   PROCESAR LAS 3 ALTERNATIVAS
-===================================================== */
-
-async function procesarAlternativas(alternativas) {
-
-  /*
-    1. Primero comprobamos si la persona está haciendo
-       una pregunta sobre el resultado anterior.
-  */
-
-  for (const alternativa of alternativas) {
-
-    const contextual =
-      detectarPreguntaContextual(alternativa);
-
-    if (contextual) {
-
-      document.getElementById("interpretado").textContent =
-        "CONTEXTO: " + contextual;
-
-      responderPreguntaContextual(contextual);
-      restaurarMicrofono();
-      return;
-    }
-  }
-
-
-  /*
-    2. Analizamos TODAS las alternativas que entregó
-       SpeechRecognition.
-
-       Una coincidencia exacta contra la base tiene
-       prioridad sobre una interpretación aproximada.
-  */
-
-  const deteccionesExactas = [];
-
-  for (const alternativa of alternativas) {
-
-    const deteccion =
-      detectarConsultaSegura(alternativa);
-
-    if (
-      deteccion &&
-      deteccion.estado === "EXACTA"
-    ) {
-
-      deteccionesExactas.push({
-        texto: alternativa,
-        deteccion: deteccion
-      });
-    }
-  }
-
-
-  if (deteccionesExactas.length) {
-
-    /*
-      Si varias alternativas terminan detectando exactamente
-      lo mismo, simplemente usamos la primera.
-    */
-
-    const elegida = deteccionesExactas[0].deteccion;
-
-    document.getElementById("interpretado").textContent =
-      elegida.opcion.tipo +
-      ": " +
-      elegida.opcion.valor;
-
-    await consultarAPI(
-      elegida.opcion.tipo +
-      " " +
-      elegida.opcion.valor,
-      true
-    );
-
-    restaurarMicrofono();
-    return;
-  }
-
-
-  /*
-    3. Si no hubo coincidencia exacta, buscamos una
-       interpretación ambigua/aproximada.
-  */
-
-  for (const alternativa of alternativas) {
-
-    const deteccion =
-      detectarConsultaSegura(alternativa);
-
-    if (
-      deteccion &&
-      deteccion.estado === "AMBIGUA"
-    ) {
-
-      mostrarAmbiguedad(deteccion.opciones);
-      restaurarMicrofono();
-      return;
-    }
-  }
-
-
-  /*
-    4. Último recurso:
-       mandamos la frase normalizada al backend.
-  */
-
-  const consulta =
-    normalizarVoz(alternativas[0] || "");
-
-  document.getElementById("interpretado").textContent =
-    consulta;
-
-  await consultarAPI(consulta, true);
+/* RECONOCIMIENTO DE VOZ */
+const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+let reconocimiento=null;
+function escuchar(){
+ if("speechSynthesis"in window)speechSynthesis.cancel();
+ if(!SpeechRecognition){mostrarError("Este navegador no permite reconocimiento de voz.");return}
+ if(!datosCatalogo.length){mostrarError("La base de datos todavía no está disponible.");return}
+ if(reconocimiento)try{reconocimiento.abort()}catch(e){}
+ reconocimiento=new SpeechRecognition();
+ reconocimiento.lang="es-MX";
+ reconocimiento.continuous=false;
+ reconocimiento.interimResults=false;
+ reconocimiento.maxAlternatives=3;
+ reconocimiento.onstart=()=>{
+  $("micBtn").classList.add("listening");
+  $("micBtn").classList.remove("processing");
+  $("micText").textContent="ESCUCHANDO...";
+  $("estado").textContent="Habla ahora";
+ };
+ reconocimiento.onresult=event=>{
+  $("micBtn").classList.remove("listening");
+  $("micBtn").classList.add("processing");
+  $("micText").textContent="PROCESANDO";
+  const alternativas=[];
+  for(let i=0;i<event.results[0].length;i++)alternativas.push(event.results[0][i].transcript.trim());
+  $("speechInfo").style.display="block";
+  $("escuchado").textContent=alternativas[0]||"";
+  procesarAlternativas(alternativas);
+ };
+ reconocimiento.onerror=event=>{
   restaurarMicrofono();
+  let m="No pude escuchar correctamente. Intenta nuevamente.";
+  if(event.error==="not-allowed")m="Necesitas permitir el acceso al micrófono.";
+  if(event.error==="no-speech")m="No detecté voz. Intenta nuevamente.";
+  mostrarError(m);
+ };
+ reconocimiento.onend=()=>{if(!$("micBtn").classList.contains("processing"))restaurarMicrofono()};
+ try{reconocimiento.start()}catch(e){restaurarMicrofono();mostrarError("No fue posible iniciar el micrófono.")}
 }
-
-
-/* =====================================================
-   MOTOR DE DETECCIÓN DINÁMICA
-===================================================== */
-
-function detectarConsultaSegura(texto) {
-
-  const normal = normalizarParaComparar(texto);
-
-  const mencionaUbicacion =
-    /\bUBICACION\b/.test(normal);
-
-  const mencionaRuta =
-    /\bRUTA\b/.test(normal);
-
-  const mencionaProveedor =
-    /\bPROVEEDOR\b/.test(normal);
-
-  const mencionaNumero =
-    /\bNUMERO\b/.test(normal);
-
-
-  /*
-    Generamos múltiples posibilidades a partir de lo que
-    escuchó el teléfono.
-
-    Ejemplo:
-    "proveedor 20 80 1"
-
-    puede generar:
-    20
-    80
-    1
-    2080
-    20801
-    etc.
-
-    Después son LOS DATOS REALES los que deciden
-    cuál candidato tiene sentido.
-  */
-
-  const candidatos =
-    generarCandidatos(texto)
-      .map(limpiarCodigo)
-      .filter(Boolean);
-
-  const candidatosSet =
-    new Set(candidatos);
-
-
-  /*
-    -----------------------------------------------------
-    UBICACIÓN EXPLÍCITA
-    -----------------------------------------------------
-  */
-
-  if (mencionaUbicacion) {
-
-    const coincidencia =
-      encontrarValorExacto(
-        catalogoVoz.ubicaciones,
-        candidatosSet
-      );
-
-    if (coincidencia) {
-      return {
-        estado: "EXACTA",
-        opcion: {
-          tipo: "UBICACION",
-          valor: coincidencia
-        }
-      };
-    }
+async function procesarAlternativas(alternativas){
+ try{
+  for(const alternativa of alternativas){
+   const contextual=detectarPreguntaContextual(alternativa);
+   if(contextual){
+    $("interpretado").textContent="CONTEXTO: "+contextual;
+    responderPreguntaContextual(contextual);
+    return;
+   }
   }
-
-
-  /*
-    -----------------------------------------------------
-    RUTA EXPLÍCITA
-    -----------------------------------------------------
-  */
-
-  if (mencionaRuta) {
-
-    const coincidencia =
-      encontrarValorExacto(
-        catalogoVoz.rutas,
-        candidatosSet
-      );
-
-    if (coincidencia) {
-      return {
-        estado: "EXACTA",
-        opcion: {
-          tipo: "RUTA",
-          valor: coincidencia
-        }
-      };
-    }
+  for(const alternativa of alternativas){
+   const d=detectarConsultaSegura(alternativa);
+   if(d&&d.estado==="EXACTA"){
+    $("interpretado").textContent=d.opcion.tipo+": "+d.opcion.valor;
+    await consultarAPI(d.opcion.tipo+" "+d.opcion.valor,true);
+    return;
+   }
   }
-
-
-  /*
-    -----------------------------------------------------
-    PROVEEDOR / NÚMERO DE PROVEEDOR
-    -----------------------------------------------------
-
-    Esta es la mejora importante.
-
-    Si alguien dice:
-
-       "proveedor 12345"
-
-    NO asumimos que 12345 pertenece al campo PROVEEDOR.
-
-    Comprobamos los dos campos reales:
-
-       PROVEEDOR
-       NUMERO DE PROVEEDOR
-
-    y la base decide cuál existe.
-  */
-
-  if (mencionaProveedor || mencionaNumero) {
-
-    const numeroExacto =
-      encontrarValorExacto(
-        catalogoVoz.numerosProveedor,
-        candidatosSet
-      );
-
-    const proveedorExacto =
-      encontrarValorExacto(
-        catalogoVoz.proveedores,
-        candidatosSet
-      );
-
-
-    /*
-      Si dijo explícitamente "número", el número
-      tiene prioridad.
-    */
-
-    if (mencionaNumero && numeroExacto) {
-
-      return {
-        estado: "EXACTA",
-        opcion: {
-          tipo: "NUMERO",
-          valor: numeroExacto
-        }
-      };
-    }
-
-
-    /*
-      Si solo uno de los dos campos coincide,
-      sabemos exactamente qué quiso decir.
-    */
-
-    if (numeroExacto && !proveedorExacto) {
-
-      return {
-        estado: "EXACTA",
-        opcion: {
-          tipo: "NUMERO",
-          valor: numeroExacto
-        }
-      };
-    }
-
-    if (proveedorExacto && !numeroExacto) {
-
-      return {
-        estado: "EXACTA",
-        opcion: {
-          tipo: "PROVEEDOR",
-          valor: proveedorExacto
-        }
-      };
-    }
-
-
-    /*
-      Caso raro: el mismo texto existe tanto como
-      proveedor como número.
-
-      No adivinamos.
-    */
-
-    if (numeroExacto && proveedorExacto) {
-
-      return {
-        estado: "AMBIGUA",
-        opciones: [
-          {
-            tipo: "PROVEEDOR",
-            valor: proveedorExacto
-          },
-          {
-            tipo: "NUMERO",
-            valor: numeroExacto
-          }
-        ]
-      };
-    }
+  for(const alternativa of alternativas){
+   const d=detectarConsultaSegura(alternativa);
+   if(d&&d.estado==="AMBIGUA"){
+    mostrarAmbiguedad(d.opciones);
+    return;
+   }
   }
-
-
-  /*
-    -----------------------------------------------------
-    SIN TIPO EXPLÍCITO
-    -----------------------------------------------------
-
-    Si simplemente dice:
-
-      "F1"
-      "ABC25"
-      "12345"
-      "SGUG"
-
-    buscamos en TODOS los campos permitidos.
-
-    PNK NO está incluido.
-  */
-
-  const coincidenciasGenerales =
-    buscarCoincidenciasExactas(texto, null);
-
-  if (coincidenciasGenerales.length === 1) {
-
-    return {
-      estado: "EXACTA",
-      opcion: coincidenciasGenerales[0]
-    };
-  }
-
-
-  if (coincidenciasGenerales.length > 1) {
-
-    /*
-      Si la frase mencionaba un tipo, intentamos
-      quedarnos con ese tipo antes de declarar
-      ambigüedad.
-    */
-
-    let filtradas = coincidenciasGenerales;
-
-    if (mencionaUbicacion) {
-      filtradas =
-        coincidenciasGenerales.filter(
-          o => o.tipo === "UBICACION"
-        );
-    }
-    else if (mencionaRuta) {
-      filtradas =
-        coincidenciasGenerales.filter(
-          o => o.tipo === "RUTA"
-        );
-    }
-
-    if (filtradas.length === 1) {
-
-      return {
-        estado: "EXACTA",
-        opcion: filtradas[0]
-      };
-    }
-
-    return {
-      estado: "AMBIGUA",
-      opciones:
-        (filtradas.length ? filtradas : coincidenciasGenerales)
-          .slice(0, 4)
-    };
-  }
-
-
-  /*
-    -----------------------------------------------------
-    BÚSQUEDA APROXIMADA
-    -----------------------------------------------------
-  */
-
-  let tipoPreferido = null;
-
-  if (mencionaUbicacion) {
-    tipoPreferido = "UBICACION";
-  }
-  else if (mencionaRuta) {
-    tipoPreferido = "RUTA";
-  }
-
-
-  /*
-    Para "proveedor" NO restringimos inmediatamente
-    a PROVEEDOR porque también puede estar diciendo
-    un número de proveedor.
-
-    Buscamos ambos.
-  */
-
-  let aproximadas = [];
-
-  if (mencionaProveedor || mencionaNumero) {
-
-    const aproxProveedor =
-      buscarCoincidenciasAproximadas(
-        texto,
-        "PROVEEDOR"
-      );
-
-    const aproxNumero =
-      buscarCoincidenciasAproximadas(
-        texto,
-        "NUMERO"
-      );
-
-    aproximadas =
-      eliminarDuplicados(
-        aproxProveedor.concat(aproxNumero)
-      );
-
-    aproximadas.sort(function(a, b) {
-
-      if (a.distancia !== b.distancia) {
-        return a.distancia - b.distancia;
-      }
-
-      return String(a.valor)
-        .localeCompare(String(b.valor));
-    });
-
-  } else {
-
-    aproximadas =
-      buscarCoincidenciasAproximadas(
-        texto,
-        tipoPreferido
-      );
-  }
-
-
-  if (!aproximadas.length) {
-    return null;
-  }
-
-
-  if (aproximadas.length === 1) {
-
-    if (aproximadas[0].distancia === 0) {
-
-      return {
-        estado: "EXACTA",
-        opcion: aproximadas[0]
-      };
-    }
-
-    return {
-      estado: "AMBIGUA",
-      opciones: aproximadas.slice(0, 3)
-    };
-  }
-
-
-  const mejor = aproximadas[0];
-  const segunda = aproximadas[1];
-
-
-  /*
-    Solo aceptamos automáticamente una aproximación
-    cuando es claramente mejor que la siguiente.
-  */
-
-  if (
-    mejor.distancia <= 1 &&
-    segunda.distancia >= mejor.distancia + 2
-  ) {
-
-    return {
-      estado: "EXACTA",
-      opcion: mejor
-    };
-  }
-
-
-  return {
-    estado: "AMBIGUA",
-    opciones: aproximadas.slice(0, 3)
-  };
+  const q=normalizarVoz(alternativas[0]||"");
+  $("interpretado").textContent=q;
+  await consultarAPI(q,true);
+ }finally{restaurarMicrofono()}
 }
-
-
-/* =====================================================
-   COINCIDENCIA EXACTA
-===================================================== */
-
-function encontrarValorExacto(lista, candidatosSet) {
-
-  return (lista || []).find(function(valor) {
-
-    return candidatosSet.has(
-      limpiarCodigo(valor)
-    );
-  }) || null;
+function detectarConsultaSegura(texto){
+ const n=normalizarParaComparar(texto);
+ const ubicacion=/\bUBICACION\b/.test(n);
+ const ruta=/\bRUTA\b/.test(n);
+ const proveedor=/\bPROVEEDOR\b/.test(n);
+ const numero=/\bNUMERO\b/.test(n);
+ const set=new Set(generarCandidatos(texto).map(limpiarCodigo).filter(Boolean));
+ if(ubicacion){
+  const v=encontrarValorExacto(catalogoVoz.ubicaciones,set);
+  if(v)return{estado:"EXACTA",opcion:{tipo:"UBICACION",valor:v}};
+ }
+ if(ruta){
+  const v=encontrarValorExacto(catalogoVoz.rutas,set);
+  if(v)return{estado:"EXACTA",opcion:{tipo:"RUTA",valor:v}};
+ }
+ if(proveedor||numero){
+  const num=encontrarValorExacto(catalogoVoz.numerosProveedor,set);
+  const prov=encontrarValorExacto(catalogoVoz.proveedores,set);
+  if(numero&&num)return{estado:"EXACTA",opcion:{tipo:"NUMERO",valor:num}};
+  if(num&&!prov)return{estado:"EXACTA",opcion:{tipo:"NUMERO",valor:num}};
+  if(prov&&!num)return{estado:"EXACTA",opcion:{tipo:"PROVEEDOR",valor:prov}};
+  if(num&&prov)return{estado:"AMBIGUA",opciones:[{tipo:"PROVEEDOR",valor:prov},{tipo:"NUMERO",valor:num}]};
+ }
+ const exactas=buscarCoincidenciasExactas(texto,null);
+ if(exactas.length===1)return{estado:"EXACTA",opcion:exactas[0]};
+ if(exactas.length>1){
+  let f=exactas;
+  if(ubicacion)f=exactas.filter(o=>o.tipo==="UBICACION");
+  else if(ruta)f=exactas.filter(o=>o.tipo==="RUTA");
+  if(f.length===1)return{estado:"EXACTA",opcion:f[0]};
+  return{estado:"AMBIGUA",opciones:(f.length?f:exactas).slice(0,4)};
+ }
+ let aproximadas=[];
+ if(proveedor||numero){
+  aproximadas=eliminarDuplicados(buscarCoincidenciasAproximadas(texto,"PROVEEDOR").concat(buscarCoincidenciasAproximadas(texto,"NUMERO")));
+  aproximadas.sort((a,b)=>a.distancia-b.distancia||String(a.valor).localeCompare(String(b.valor)));
+ }else{
+  aproximadas=buscarCoincidenciasAproximadas(texto,ubicacion?"UBICACION":ruta?"RUTA":null);
+ }
+ if(!aproximadas.length)return null;
+ if(aproximadas.length===1){
+  if(aproximadas[0].distancia===0)return{estado:"EXACTA",opcion:aproximadas[0]};
+  return{estado:"AMBIGUA",opciones:aproximadas.slice(0,3)};
+ }
+ const a=aproximadas[0],b=aproximadas[1];
+ if(a.distancia<=1&&b.distancia>=a.distancia+2)return{estado:"EXACTA",opcion:a};
+ return{estado:"AMBIGUA",opciones:aproximadas.slice(0,3)};
 }
-
-function buscarCoincidenciasExactas(texto, tipoPreferido) {
-
-  const candidatos = generarCandidatos(texto);
-
-  const set =
-    new Set(
-      candidatos.map(limpiarCodigo)
-    );
-
-  return eliminarDuplicados(
-    obtenerEntradasCatalogo(tipoPreferido)
-      .filter(function(entrada) {
-
-        return set.has(
-          limpiarCodigo(entrada.valor)
-        );
-      })
-  );
+function encontrarValorExacto(lista,set){
+ return(lista||[]).find(v=>set.has(limpiarCodigo(v)))||null;
 }
-
-
-/* =====================================================
-   COINCIDENCIA APROXIMADA
-===================================================== */
-
-function buscarCoincidenciasAproximadas(texto, tipoPreferido) {
-
-  const candidatos =
-    generarCandidatos(texto)
-      .map(limpiarCodigo)
-      .filter(function(c) {
-        return c.length >= 2;
-      });
-
-  const resultados = [];
-
-  obtenerEntradasCatalogo(tipoPreferido)
-    .forEach(function(entrada) {
-
-      const codigo =
-        limpiarCodigo(entrada.valor);
-
-      let mejor = Infinity;
-
-      candidatos.forEach(function(candidato) {
-
-        if (
-          Math.abs(
-            candidato.length - codigo.length
-          ) > 2
-        ) {
-          return;
-        }
-
-        const distancia =
-          distanciaLevenshtein(
-            codigo,
-            candidato
-          );
-
-        if (distancia < mejor) {
-          mejor = distancia;
-        }
-      });
-
-      const limite =
-        codigo.length >= 6 ? 2 : 1;
-
-      if (mejor <= limite) {
-
-        resultados.push({
-          tipo: entrada.tipo,
-          valor: entrada.valor,
-          distancia: mejor
-        });
-      }
-    });
-
-  resultados.sort(function(a, b) {
-
-    if (a.distancia !== b.distancia) {
-      return a.distancia - b.distancia;
-    }
-
-    return String(a.valor)
-      .localeCompare(String(b.valor));
+function buscarCoincidenciasExactas(texto,tipo){
+ const set=new Set(generarCandidatos(texto).map(limpiarCodigo));
+ return eliminarDuplicados(obtenerEntradasCatalogo(tipo).filter(e=>set.has(limpiarCodigo(e.valor))));
+}
+function buscarCoincidenciasAproximadas(texto,tipo){
+ const candidatos=generarCandidatos(texto).map(limpiarCodigo).filter(c=>c.length>=2);
+ const resultados=[];
+ obtenerEntradasCatalogo(tipo).forEach(e=>{
+  const codigo=limpiarCodigo(e.valor);
+  let mejor=Infinity;
+  candidatos.forEach(c=>{
+   if(Math.abs(c.length-codigo.length)>2)return;
+   mejor=Math.min(mejor,distanciaLevenshtein(codigo,c));
   });
-
-  return eliminarDuplicados(resultados);
+  if(mejor<=(codigo.length>=6?2:1))resultados.push({...e,distancia:mejor});
+ });
+ resultados.sort((a,b)=>a.distancia-b.distancia||String(a.valor).localeCompare(String(b.valor)));
+ return eliminarDuplicados(resultados);
 }
-
-
-/* =====================================================
-   DICCIONARIO DINÁMICO
-===================================================== */
-
-function obtenerEntradasCatalogo(tipoPreferido) {
-
-  const entradas = [];
-
-  function agregar(tipo, lista) {
-
-    if (
-      tipoPreferido &&
-      tipo !== tipoPreferido
-    ) {
-      return;
-    }
-
-    (lista || []).forEach(function(valor) {
-
-      entradas.push({
-        tipo: tipo,
-        valor: valor
-      });
-    });
-  }
-
-  /*
-    IMPORTANTE:
-
-    Aquí están los únicos campos que puede usar
-    el buscador por voz.
-
-    CODIGO / PNK deliberadamente NO aparece.
-  */
-
-  agregar(
-    "UBICACION",
-    catalogoVoz.ubicaciones
-  );
-
-  agregar(
-    "RUTA",
-    catalogoVoz.rutas
-  );
-
-  agregar(
-    "PROVEEDOR",
-    catalogoVoz.proveedores
-  );
-
-  agregar(
-    "NUMERO",
-    catalogoVoz.numerosProveedor
-  );
-
-  return entradas;
+function obtenerEntradasCatalogo(tipo){
+ const e=[];
+ const add=(t,lista)=>{if(!tipo||tipo===t)(lista||[]).forEach(valor=>e.push({tipo:t,valor}))};
+ add("UBICACION",catalogoVoz.ubicaciones);
+ add("RUTA",catalogoVoz.rutas);
+ add("PROVEEDOR",catalogoVoz.proveedores);
+ add("NUMERO",catalogoVoz.numerosProveedor);
+ return e;
 }
-
-function eliminarDuplicados(opciones) {
-
-  const mapa = new Map();
-
-  opciones.forEach(function(opcion) {
-
-    const clave =
-      opcion.tipo +
-      "|" +
-      opcion.valor;
-
-    if (!mapa.has(clave)) {
-      mapa.set(clave, opcion);
-    }
-  });
-
-  return Array.from(mapa.values());
+function eliminarDuplicados(opciones){
+ const mapa=new Map();
+ opciones.forEach(o=>{const k=o.tipo+"|"+o.valor;if(!mapa.has(k))mapa.set(k,o)});
+ return[...mapa.values()];
 }
-
-
-/* =====================================================
-   AMBIGÜEDAD
-===================================================== */
-
-function mostrarAmbiguedad(opciones) {
-
-  const contenedor =
-    document.getElementById("resultados");
-
-  contenedor.innerHTML = "";
-
-  const tarjeta =
-    document.createElement("div");
-
-  tarjeta.className = "ambiguedad";
-
-  const titulo =
-    document.createElement("div");
-
-  titulo.className =
-    "ambiguedad-titulo";
-
-  titulo.textContent =
-    "No estoy completamente seguro";
-
-  const texto =
-    document.createElement("div");
-
-  texto.className =
-    "ambiguedad-texto";
-
-  texto.textContent =
-    "¿Te refieres a una de estas opciones?";
-
-  const zona =
-    document.createElement("div");
-
-  zona.className =
-    "ambiguedad-opciones";
-
-  opciones.forEach(function(opcion) {
-
-    const boton =
-      document.createElement("button");
-
-    boton.className =
-      "ambiguedad-btn";
-
-    boton.textContent =
-      opcion.valor;
-
-    boton.onclick = function() {
-
-      document.getElementById("interpretado").textContent =
-        opcion.tipo +
-        ": " +
-        opcion.valor;
-
-      consultarAPI(
-        opcion.tipo +
-        " " +
-        opcion.valor,
-        true
-      );
-    };
-
-    zona.appendChild(boton);
-  });
-
-  tarjeta.appendChild(titulo);
-  tarjeta.appendChild(texto);
-  tarjeta.appendChild(zona);
-
-  contenedor.appendChild(tarjeta);
-
-  hablar(
-    "No estoy completamente seguro. Selecciona una de las opciones en pantalla."
-  );
+function mostrarAmbiguedad(opciones){
+ const c=$("resultados");
+ c.innerHTML="";
+ const t=document.createElement("div");
+ t.className="ambiguedad";
+ agregarElemento(t,"No estoy completamente seguro","ambiguedad-titulo");
+ agregarElemento(t,"¿Te refieres a una de estas opciones?","ambiguedad-texto");
+ const zona=document.createElement("div");
+ zona.className="ambiguedad-opciones";
+ opciones.forEach(o=>{
+  const b=document.createElement("button");
+  b.className="ambiguedad-btn";
+  b.textContent=o.valor;
+  b.onclick=()=>{$("interpretado").textContent=o.tipo+": "+o.valor;consultarAPI(o.tipo+" "+o.valor,true)};
+  zona.appendChild(b);
+ });
+ t.appendChild(zona);
+ c.appendChild(t);
+ hablar("No estoy completamente seguro. Selecciona una de las opciones en pantalla.");
 }
-
-
-/* =====================================================
-   CONSULTA DE VOZ
-===================================================== */
-
-async function consultarAPI(consulta, debeHablar) {
-
-  const estado =
-    document.getElementById("estado");
-
-  const contenedor =
-    document.getElementById("resultados");
-
-  estado.textContent = "Buscando...";
-  contenedor.innerHTML = "";
-
-  try {
-
-    const datos =
-      await consultarServidor({
-        q: consulta
-      });
-
-    estado.textContent = "";
-
-    if (!datos || !datos.ok) {
-
-      mostrarError(
-        datos && datos.mensaje
-          ? datos.mensaje
-          : "Ocurrió un error."
-      );
-
-      return;
-    }
-
-    if (!datos.encontrado) {
-
-      mostrarError(
-        "No encontré información para esa consulta."
-      );
-
-      if (debeHablar) {
-        hablar(
-          "No encontré información para esa consulta."
-        );
-      }
-
-      return;
-    }
-
-    mostrarResultados(datos);
-    guardarContexto(datos);
-
-    if (debeHablar) {
-      responderConVoz(datos);
-    }
-
-  } catch (error) {
-
-    console.error(error);
-    estado.textContent = "";
-
-    mostrarError(
-      "No fue posible consultar la base de datos."
-    );
+async function consultarAPI(consulta,debeHablar){
+ $("estado").textContent="Buscando...";
+ $("resultados").innerHTML="";
+ try{
+  const d=await consultarServidor({q:consulta});
+  $("estado").textContent="";
+  if(!d||!d.ok){mostrarError(d&&d.mensaje?d.mensaje:"Ocurrió un error.");return}
+  if(!d.encontrado){
+   mostrarError("No encontré información para esa consulta.");
+   if(debeHablar)hablar("No encontré información para esa consulta.");
+   return;
   }
+  mostrarResultados(d);
+  guardarContexto(d);
+  if(debeHablar)responderConVoz(d);
+ }catch(e){console.error(e);$("estado").textContent="";mostrarError("No fue posible consultar la base de datos.")}
 }
-
-function mostrarResultados(datos) {
-
-  const contenedor =
-    document.getElementById("resultados");
-
-  contenedor.innerHTML = "";
-
-  (datos.resultados || [])
-    .forEach(function(r) {
-
-      const tarjeta =
-        document.createElement("div");
-
-      tarjeta.className = "resultado";
-
-      tarjeta.onclick = function() {
-
-        vistaAnterior = "voz";
-        abrirFichaPorRegistro(r);
-      };
-
-      agregarElemento(
-        tarjeta,
-        r.ubicacion,
-        "resultado-ubicacion"
-      );
-
-      agregarElemento(
-        tarjeta,
-        r.proveedor,
-        "resultado-proveedor"
-      );
-
-      agregarElemento(
-        tarjeta,
-        "Proveedor #" +
-        (r.numeroProveedor || "—"),
-        "resultado-detalle"
-      );
-
-      agregarElemento(
-        tarjeta,
-        "🚛 Ruta: " +
-        (r.ruta || "—"),
-        "resultado-detalle"
-      );
-
-      agregarElemento(
-        tarjeta,
-        "📦 Máximo: " +
-        (r.maximo || "—"),
-        "resultado-detalle"
-      );
-
-      contenedor.appendChild(tarjeta);
-    });
+function mostrarResultados(datos){
+ const c=$("resultados");
+ c.innerHTML="";
+ (datos.resultados||[]).forEach(r=>{
+  const t=document.createElement("div");
+  t.className="resultado";
+  t.onclick=()=>{vistaAnterior="voz";abrirFichaPorRegistro(r)};
+  agregarElemento(t,r.ubicacion,"resultado-ubicacion");
+  agregarElemento(t,r.proveedor,"resultado-proveedor");
+  agregarElemento(t,"Proveedor #"+(r.numeroProveedor||"—"),"resultado-detalle");
+  agregarElemento(t,"🚛 Ruta: "+(r.ruta||"—"),"resultado-detalle");
+  agregarElemento(t,"📦 Máximo: "+(r.maximo||"—"),"resultado-detalle");
+  c.appendChild(t);
+ });
 }
-
-
-/* =====================================================
-   CONTEXTO
-===================================================== */
-
-function guardarContexto(datos) {
-
-  if (
-    !datos ||
-    !datos.encontrado ||
-    !datos.resultados ||
-    !datos.resultados.length
-  ) {
-    return;
-  }
-
-  contextoActual = {
-    tipo: datos.tipo,
-    valor: datos.valor,
-    resultados: datos.resultados
-  };
+function guardarContexto(d){
+ if(d&&d.encontrado&&d.resultados&&d.resultados.length)contextoActual={tipo:d.tipo,valor:d.valor,resultados:d.resultados};
 }
-
-function detectarPreguntaContextual(texto) {
-
-  if (!contextoActual) {
-    return null;
-  }
-
-  const t =
-    normalizarParaComparar(texto);
-
-  /*
-    Evitamos tratar como pregunta contextual una nueva
-    búsqueda completa.
-
-    Por ejemplo:
-    "proveedor 12345"
-
-    debe ser una NUEVA búsqueda, no una pregunta sobre
-    el proveedor anterior.
-  */
-
-  const candidatos =
-    generarCandidatos(texto)
-      .map(limpiarCodigo);
-
-  const contieneValorReal =
-    obtenerEntradasCatalogo(null)
-      .some(function(entrada) {
-
-        return candidatos.includes(
-          limpiarCodigo(entrada.valor)
-        );
-      });
-
-  if (contieneValorReal) {
-    return null;
-  }
-
-
-  if (/\bRUTA\b/.test(t)) {
-    return "RUTA";
-  }
-
-  if (
-    /\bMAXIMO\b/.test(t) ||
-    /\bMAXIMA\b/.test(t) ||
-    /\bCAPACIDAD\b/.test(t)
-  ) {
-    return "MAXIMO";
-  }
-
-  if (
-    /\bNUMERO\b/.test(t) &&
-    /\bPROVEEDOR\b/.test(t)
-  ) {
-    return "NUMERO";
-  }
-
-  if (
-    /\bACTUALIZ/.test(t) ||
-    /\bFECHA\b/.test(t) ||
-    /\bCUANDO\b/.test(t)
-  ) {
-    return "FECHA";
-  }
-
-  if (/\bUBICACION\b/.test(t)) {
-    return "UBICACION";
-  }
-
-  if (/\bPROVEEDOR\b/.test(t)) {
-    return "PROVEEDOR";
-  }
-
-  return null;
+function detectarPreguntaContextual(texto){
+ if(!contextoActual)return null;
+ const t=normalizarParaComparar(texto);
+ const candidatos=generarCandidatos(texto).map(limpiarCodigo);
+ if(obtenerEntradasCatalogo(null).some(e=>candidatos.includes(limpiarCodigo(e.valor))))return null;
+ if(/\bRUTA\b/.test(t))return"RUTA";
+ if(/\bMAXIMO\b|\bMAXIMA\b|\bCAPACIDAD\b/.test(t))return"MAXIMO";
+ if(/\bNUMERO\b/.test(t)&&/\bPROVEEDOR\b/.test(t))return"NUMERO";
+ if(/\bACTUALIZ|\bFECHA\b|\bCUANDO\b/.test(t))return"FECHA";
+ if(/\bUBICACION\b/.test(t))return"UBICACION";
+ if(/\bPROVEEDOR\b/.test(t))return"PROVEEDOR";
+ return null;
 }
-
-function responderPreguntaContextual(campo) {
-
-  if (
-    !contextoActual ||
-    !contextoActual.resultados ||
-    !contextoActual.resultados.length
-  ) {
-    return;
-  }
-
-  const mapa = {
-    RUTA: [
-      "ruta",
-      "La ruta"
-    ],
-
-    MAXIMO: [
-      "maximo",
-      "El máximo"
-    ],
-
-    NUMERO: [
-      "numeroProveedor",
-      "El número de proveedor"
-    ],
-
-    FECHA: [
-      "fechaActualizacion",
-      "La última actualización"
-    ],
-
-    UBICACION: [
-      "ubicacion",
-      "La ubicación"
-    ],
-
-    PROVEEDOR: [
-      "proveedor",
-      "El proveedor"
-    ]
-  };
-
-  const configuracion =
-    mapa[campo];
-
-  if (!configuracion) {
-    return;
-  }
-
-  const valores =
-    obtenerUnicos(
-      contextoActual.resultados,
-      configuracion[0]
-    );
-
-  if (!valores.length) {
-
-    hablar(
-      "No hay información disponible."
-    );
-
-    return;
-  }
-
-  const contenedor =
-    document.getElementById("resultados");
-
-  contenedor.innerHTML = "";
-
-  const tarjeta =
-    document.createElement("div");
-
-  tarjeta.className =
-    "respuesta-contextual";
-
-  agregarElemento(
-    tarjeta,
-    configuracion[1],
-    "respuesta-contextual-titulo"
-  );
-
-  agregarElemento(
-    tarjeta,
-    valores.join(", "),
-    "respuesta-contextual-valor"
-  );
-
-  contenedor.appendChild(tarjeta);
-
-  hablar(
-    configuracion[1] +
-    " es " +
-    valores
-      .map(decirCodigo)
-      .join(", ") +
-    "."
-  );
+function responderPreguntaContextual(campo){
+ if(!contextoActual||!contextoActual.resultados.length)return;
+ const mapa={
+  RUTA:["ruta","La ruta"],
+  MAXIMO:["maximo","El máximo"],
+  NUMERO:["numeroProveedor","El número de proveedor"],
+  FECHA:["fechaActualizacion","La última actualización"],
+  UBICACION:["ubicacion","La ubicación"],
+  PROVEEDOR:["proveedor","El proveedor"]
+ };
+ const cfg=mapa[campo];
+ if(!cfg)return;
+ const valores=obtenerUnicos(contextoActual.resultados,cfg[0]);
+ if(!valores.length){hablar("No hay información disponible.");return}
+ $("resultados").innerHTML="";
+ const t=document.createElement("div");
+ t.className="respuesta-contextual";
+ agregarElemento(t,cfg[1],"respuesta-contextual-titulo");
+ agregarElemento(t,valores.join(", "),"respuesta-contextual-valor");
+ $("resultados").appendChild(t);
+ hablar(cfg[1]+" es "+valores.map(decirCodigo).join(", ")+".");
 }
-
-
-/* =====================================================
-   RESPUESTA HABLADA
-===================================================== */
-
-function responderConVoz(datos) {
-
-  const resultados =
-    datos.resultados || [];
-
-  if (!resultados.length) {
-    return;
-  }
-
-  const tipo =
-    String(datos.tipo || "")
-      .toUpperCase();
-
-  const valor =
-    String(datos.valor || "");
-
-
-  if (
-    tipo === "UBICACION" &&
-    resultados.length === 1
-  ) {
-
-    const r =
-      resultados[0];
-
-    let frase =
-      "En la ubicación " +
-      decirCodigo(r.ubicacion) +
-      " se encuentra el proveedor " +
-      decirCodigo(r.proveedor) +
-      ".";
-
-    if (r.ruta) {
-      frase +=
-        " Ruta " +
-        decirCodigo(r.ruta) +
-        ".";
-    }
-
-    if (r.maximo) {
-      frase +=
-        " Máximo " +
-        r.maximo +
-        ".";
-    }
-
-    hablar(frase);
-    return;
-  }
-
-
-  if (
-    tipo === "PROVEEDOR" ||
-    tipo === "NUMERO"
-  ) {
-
-    const ubicaciones =
-      obtenerUnicos(
-        resultados,
-        "ubicacion"
-      );
-
-    const proveedor =
-      resultados[0].proveedor ||
-      valor;
-
-    if (ubicaciones.length === 1) {
-
-      hablar(
-        "El proveedor " +
-        decirCodigo(proveedor) +
-        " se encuentra en la ubicación " +
-        decirCodigo(ubicaciones[0]) +
-        "."
-      );
-
-      return;
-    }
-
-    hablar(
-      "Encontré " +
-      ubicaciones.length +
-      " ubicaciones para el proveedor " +
-      decirCodigo(proveedor) +
-      "."
-    );
-
-    return;
-  }
-
-
-  if (tipo === "RUTA") {
-
-    const ubicaciones =
-      obtenerUnicos(
-        resultados,
-        "ubicacion"
-      );
-
-    hablar(
-      "La ruta " +
-      decirCodigo(valor) +
-      " tiene " +
-      ubicaciones.length +
-      " ubicaciones."
-    );
-
-    return;
-  }
-
-  hablar(
-    "Encontré " +
-    resultados.length +
-    " resultados."
-  );
+function responderConVoz(datos){
+ const r=datos.resultados||[];
+ if(!r.length)return;
+ const tipo=String(datos.tipo||"").toUpperCase(),valor=String(datos.valor||"");
+ if(tipo==="UBICACION"&&r.length===1){
+  const x=r[0];
+  let frase="En la ubicación "+decirCodigo(x.ubicacion)+" se encuentra el proveedor "+decirCodigo(x.proveedor)+".";
+  if(x.ruta)frase+=" Ruta "+decirCodigo(x.ruta)+".";
+  if(x.maximo)frase+=" Máximo "+x.maximo+".";
+  hablar(frase);return;
+ }
+ if(tipo==="PROVEEDOR"||tipo==="NUMERO"){
+  const ubicaciones=obtenerUnicos(r,"ubicacion");
+  const proveedor=r[0].proveedor||valor;
+  hablar(ubicaciones.length===1?"El proveedor "+decirCodigo(proveedor)+" se encuentra en la ubicación "+decirCodigo(ubicaciones[0])+".":"Encontré "+ubicaciones.length+" ubicaciones para el proveedor "+decirCodigo(proveedor)+".");
+  return;
+ }
+ if(tipo==="RUTA"){
+  hablar("La ruta "+decirCodigo(valor)+" tiene "+obtenerUnicos(r,"ubicacion").length+" ubicaciones.");
+  return;
+ }
+ hablar("Encontré "+r.length+" resultados.");
 }
-
-
-/* =====================================================
-   SONIDO
-===================================================== */
-
-function alternarSonido() {
-
-  sonidoActivado =
-    !sonidoActivado;
-
-  const boton =
-    document.getElementById("soundBtn");
-
-  if (sonidoActivado) {
-
-    boton.textContent =
-      "🔊 Respuesta por voz activada";
-
-  } else {
-
-    boton.textContent =
-      "🔇 Respuesta por voz desactivada";
-
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-    }
-  }
+function alternarSonido(){
+ sonidoActivado=!sonidoActivado;
+ $("soundBtn").textContent=sonidoActivado?"🔊 Respuesta por voz activada":"🔇 Respuesta por voz desactivada";
+ if(!sonidoActivado&&"speechSynthesis"in window)speechSynthesis.cancel();
 }
-
-function hablar(texto) {
-
-  if (!sonidoActivado) return;
-  if (!("speechSynthesis" in window)) return;
-
-  window.speechSynthesis.cancel();
-
-  const mensaje =
-    new SpeechSynthesisUtterance(texto);
-
-  mensaje.lang = "es-MX";
-  mensaje.rate = 1;
-  mensaje.pitch = 1;
-
-  window.speechSynthesis.speak(mensaje);
+function hablar(texto){
+ if(!sonidoActivado||!("speechSynthesis"in window))return;
+ speechSynthesis.cancel();
+ const m=new SpeechSynthesisUtterance(texto);
+ m.lang="es-MX";
+ m.rate=1;
+ m.pitch=1;
+ speechSynthesis.speak(m);
 }
-
-
-/* =====================================================
-   GENERACIÓN DE CANDIDATOS
-===================================================== */
-
-function generarCandidatos(texto) {
-
-  const candidatos =
-    new Set();
-
-  const normal =
-    normalizarVoz(texto);
-
-  const palabras =
-    normal.split(" ")
-      .filter(Boolean);
-
-
-  /*
-    Palabras individuales
-  */
-
-  palabras.forEach(function(palabra) {
-
-    const limpia =
-      limpiarCodigo(palabra);
-
-    if (limpia.length >= 1) {
-      candidatos.add(limpia);
-    }
-  });
-
-
-  /*
-    Combinaciones consecutivas.
-
-    Esto permite reconstruir cosas como:
-
-      F 1       → F1
-      DEN 28    → DEN28
-      2080 1    → 20801
-      S G U G   → SGUG
-  */
-
-  for (
-    let inicio = 0;
-    inicio < palabras.length;
-    inicio++
-  ) {
-
-    let acumulado = "";
-
-    for (
-      let fin = inicio;
-      fin < palabras.length &&
-      fin < inicio + 8;
-      fin++
-    ) {
-
-      acumulado +=
-        limpiarCodigo(
-          palabras[fin]
-        );
-
-      if (acumulado.length >= 1) {
-        candidatos.add(acumulado);
-      }
-    }
-  }
-
-
-  /*
-    Versión sin palabras de relleno.
-  */
-
-  const compacto =
-    compactarVoz(texto);
-
-  if (compacto.length >= 1) {
-    candidatos.add(compacto);
-  }
-
-
-  /*
-    Extraemos secuencias numéricas aunque SpeechRecognition
-    las haya separado con espacios.
-
-    No contiene ningún número fijo.
-  */
-
-  const soloNumeros =
-    normal
-      .replace(/[^0-9\s]/g, " ")
-      .replace(/\s+/g, "")
-      .trim();
-
-  if (soloNumeros) {
-    candidatos.add(soloNumeros);
-  }
-
-
-  return Array.from(candidatos);
+function generarCandidatos(texto){
+ const set=new Set();
+ const palabras=normalizarVoz(texto).split(" ").filter(Boolean);
+ palabras.forEach(p=>{const c=limpiarCodigo(p);if(c)set.add(c)});
+ for(let i=0;i<palabras.length;i++){
+  let a="";
+  for(let j=i;j<palabras.length&&j<i+8;j++){a+=limpiarCodigo(palabras[j]);if(a)set.add(a)}
+ }
+ const compacto=compactarVoz(texto);
+ if(compacto)set.add(compacto);
+ const numeros=normalizarVoz(texto).replace(/[^0-9\s]/g," ").replace(/\s+/g,"").trim();
+ if(numeros)set.add(numeros);
+ return[...set];
 }
-
-
-/* =====================================================
-   COMPACTAR FRASE
-===================================================== */
-
-function compactarVoz(texto) {
-
-  return normalizarVoz(texto)
-    .replace(/\bQUE\b/g, " ")
-    .replace(/\bHAY\b/g, " ")
-    .replace(/\bDONDE\b/g, " ")
-    .replace(/\bESTA\b/g, " ")
-    .replace(/\bESTAN\b/g, " ")
-    .replace(/\bEL\b/g, " ")
-    .replace(/\bLA\b/g, " ")
-    .replace(/\bLOS\b/g, " ")
-    .replace(/\bLAS\b/g, " ")
-    .replace(/\bEN\b/g, " ")
-    .replace(/\bUN\b/g, " ")
-    .replace(/\bUNA\b/g, " ")
-    .replace(/\bDE\b/g, " ")
-    .replace(/\bDEL\b/g, " ")
-    .replace(/\bDAME\b/g, " ")
-    .replace(/\bBUSCA\b/g, " ")
-    .replace(/\bBUSCAME\b/g, " ")
-    .replace(/\bBUSCAR\b/g, " ")
-    .replace(/\bNECESITO\b/g, " ")
-    .replace(/\bQUIERO\b/g, " ")
-    .replace(/\bUBICACION\b/g, " ")
-    .replace(/\bPROVEEDOR\b/g, " ")
-    .replace(/\bRUTA\b/g, " ")
-    .replace(/\bNUMERO\b/g, " ")
-    .replace(/\bPOR\b/g, " ")
-    .replace(/\bFAVOR\b/g, " ")
-    .replace(/[^A-Z0-9]/g, "");
+function compactarVoz(texto){
+ return normalizarVoz(texto).replace(/\b(QUE|HAY|DONDE|ESTA|ESTAN|EL|LA|LOS|LAS|EN|UN|UNA|DE|DEL|DAME|BUSCA|BUSCAME|BUSCAR|NECESITO|QUIERO|UBICACION|PROVEEDOR|RUTA|NUMERO|POR|FAVOR)\b/g," ").replace(/[^A-Z0-9]/g,"");
 }
-
-
-/* =====================================================
-   NORMALIZACIÓN
-===================================================== */
-
-function normalizarParaComparar(texto) {
-
-  return quitarAcentos(
-    String(texto || "")
-  )
-    .toUpperCase()
-    .replace(/[¿?¡!,.;:]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+function normalizarParaComparar(texto){
+ return quitarAcentos(String(texto||"")).toUpperCase().replace(/[¿?¡!,.;:]/g," ").replace(/\s+/g," ").trim();
 }
-
-function normalizarComparacion(texto) {
-
-  return quitarAcentos(
-    String(texto || "")
-  )
-    .toUpperCase()
-    .trim();
+function normalizarComparacion(texto){
+ return quitarAcentos(String(texto||"")).toUpperCase().trim();
 }
-
-function normalizarVoz(texto) {
-
-  let t =
-    normalizarParaComparar(texto);
-
-  const letras = {
-    A:"A",
-    BE:"B", B:"B",
-    CE:"C", C:"C",
-    DE:"D", D:"D",
-    E:"E",
-    EFE:"F", F:"F",
-    GE:"G", G:"G",
-    HACHE:"H", H:"H",
-    I:"I",
-    JOTA:"J", J:"J",
-    KA:"K", K:"K",
-    ELE:"L", L:"L",
-    EME:"M", M:"M",
-    ENE:"N", N:"N",
-    O:"O",
-    PE:"P", P:"P",
-    CU:"Q", Q:"Q",
-    ERRE:"R", R:"R",
-    ESE:"S", S:"S",
-    TE:"T", T:"T",
-    U:"U",
-    UVE:"V", V:"V",
-    DOBLEU:"W",
-    EQUIS:"X", X:"X",
-    YE:"Y", Y:"Y",
-    ZETA:"Z", Z:"Z"
-  };
-
-  const numeros = {
-    CERO:"0",
-    UNO:"1",
-    DOS:"2",
-    TRES:"3",
-    CUATRO:"4",
-    CINCO:"5",
-    SEIS:"6",
-    SIETE:"7",
-    OCHO:"8",
-    NUEVE:"9",
-    DIEZ:"10",
-    ONCE:"11",
-    DOCE:"12",
-    TRECE:"13",
-    CATORCE:"14",
-    QUINCE:"15",
-    DIECISEIS:"16",
-    DIECISIETE:"17",
-    DIECIOCHO:"18",
-    DIECINUEVE:"19",
-    VEINTE:"20",
-    VEINTIUNO:"21",
-    VEINTIDOS:"22",
-    VEINTITRES:"23",
-    VEINTICUATRO:"24",
-    VEINTICINCO:"25",
-    VEINTISEIS:"26",
-    VEINTISIETE:"27",
-    VEINTIOCHO:"28",
-    VEINTINUEVE:"29",
-    TREINTA:"30"
-  };
-
-  const palabras =
-    t.split(" ");
-
-  const convertidas = [];
-
-  for (
-    let i = 0;
-    i < palabras.length;
-    i++
-  ) {
-
-    const palabra =
-      palabras[i];
-
-    if (
-      palabra === "DOBLE" &&
-      palabras[i + 1] === "U"
-    ) {
-
-      convertidas.push("W");
-      i++;
-      continue;
-    }
-
-    if (
-      numeros[palabra] !== undefined
-    ) {
-
-      convertidas.push(
-        numeros[palabra]
-      );
-
-      continue;
-    }
-
-    if (
-      letras[palabra] !== undefined
-    ) {
-
-      convertidas.push(
-        letras[palabra]
-      );
-
-      continue;
-    }
-
-    convertidas.push(palabra);
-  }
-
-  return convertidas
-    .join(" ")
-    .replace(/\s+/g, " ")
-    .trim();
+function normalizarVoz(texto){
+ const letras={A:"A",BE:"B",B:"B",CE:"C",C:"C",DE:"D",D:"D",E:"E",EFE:"F",F:"F",GE:"G",G:"G",HACHE:"H",H:"H",I:"I",JOTA:"J",J:"J",KA:"K",K:"K",ELE:"L",L:"L",EME:"M",M:"M",ENE:"N",N:"N",O:"O",PE:"P",P:"P",CU:"Q",Q:"Q",ERRE:"R",R:"R",ESE:"S",S:"S",TE:"T",T:"T",U:"U",UVE:"V",V:"V",DOBLEU:"W",EQUIS:"X",X:"X",YE:"Y",Y:"Y",ZETA:"Z",Z:"Z"};
+ const numeros={CERO:"0",UNO:"1",DOS:"2",TRES:"3",CUATRO:"4",CINCO:"5",SEIS:"6",SIETE:"7",OCHO:"8",NUEVE:"9",DIEZ:"10",ONCE:"11",DOCE:"12",TRECE:"13",CATORCE:"14",QUINCE:"15",DIECISEIS:"16",DIECISIETE:"17",DIECIOCHO:"18",DIECINUEVE:"19",VEINTE:"20",VEINTIUNO:"21",VEINTIDOS:"22",VEINTITRES:"23",VEINTICUATRO:"24",VEINTICINCO:"25",VEINTISEIS:"26",VEINTISIETE:"27",VEINTIOCHO:"28",VEINTINUEVE:"29",TREINTA:"30"};
+ const p=normalizarParaComparar(texto).split(" "),out=[];
+ for(let i=0;i<p.length;i++){
+  if(p[i]==="DOBLE"&&p[i+1]==="U"){out.push("W");i++;continue}
+  out.push(numeros[p[i]]!==undefined?numeros[p[i]]:letras[p[i]]!==undefined?letras[p[i]]:p[i]);
+ }
+ return out.join(" ").replace(/\s+/g," ").trim();
 }
-
-function limpiarCodigo(texto) {
-
-  return String(texto || "")
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, "");
+function limpiarCodigo(texto){return String(texto||"").toUpperCase().replace(/[^A-Z0-9]/g,"")}
+function quitarAcentos(texto){return String(texto).normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+function distanciaLevenshtein(a,b){
+ a=String(a||"");b=String(b||"");
+ const m=[];
+ for(let i=0;i<=b.length;i++)m[i]=[i];
+ for(let j=0;j<=a.length;j++)m[0][j]=j;
+ for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++)m[i][j]=b[i-1]===a[j-1]?m[i-1][j-1]:Math.min(m[i-1][j-1]+1,m[i][j-1]+1,m[i-1][j]+1);
+ return m[b.length][a.length];
 }
-
-function quitarAcentos(texto) {
-
-  return String(texto)
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+function obtenerUnicos(resultados,campo){
+ return[...new Set(resultados.map(r=>String(r[campo]||"").trim()).filter(Boolean))];
 }
-
-
-/* =====================================================
-   LEVENSHTEIN
-===================================================== */
-
-function distanciaLevenshtein(a, b) {
-
-  a = String(a || "");
-  b = String(b || "");
-
-  const matriz = [];
-
-  for (
-    let i = 0;
-    i <= b.length;
-    i++
-  ) {
-    matriz[i] = [i];
-  }
-
-  for (
-    let j = 0;
-    j <= a.length;
-    j++
-  ) {
-    matriz[0][j] = j;
-  }
-
-  for (
-    let i = 1;
-    i <= b.length;
-    i++
-  ) {
-
-    for (
-      let j = 1;
-      j <= a.length;
-      j++
-    ) {
-
-      if (
-        b.charAt(i - 1) ===
-        a.charAt(j - 1)
-      ) {
-
-        matriz[i][j] =
-          matriz[i - 1][j - 1];
-
-      } else {
-
-        matriz[i][j] =
-          Math.min(
-            matriz[i - 1][j - 1] + 1,
-            matriz[i][j - 1] + 1,
-            matriz[i - 1][j] + 1
-          );
-      }
-    }
-  }
-
-  return matriz[b.length][a.length];
+function decirCodigo(codigo){
+ codigo=String(codigo||"").toUpperCase().trim();
+ if(!codigo)return"";
+ if(/^\d+$/.test(codigo))return codigo;
+ const m=codigo.match(/^([A-Z]+)(\d+)$/);
+ if(m)return m[1].split("").join(" ")+" "+m[2];
+ if(/^[A-Z]+$/.test(codigo))return codigo.split("").join(" ");
+ return codigo;
 }
-
-
-/* =====================================================
-   UTILIDADES
-===================================================== */
-
-function obtenerUnicos(resultados, campo) {
-
-  return Array.from(new Set(
-    resultados
-      .map(function(r) {
-        return String(r[campo] || "").trim();
-      })
-      .filter(Boolean)
-  ));
+function mostrarError(mensaje){
+ $("resultados").innerHTML="";
+ agregarElemento($("resultados"),mensaje,"error");
 }
-
-function decirCodigo(codigo) {
-
-  codigo =
-    String(codigo || "")
-      .toUpperCase()
-      .trim();
-
-  if (!codigo) {
-    return "";
-  }
-
-  if (/^\d+$/.test(codigo)) {
-    return codigo;
-  }
-
-  const combinado =
-    codigo.match(
-      /^([A-Z]+)(\d+)$/
-    );
-
-  if (combinado) {
-
-    return combinado[1]
-      .split("")
-      .join(" ") +
-      " " +
-      combinado[2];
-  }
-
-  if (/^[A-Z]+$/.test(codigo)) {
-
-    return codigo
-      .split("")
-      .join(" ");
-  }
-
-  return codigo;
+function restaurarMicrofono(){
+ $("micBtn").classList.remove("listening","processing");
+ $("micText").textContent="HABLAR";
+ $("estado").textContent="";
 }
-
-function mostrarError(mensaje) {
-
-  const contenedor =
-    document.getElementById("resultados");
-
-  contenedor.innerHTML = "";
-
-  const elemento =
-    document.createElement("div");
-
-  elemento.className = "error";
-  elemento.textContent = mensaje;
-
-  contenedor.appendChild(elemento);
-}
-
-function restaurarMicrofono() {
-
-  const boton =
-    document.getElementById("micBtn");
-
-  boton.classList.remove("listening");
-  boton.classList.remove("processing");
-
-  document.getElementById("micText").textContent =
-    "HABLAR";
-
-  document.getElementById("estado").textContent =
-    "";
-}
-
-
-/* =====================================================
-   ARRANQUE
-===================================================== */
-
 iniciarAplicacion();
-
 </script>
 </body>
 </html>
